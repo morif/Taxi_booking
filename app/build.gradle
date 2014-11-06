@@ -1,0 +1,39 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
+
+    defaultConfig {
+        applicationId "ch.crut.taxi"
+        minSdkVersion 14
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+apt {
+    arguments {
+        androidManifestFile variant.processResources.manifestFile
+        resourcePackageName "ch.crut.taxi"
+    }
+}
+
+dependencies {
+    /**
+     * annotations
+     */
+    apt "org.androidannotations:androidannotations:3.0.1"
+    compile 'org.androidannotations:androidannotations-api:3.0.1'
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.google.android.gms:play-services:6.1.11'
+}
