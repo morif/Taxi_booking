@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Taxi</string>
+    <string name="from">Откуда</string>
+    <string name="whereabouts">Куда</string>
+    <string name="when">Когда</string>
+    <string name="wishes">Пожелания</string>
+    <string name="taxi_booking">Заказ такси</string>
 </resources>
