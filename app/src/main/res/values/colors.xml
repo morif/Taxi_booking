@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="design_light_blue">#ff48ceff</color>
+    <color name="grey" >#ff73706f</color>
+    <color name="light_grey" >#ffb6b3b0</color>
+    <color name="blue">#ff3778ff</color>
 </resources>

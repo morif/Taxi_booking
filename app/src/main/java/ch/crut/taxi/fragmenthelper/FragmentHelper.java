@@ -61,6 +61,11 @@ public class FragmentHelper {
                 fragment).commit();
     }
 
+    public static void addImmediately(FragmentManager fragmentManager, Fragment fragment, int container) {
+        add(fragmentManager, fragment, container);
+        fragmentManager.executePendingTransactions();
+    }
+
     public static void replace(FragmentManager fragmentManager, Fragment fragment, int container) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(container, fragment).commit();
@@ -95,8 +100,18 @@ public class FragmentHelper {
         fragmentManager.popBackStackImmediate();
     }
 
-    public static void clearStack(FragmentManager fragmentManager) {
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    public static void clear(FragmentManager fragmentManager, int saveCount) {
+        int count = getStackCount(fragmentManager);
+        if (count > saveCount) {
+            for (int i = count; i > saveCount; i--) {
+                popImmediate(fragmentManager);
+            }
+        }
+    }
+
+    public static void clear(FragmentManager fragmentManager) {
+        clear(fragmentManager, 0);
+//        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     public static int getStackCount(FragmentManager fragmentManager) {

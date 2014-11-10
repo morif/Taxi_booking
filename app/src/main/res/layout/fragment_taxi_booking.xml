@@ -12,20 +12,22 @@
 
 
         <LinearLayout
-            android:id="@+id/fragmentBeginFromWhere"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_def_bg"
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/fragmentBeginFromWhere"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/from"
                 style="@style/fragmentBeginButton"
                 android:layout_weight="26" />
 
-            <Button
+            <EditText
+                android:inputType="none"
+                android:id="@+id/fragmentTaxiBookingOrigin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/fragmentBeginButton"
@@ -45,7 +47,9 @@
                 style="@style/fragmentBeginButton"
                 android:layout_weight="26" />
 
-            <Button
+            <EditText
+                android:inputType="none"
+                android:id="@+id/fragmentTaxiBookingDestination"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/fragmentBeginButton"
@@ -103,7 +107,6 @@
                 android:layout_height="wrap_content"
                 android:text="search auto" />
         </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

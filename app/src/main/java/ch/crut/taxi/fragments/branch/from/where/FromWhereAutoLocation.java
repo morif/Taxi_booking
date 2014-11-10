@@ -1,4 +1,4 @@
-package ch.crut.taxi.fragments;
+package ch.crut.taxi.fragments.branch.from.where;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,7 +13,6 @@ import android.widget.EditText;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -29,7 +28,6 @@ import ch.crut.taxi.interfaces.ActionBarClickListener;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.GoogleMapUtils;
 import ch.crut.taxi.utils.LocationAddress;
-import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Observable;
@@ -37,28 +35,20 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 
 @EFragment(R.layout.fragment_from_where)
-public class FragmentFromWhere extends Fragment implements ActionBarClickListener {
-
-//    public static final String AUTO_LOCATION = "AUTO_LOCATION";
+public class FromWhereAutoLocation extends Fragment implements ActionBarClickListener {
 
     private static final int FRAME_CONTAINER = R.id.fragmentFromWhereFrameLayout;
 
-//    private boolean autoLocation;
-
+    private ActionBarController barController;
     private GoogleMapUtils mapUtils;
     private LocationAddress locationAddress;
-    private ActionBarController barController;
     private TaxiBookingHelper taxiBookingHelper;
 
-    private LatLng selectedPosition;
-    private SupportMapFragment mapFragment;
-
-
-    public static FragmentFromWhere newInstance() {
-        FragmentFromWhere fragmentFromWhere = new FragmentFromWhere_();
+    public static FromWhereAutoLocation newInstance() {
+        FromWhereAutoLocation fromWhereAutoLocation = new FromWhereAutoLocation_();
         Bundle bundle = new Bundle();
-        fragmentFromWhere.setArguments(bundle);
-        return fragmentFromWhere;
+        fromWhereAutoLocation.setArguments(bundle);
+        return fromWhereAutoLocation;
     }
 
     @ViewById(R.id.fragmentFromWhereAddress)
@@ -68,16 +58,11 @@ public class FragmentFromWhere extends Fragment implements ActionBarClickListene
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-//        Bundle bundle = getArguments();
-
-//        autoLocation = bundle.getBoolean(AUTO_LOCATION);
-
-        final ActivityMain activityMain = (ActivityMain) getActivity();
+        final ActivityMain activityMain = (ActivityMain) activity;
         activityMain.replaceActionBarClickListener(this);
 
         barController = activityMain.getActionBarController();
-        taxiBookingHelper = ((ActivityMain) activity).getTaxiBookingHelper();
-        mapFragment = SupportMapFragment.newInstance();
+        taxiBookingHelper = activityMain.getTaxiBookingHelper();
     }
 
     @Override
@@ -88,18 +73,20 @@ public class FragmentFromWhere extends Fragment implements ActionBarClickListene
         barController.cancelEnabled(true);
         barController.doneEnabled(true);
 
+        final SupportMapFragment mapFragment = SupportMapFragment.newInstance();
         FragmentHelper.add(getChildFragmentManager(), mapFragment, FRAME_CONTAINER);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 GoogleMap map = mapFragment.getMap();
-                map.setOnMapClickListener(onMapClick);
+                map.setMyLocationEnabled(true);
 
-                mapUtils = new GoogleMapUtils(map);
+                mapUtils = new GoogleMapUtils(mapFragment.getMap());
+
+                findMyLocation(getActivity());
             }
         }, 100);
-
     }
 
     @Override
@@ -132,20 +119,40 @@ public class FragmentFromWhere extends Fragment implements ActionBarClickListene
         }
     };
 
+    private void findMyLocation(final Context context) {
+        long LOCATION_UPDATE_INTERVAL = 10;
+        long WAIT_TIME = 10;
+        long LOCATION_TIMEOUT_IN_SECONDS = 10;
 
-    private GoogleMap.OnMapClickListener onMapClick = new GoogleMap.OnMapClickListener() {
-        @Override
-        public void onMapClick(LatLng latLng) {
-            selectedPosition = latLng;
+        LocationRequest req = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setExpirationDuration(TimeUnit.SECONDS.toMillis(WAIT_TIME))
+                .setInterval(LOCATION_UPDATE_INTERVAL);
 
-            mapUtils.getMap().clear();
-            mapUtils.me(latLng);
+        ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(context);
 
-            locationAddress = new LocationAddress(getActivity(), latLng);
-            locationAddress.setOnCompleteListener(onAddressFound);
-            locationAddress.start();
-        }
-    };
+
+        Observable<Location> goodEnoughQuicklyOrNothingObservable = locationProvider.getUpdatedLocation(req)
+                .filter(new Func1<Location, Boolean>() {
+                    @Override
+                    public Boolean call(Location location) {
+
+                        mapUtils.moveCamera(location.getLatitude(), location.getLongitude());
+
+                        locationAddress = new LocationAddress(context,
+                                location.getLatitude(), location.getLongitude());
+                        locationAddress.setOnCompleteListener(onAddressFound);
+                        locationAddress.start();
+
+                        return true;
+                    }
+                })
+                .timeout(LOCATION_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS, Observable.from((Location) null), AndroidSchedulers.mainThread())
+                .first()
+                .observeOn(AndroidSchedulers.mainThread());
+
+        goodEnoughQuicklyOrNothingObservable.subscribe();
+    }
 
     @Override
     public void clickSettings(View view) {
@@ -164,12 +171,7 @@ public class FragmentFromWhere extends Fragment implements ActionBarClickListene
 
     @Override
     public void clickDone(View view) {
-        NavigationPoint navigationPoint = new NavigationPoint();
-        navigationPoint.address = this.address.getText().toString();
-        navigationPoint.latLng = selectedPosition;
 
-        taxiBookingHelper.original = navigationPoint;
-
-        ((ActivityMain) getActivity()).initialScreen();
     }
 }
+

@@ -6,10 +6,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import ch.crut.taxi.R;
-import ch.crut.taxi.interfaces.ActionBarActions;
 import ch.crut.taxi.interfaces.ActionBarClickListener;
 
-public class ActionBarController implements ActionBarActions {
+public class ActionBarController {
 
     public void setActionBarClickListener(ActionBarClickListener actionBarClickListener) {
         this.actionBarClickListener = actionBarClickListener;
@@ -29,8 +28,22 @@ public class ActionBarController implements ActionBarActions {
         rightButton = (Button) view.findViewById(R.id.actionBarUIRightButton);
     }
 
-    @Override
-    public void settingEnabled() {
+
+    public void settingEnabled(boolean enabled) {
+        if (enabled)
+            showSettings();
+        else
+            hideSettings();
+    }
+
+    private void hideSettings() {
+        rightButton.setText("");
+        rightButton.setBackgroundDrawable(null);
+        rightButton.setOnClickListener(null);
+    }
+
+    private void showSettings() {
+        rightButton.setText("");
         rightButton.setBackgroundResource(R.drawable.icon_settings);
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,23 +55,39 @@ public class ActionBarController implements ActionBarActions {
         });
     }
 
-    @Override
-    public void setTitle(String title) {
 
+    public void title(String title) {
+        this.title.setText(title);
     }
 
-    @Override
+
     public void hideTitle() {
 
     }
 
-    @Override
-    public void cancelEnabled() {
 
+    public void cancelEnabled(boolean enable) {
+        if (enable) {
+            leftButton.setBackgroundResource(R.drawable.selector_action_bar_blue);
+            leftButton.setText(R.string.cancel);
+            leftButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (actionBarClickListener != null) {
+                        actionBarClickListener.clickCancel(view);
+                    }
+                }
+            });
+        } else {
+            leftButton.setBackgroundDrawable(null);
+            leftButton.setText("");
+            leftButton.setOnClickListener(null);
+        }
     }
 
-    @Override
+
     public void backEnabled() {
+        rightButton.setText(R.string.back);
         rightButton.setBackgroundResource(R.drawable.ic_launcher);
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,17 +99,32 @@ public class ActionBarController implements ActionBarActions {
         });
     }
 
-    @Override
-    public void doneEnabled() {
 
+    public void doneEnabled(boolean enable) {
+        if (enable) {
+            rightButton.setBackgroundResource(R.drawable.selector_action_bar_blue);
+            rightButton.setText(R.string.done);
+            rightButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (actionBarClickListener != null) {
+                        actionBarClickListener.clickDone(view);
+                    }
+                }
+            });
+        } else {
+            rightButton.setBackgroundDrawable(null);
+            rightButton.setText("");
+            rightButton.setOnClickListener(null);
+        }
     }
 
-    @Override
+
     public void hideLeft() {
         leftButton.setVisibility(View.INVISIBLE);
     }
 
-    @Override
+
     public void hideRight() {
         rightButton.setVisibility(View.INVISIBLE);
     }

@@ -54,4 +54,9 @@ dependencies {
     compile project(':calligraphy')
 
 //    compile 'uk.co.chrisjenx:calligraphy:1.2.0'
+
+    //reactive location
+    compile 'pl.charmas.android:android-reactive-location:0.2@aar'
+    compile 'com.netflix.rxjava:rxjava-android:0.18.4'
+    // reactive location end
 }

@@ -2,6 +2,7 @@ package ch.crut.taxi;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -18,6 +19,7 @@ import ch.crut.taxi.fragmenthelper.FragmentHelper;
 import ch.crut.taxi.fragments.FragmentTaxiBooking;
 import ch.crut.taxi.interfaces.ActionBarClickListener;
 import ch.crut.taxi.querymaster.QueryMaster;
+import ch.crut.taxi.utils.TaxiBookingHelper;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -30,23 +32,39 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
 
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
+    private SupportMapFragment supportMapFragment;
     private ActionBarController actionBarController;
+    private FragmentTaxiBooking fragmentTaxiBooking;
+    private TaxiBookingHelper taxiBookingHelper;
+
+    // getters
+    public ActionBarController getActionBarController() {
+        return actionBarController;
+    }
+
+    public FragmentTaxiBooking getFragmentTaxiBooking() {
+        return fragmentTaxiBooking;
+    }
+
+    public TaxiBookingHelper getTaxiBookingHelper() {
+        return taxiBookingHelper;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         UIActionBar uiActionBar = new UIActionBar(getActionBar());
+
         actionBarController = new ActionBarController(uiActionBar);
-        actionBarController.setActionBarClickListener(this);
+        setActionBarDefaultListener();
 
-        actionBarController.settingEnabled();
-        actionBarController.setTitle(getString(R.string.taxi_booking));
-        actionBarController.hideLeft();
+        fragmentTaxiBooking = FragmentTaxiBooking.newInstance();
+        supportMapFragment = SupportMapFragment.newInstance();
+        taxiBookingHelper = new TaxiBookingHelper();
 
-        FragmentHelper.add(fragmentManager, SupportMapFragment.newInstance(), MAP_CONTAINER);
-        FragmentHelper.add(fragmentManager, FragmentTaxiBooking.newInstance(), FRAME_CONTAINER);
-
+        FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
+        FragmentHelper.add(fragmentManager, fragmentTaxiBooking, FRAME_CONTAINER);
     }
 
     @Override
@@ -64,4 +82,31 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         QueryMaster.toast(this, "back");
     }
 
+    @Override
+    public void clickDone(View view) {
+        QueryMaster.toast(this, "done");
+    }
+
+    @Override
+    public void clickCancel(View view) {
+        FragmentHelper.pop(fragmentManager);
+    }
+
+
+    public void add(Fragment fragment) {
+        FragmentHelper.add(fragmentManager, fragment, FRAME_CONTAINER);
+    }
+
+    public void initialScreen() {
+        FragmentHelper.clear(fragmentManager, 2);
+    }
+
+    public void replaceActionBarClickListener(ActionBarClickListener clickListener) {
+        actionBarController.setActionBarClickListener(clickListener);
+    }
+
+    public void setActionBarDefaultListener() {
+        actionBarController.setActionBarClickListener(this);
+    }
 }
+
