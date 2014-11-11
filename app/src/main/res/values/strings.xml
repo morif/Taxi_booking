@@ -18,4 +18,6 @@
     <string name="fail_getting_address">Не удалось определить адресс из координат, сервис временно недоступен, попробуйте позже</string>
     <string name="back">Назад</string>
     <string name="hint_address">Адресс</string>
+    <string name="show_route">Показать маршрут</string>
+    <string name="taxi_order">Заказать такси</string>
 </resources>

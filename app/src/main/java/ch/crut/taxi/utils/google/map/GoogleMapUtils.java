@@ -1,4 +1,4 @@
-package ch.crut.taxi.utils;
+package ch.crut.taxi.utils.google.map;
 
 
 import com.google.android.gms.maps.CameraUpdateFactory;

@@ -3,10 +3,14 @@ package ch.crut.taxi.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
@@ -35,6 +39,10 @@ public class FragmentTaxiBooking extends Fragment {
 
     @ViewById(R.id.fragmentTaxiBookingDestination)
     protected EditText destinationAddress;
+
+    @ViewById(R.id.fragmentTaxiBookingOrderTime)
+    protected TextView orderTime;
+
 
     @Click(R.id.fragmentTaxiBookingOriginButton)
     protected void clickOriginal() {
@@ -68,6 +76,8 @@ public class FragmentTaxiBooking extends Fragment {
         if (destinationPoint != null) {
             destinationAddress.setText(destinationPoint.addressString);
         }
+
+        orderTime.setText(getOrderTime());
     }
 
     @Override
@@ -81,5 +91,14 @@ public class FragmentTaxiBooking extends Fragment {
     }
 
 
+    public static String millisecToDate(long milliseconds) {
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = new Date(milliseconds);
+        return formatDate.format(date);
+    }
+
+    public static String getOrderTime() {
+        return millisecToDate(new Date().getTime() + (15 * 60000));
+    }
 }
 

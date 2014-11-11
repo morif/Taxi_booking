@@ -65,7 +65,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button_def_bg">
 
-            <Button
+            <TextView
+                android:id="@+id/fragmentTaxiBookingOrderTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/when"
