@@ -11,7 +11,7 @@ import org.androidannotations.annotations.ViewById;
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
 import ch.crut.taxi.actionbar.ActionBarController;
-import ch.crut.taxi.querymaster.QueryMaster;
+import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
 
@@ -36,9 +36,16 @@ public class FragmentTaxiBooking extends Fragment {
     @ViewById(R.id.fragmentTaxiBookingDestination)
     protected EditText destinationAddress;
 
-    @Click(R.id.fragmentBeginFromWhere)
-    protected void clickFromWhere() {
-        ((ActivityMain) getActivity()).add(FragmentFromWhereAction.newInstance());
+    @Click(R.id.fragmentTaxiBookingOriginButton)
+    protected void clickOriginal() {
+        final OnPlaceSelectedListener.PlaceSelectedKeys originalKey = OnPlaceSelectedListener.PlaceSelectedKeys.ORIGINAL;
+        ((ActivityMain) getActivity()).add(FragmentDirectionAction.newInstance(originalKey));
+    }
+
+    @Click(R.id.fragmentTaxiBookingDestinationButton)
+    protected void clickDestination() {
+        final OnPlaceSelectedListener.PlaceSelectedKeys destinationKey = OnPlaceSelectedListener.PlaceSelectedKeys.DESTINATION;
+        ((ActivityMain) getActivity()).add(FragmentDirectionAction.newInstance(destinationKey));
     }
 
     @Override
@@ -55,14 +62,12 @@ public class FragmentTaxiBooking extends Fragment {
         destinationPoint = bookingHelper.destination;
 
         if (originalPoint != null) {
-            originAddress.setText(originalPoint.address);
-
+            originAddress.setText(originalPoint.addressString);
         }
 
         if (destinationPoint != null) {
-            destinationAddress.setText(destinationPoint.address);
+            destinationAddress.setText(destinationPoint.addressString);
         }
-
     }
 
     @Override

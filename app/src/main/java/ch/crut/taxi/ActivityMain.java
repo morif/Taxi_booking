@@ -18,14 +18,16 @@ import ch.crut.taxi.actionbar.UIActionBar;
 import ch.crut.taxi.fragmenthelper.FragmentHelper;
 import ch.crut.taxi.fragments.FragmentTaxiBooking;
 import ch.crut.taxi.interfaces.ActionBarClickListener;
+import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.querymaster.QueryMaster;
+import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 @WindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
 @EActivity(R.layout.activity_main)
-public class ActivityMain extends FragmentActivity implements ActionBarClickListener {
+public class ActivityMain extends FragmentActivity implements ActionBarClickListener, OnPlaceSelectedListener {
 
     public static final int MAP_CONTAINER = R.id.activityMainMap;
     public static final int FRAME_CONTAINER = R.id.activityMainContainer;
@@ -107,6 +109,16 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
 
     public void setActionBarDefaultListener() {
         actionBarController.setActionBarClickListener(this);
+    }
+
+
+    @Override
+    public void placeSelected(NavigationPoint navigationPoint, PlaceSelectedKeys selectedKey) {
+        if (selectedKey == PlaceSelectedKeys.DESTINATION) {
+            taxiBookingHelper.destination = navigationPoint;
+        } else {
+            taxiBookingHelper.original = navigationPoint;
+        }
     }
 }
 

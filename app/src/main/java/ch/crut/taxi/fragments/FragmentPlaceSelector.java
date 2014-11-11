@@ -1,0 +1,243 @@
+package ch.crut.taxi.fragments;
+
+import android.app.Activity;
+import android.content.Context;
+import android.location.Address;
+import android.location.Location;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.view.View;
+import android.widget.EditText;
+
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import ch.crut.taxi.ActivityMain;
+import ch.crut.taxi.R;
+import ch.crut.taxi.actionbar.ActionBarController;
+import ch.crut.taxi.fragmenthelper.FragmentHelper;
+import ch.crut.taxi.interfaces.ActionBarClickListener;
+import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
+import ch.crut.taxi.querymaster.QueryMaster;
+import ch.crut.taxi.utils.GoogleMapUtils;
+import ch.crut.taxi.utils.LocationAddress;
+import ch.crut.taxi.utils.NavigationPoint;
+import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+
+
+@EFragment(R.layout.fragment_place_selector)
+public class FragmentPlaceSelector extends Fragment implements ActionBarClickListener {
+
+    private static final int FRAME_CONTAINER = R.id.fragmentFromWhereFrameLayout;
+
+    public static final String SELECTED_PLACE_KEY = "SELECTED_PLACE_KEY";
+    public static final String AUTO_LOCATION = "AUTO_LOCATION";
+
+    private OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey;
+    private boolean autoLocation;
+
+
+    private ActionBarController barController;
+    private GoogleMapUtils mapUtils;
+    private NavigationPoint navigationPoint;
+
+    public static FragmentPlaceSelector newInstance(OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey, boolean autoLocation) {
+        FragmentPlaceSelector placeSelector = new FragmentPlaceSelector_();
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(SELECTED_PLACE_KEY, placeSelectedKey);
+        bundle.putBoolean(AUTO_LOCATION, autoLocation);
+
+        placeSelector.setArguments(bundle);
+
+        return placeSelector;
+    }
+
+    public static FragmentPlaceSelector newInstance(OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey) {
+        return newInstance(placeSelectedKey, false);
+    }
+
+    @ViewById(R.id.fragmentFromWhereAddress)
+    protected EditText addressEditText;
+
+    @Click(R.id.fragmentPlaceSelectorLocation)
+    protected void clickLocation() {
+        findMyLocation(getActivity());
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        Bundle bundle = getArguments();
+
+        placeSelectedKey = (OnPlaceSelectedListener.PlaceSelectedKeys) bundle.getSerializable(SELECTED_PLACE_KEY);
+        autoLocation = bundle.getBoolean(AUTO_LOCATION);
+        navigationPoint = new NavigationPoint();
+
+
+        final ActivityMain activityMain = (ActivityMain) activity;
+        activityMain.replaceActionBarClickListener(this);
+
+        barController = activityMain.getActionBarController();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        barController.title(getString(R.string.elaboration));
+        barController.cancelEnabled(true);
+        barController.doneEnabled(true);
+
+        final SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+        FragmentHelper.add(getChildFragmentManager(), mapFragment, FRAME_CONTAINER);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                GoogleMap map = mapFragment.getMap();
+
+                mapUtils = new GoogleMapUtils(map);
+
+                mapUtils.getMap().setOnMapClickListener(onMapClick);
+                mapUtils.getMap().setMyLocationEnabled(true);
+
+                if (autoLocation)
+                    findMyLocation(getActivity());
+            }
+        }, 100);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        barController.cancelEnabled(false);
+        barController.doneEnabled(false);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        ((ActivityMain) getActivity()).setActionBarDefaultListener();
+    }
+
+    @Override
+    public void clickSettings(View view) {
+        ((ActivityMain) getActivity()).clickSettings(view);
+    }
+
+    @Override
+    public void clickBack(View view) {
+        ((ActivityMain) getActivity()).clickBack(view);
+
+    }
+
+    @Override
+    public void clickCancel(View view) {
+        ((ActivityMain) getActivity()).clickCancel(view);
+    }
+
+    @Override
+    public void clickDone(View view) {
+        ((ActivityMain) getActivity()).placeSelected(navigationPoint, placeSelectedKey);
+        ((ActivityMain) getActivity()).initialScreen();
+    }
+
+    public final class OnAddressFoundListener implements LocationAddress.OnCompleteListener {
+
+        private final LatLng latLng;
+
+        public OnAddressFoundListener(LatLng latLng) {
+            this.latLng = latLng;
+        }
+
+        @Override
+        public void complete(List<Address> addresses) {
+            final Address userAddress = addresses.get(0);
+            final String addressString = userAddress.getAddressLine(0) + ", " + userAddress.getAddressLine(1);
+
+            navigationPoint.addressString = addressString;
+            navigationPoint.latLng = latLng;
+            navigationPoint.address = userAddress;
+
+            addressEditText.setText(addressString);
+        }
+
+        @Override
+        public void error() {
+            QueryMaster.alert(getActivity(), R.string.fail_getting_address);
+        }
+    }
+
+    private GoogleMap.OnMapClickListener onMapClick = new GoogleMap.OnMapClickListener() {
+        @Override
+        public void onMapClick(LatLng latLng) {
+            mapUtils.getMap().clear();
+            mapUtils.me(latLng);
+
+            OnAddressFoundListener onAddressFoundListener =
+                    new OnAddressFoundListener(latLng);
+
+            LocationAddress locationAddress = new LocationAddress(getActivity(), latLng);
+            locationAddress.setOnCompleteListener(onAddressFoundListener);
+            locationAddress.start();
+        }
+    };
+
+    private void findMyLocation(final Context context) {
+        long LOCATION_UPDATE_INTERVAL = 10;
+        long WAIT_TIME = 10;
+        long LOCATION_TIMEOUT_IN_SECONDS = 10;
+
+        LocationRequest req = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setExpirationDuration(TimeUnit.SECONDS.toMillis(WAIT_TIME))
+                .setInterval(LOCATION_UPDATE_INTERVAL);
+
+        ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(context);
+
+        Observable<Location> goodEnoughQuicklyOrNothingObservable = locationProvider.getUpdatedLocation(req)
+                .filter(new Func1<Location, Boolean>() {
+                    @Override
+                    public Boolean call(Location location) {
+                        final LatLng latLng = new LatLng(location.getLatitude(),
+                                location.getLongitude());
+
+                        final OnAddressFoundListener onAddressFoundListener = new
+                                OnAddressFoundListener(latLng);
+                        final LocationAddress locationAddress = new LocationAddress(context,
+                                location.getLatitude(), location.getLongitude());
+
+                        mapUtils.moveCamera(latLng);
+
+
+                        locationAddress.setOnCompleteListener(onAddressFoundListener);
+                        locationAddress.start();
+
+
+                        return true;
+                    }
+                })
+                .timeout(LOCATION_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS, Observable.from((Location) null), AndroidSchedulers.mainThread())
+                .first()
+                .observeOn(AndroidSchedulers.mainThread());
+
+        goodEnoughQuicklyOrNothingObservable.subscribe();
+    }
+}

@@ -1,10 +1,17 @@
 package ch.crut.taxi.utils;
 
 
+import android.location.Address;
+
 import com.google.android.gms.maps.model.LatLng;
 
-public class NavigationPoint {
+import java.io.Serializable;
 
-    public String address;
+public class NavigationPoint implements Serializable {
+
+    private static final long serialVersionUID = 100L;
+
+    public String addressString;
     public LatLng latLng;
+    public Address address;
 }

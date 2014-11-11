@@ -18,7 +18,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/fragmentBeginFromWhere"
+                android:id="@+id/fragmentTaxiBookingOriginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/from"
@@ -27,6 +27,7 @@
 
             <EditText
                 android:inputType="none"
+                android:focusable="false"
                 android:id="@+id/fragmentTaxiBookingOrigin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,6 +42,7 @@
             android:background="@drawable/button_def_bg">
 
             <Button
+                android:id="@+id/fragmentTaxiBookingDestinationButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/whereabouts"
@@ -49,6 +51,7 @@
 
             <EditText
                 android:inputType="none"
+                android:focusable="false"
                 android:id="@+id/fragmentTaxiBookingDestination"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

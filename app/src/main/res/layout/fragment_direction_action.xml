@@ -19,27 +19,28 @@
             android:background="@drawable/icon_search" />
 
         <EditText
-            android:id="@+id/fragmentFromWhereActionAddress"
+            android:id="@+id/fragmentDirectionActionAddress"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:hint="@string/hint_address"
             android:layout_height="wrap_content"
             android:background="@null" />
 
         <ImageView
+            android:id="@+id/fragmentDirectionActionMyLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/icon_location" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/fragmentFromWhereActionMyLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/my_location"
         android:background="@null" />
 
     <Button
-        android:id="@+id/fragmentFromWhereActionSetLocation"
+        android:id="@+id/fragmentDirectionActionSetLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/map_point"
