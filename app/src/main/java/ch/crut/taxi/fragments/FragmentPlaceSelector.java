@@ -111,7 +111,7 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
             public void run() {
                 GoogleMap map = mapFragment.getMap();
 
-                mapUtils = new GoogleMapUtils(map);
+                mapUtils = new GoogleMapUtils(getActivity(), map);
 
                 mapUtils.getMap().setOnMapClickListener(onMapClick);
                 mapUtils.getMap().setMyLocationEnabled(true);
@@ -169,14 +169,17 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
 
         @Override
         public void complete(List<Address> addresses) {
-            final Address userAddress = addresses.get(0);
-            final String addressString = userAddress.getAddressLine(0) + ", " + userAddress.getAddressLine(1);
+            if (addresses != null && addresses.size() > 0) {
 
-            navigationPoint.addressString = addressString;
-            navigationPoint.latLng = latLng;
-            navigationPoint.address = userAddress;
+                final Address userAddress = addresses.get(0);
+                final String addressString = userAddress.getAddressLine(0) + ", " + userAddress.getAddressLine(1);
 
-            addressEditText.setText(addressString);
+                navigationPoint.addressString = addressString;
+                navigationPoint.latLng = latLng;
+                navigationPoint.address = userAddress;
+
+                addressEditText.setText(addressString);
+            }
         }
 
         @Override

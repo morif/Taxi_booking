@@ -1,5 +1,6 @@
 package ch.crut.taxi;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,7 +28,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 @WindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
 @EActivity(R.layout.activity_main)
-public class ActivityMain extends FragmentActivity implements ActionBarClickListener, OnPlaceSelectedListener {
+public class ActivityMain extends FragmentActivity implements ActionBarClickListener, OnPlaceSelectedListener, QueryMaster.OnErrorListener {
 
     public static final int MAP_CONTAINER = R.id.activityMainMap;
     public static final int FRAME_CONTAINER = R.id.activityMainContainer;
@@ -52,9 +53,13 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         return taxiBookingHelper;
     }
 
+    private TaxiApplication taxiApplication;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        taxiApplication = (TaxiApplication) getApplication();
 
         UIActionBar uiActionBar = new UIActionBar(getActionBar());
 
@@ -67,6 +72,21 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
 
         FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
         FragmentHelper.add(fragmentManager, fragmentTaxiBooking, FRAME_CONTAINER);
+    }
+
+    protected void onResume() {
+        super.onResume();
+        taxiApplication.setCurrentActivity(this);
+    }
+
+    protected void onPause() {
+        clearReferences();
+        super.onPause();
+    }
+
+    protected void onDestroy() {
+        clearReferences();
+        super.onDestroy();
     }
 
     @Override
@@ -118,6 +138,23 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
             taxiBookingHelper.destination = navigationPoint;
         } else {
             taxiBookingHelper.original = navigationPoint;
+        }
+    }
+
+    private void clearReferences() {
+        Activity currActivity = taxiApplication.getCurrentActivity();
+        if (currActivity != null && currActivity.equals(this))
+            taxiApplication.setCurrentActivity(null);
+    }
+
+    @Override
+    public void QMerror(int errorCode) {
+        if (errorCode == QueryMaster.QM_SERVER_ERROR) {
+            QueryMaster.toast(this, R.string.error_server_connection);
+        } else if (errorCode == QueryMaster.QM_NETWORK_ERROR) {
+            QueryMaster.toast(this, R.string.error_network_unavailable);
+        } else if (errorCode == QueryMaster.QM_INVALID_JSON) {
+            QueryMaster.toast(this, R.string.error_invalid_json);
         }
     }
 }

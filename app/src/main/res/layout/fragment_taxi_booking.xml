@@ -14,10 +14,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_def_bg"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/xml_button_def_bg"
             android:orientation="horizontal">
 
             <Button
+                android:background="@drawable/xml_button_def_bg_left"
                 android:id="@+id/fragmentTaxiBookingOriginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,9 +44,14 @@
             android:id="@+id/fragmentBeginWhereBouts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_def_bg">
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/xml_button_def_bg">
 
             <Button
+                android:background="@drawable/xml_button_def_bg_left"
                 android:id="@+id/fragmentTaxiBookingDestinationButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,17 +73,22 @@
             android:id="@+id/fragmentBeginWhen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_def_bg">
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/xml_button_def_bg">
 
-            <TextView
-                android:id="@+id/fragmentTaxiBookingOrderTime"
+            <Button
+                android:background="@drawable/xml_button_def_bg_left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/when"
                 style="@style/fragmentBeginButton"
                 android:layout_weight="26" />
 
-            <Button
+            <TextView
+                android:id="@+id/fragmentTaxiBookingOrderTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/fragmentBeginButton"
@@ -85,9 +100,14 @@
             android:id="@+id/fragmentBeginWishes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_def_bg">
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/xml_button_def_bg">
 
             <Button
+                android:background="@drawable/xml_button_def_bg_left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/wishes"
@@ -104,12 +124,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="@color/light_grey_translucent">
 
             <Button
+                android:id="@+id/fragmentTaxiBookingSearchAuto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="search auto" />
+                android:background="@drawable/blue_button_bg"
+                android:text="@string/search_auto" />
         </LinearLayout>
     </LinearLayout>
 

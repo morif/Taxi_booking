@@ -56,6 +56,12 @@ public class FragmentTaxiBooking extends Fragment {
         ((ActivityMain) getActivity()).add(FragmentDirectionAction.newInstance(destinationKey));
     }
 
+    @Click(R.id.fragmentTaxiBookingSearchAuto)
+    protected void clickSearchAuto() {
+        ((ActivityMain) getActivity()).add(FragmentTaxiSearch.newInstance());
+    }
+
+
     @Override
     public void onStart() {
         super.onStart();

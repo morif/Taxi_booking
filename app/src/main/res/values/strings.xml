@@ -20,4 +20,8 @@
     <string name="hint_address">Адресс</string>
     <string name="show_route">Показать маршрут</string>
     <string name="taxi_order">Заказать такси</string>
+    <string name="error_server_connection">Ошибка подключения к серверу</string>
+    <string name="error_network_unavailable">Нет интернет подключения</string>
+    <string name="error_invalid_json">invalid json object</string>
+    <string name="search_auto">Поиск автомобиля</string>
 </resources>
