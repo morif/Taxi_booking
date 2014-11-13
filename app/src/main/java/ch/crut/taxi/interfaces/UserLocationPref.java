@@ -18,6 +18,9 @@ public interface UserLocationPref {
     public String email();
 
     @DefaultString("")
+    public String name();
+
+    @DefaultString("")
     public String phoneFirst();
 
     @DefaultString("")

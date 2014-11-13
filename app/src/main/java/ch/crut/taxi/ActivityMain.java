@@ -76,11 +76,10 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         fragmentTaxiBooking = FragmentTaxiBooking.newInstance();
         supportMapFragment = SupportMapFragment.newInstance();
         taxiBookingHelper = new TaxiBookingHelper();
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+
+        FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
+        FragmentHelper.add(fragmentManager, fragmentTaxiBooking, FRAME_CONTAINER);
     }
 
     @Override
