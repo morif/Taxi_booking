@@ -18,13 +18,24 @@
             android:layout_height="wrap_content"
             android:background="@drawable/icon_search" />
 
-        <EditText
-            android:id="@+id/fragmentDirectionActionAddress"
+        <AutoCompleteTextView
+            android:id="@+id/serchAddressAutoCompleteTextView"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:hint="@string/hint_address"
             android:layout_height="wrap_content"
-            android:background="@null" />
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textView1"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:hint="@string/hint_address"
+            android:ems="10"
+            android:layout_weight="1"
+            android:text=""/>
+
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="invisible"
+            android:id="@+id/progressBarInAutoComplite"/>
 
         <ImageView
             android:id="@+id/fragmentDirectionActionMyLocation"

@@ -20,4 +20,14 @@
     <string name="hint_address">Адресс</string>
     <string name="show_route">Показать маршрут</string>
     <string name="taxi_order">Заказать такси</string>
+    <string name="authoritation">Авторизация</string>
+    <string name="registration">Регистрация</string>
+    <string name="email_address">Электронный адрес</string>
+    <string name="name">Имя</string>
+    <string name="telephone">Телефон</string>
+    <string name="telephone_first">Телефон 1</string>
+    <string name="telephone_second">Телефон 2</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
 </resources>

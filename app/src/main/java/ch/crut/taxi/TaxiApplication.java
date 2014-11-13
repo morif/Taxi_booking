@@ -3,7 +3,7 @@ package ch.crut.taxi;
 
 import android.app.Application;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+// import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 
 public class TaxiApplication extends Application {
@@ -13,6 +13,6 @@ public class TaxiApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        CalligraphyConfig.initDefault("fonts/SegoePrint.ttf", R.attr.fontPath);
+  //      CalligraphyConfig.initDefault("fonts/SegoePrint.ttf", R.attr.fontPath);
     }
 }

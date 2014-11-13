@@ -223,14 +223,9 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
                                 OnAddressFoundListener(latLng);
                         final LocationAddress locationAddress = new LocationAddress(context,
                                 location.getLatitude(), location.getLongitude());
-
                         mapUtils.moveCamera(latLng);
-
-
                         locationAddress.setOnCompleteListener(onAddressFoundListener);
                         locationAddress.start();
-
-
                         return true;
                     }
                 })
