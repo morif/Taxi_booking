@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import org.androidannotations.annotations.Click;
@@ -26,7 +27,7 @@ import ch.crut.taxi.utils.request.Entities;
 import ch.crut.taxi.utils.request.ServerRequest;
 
 @EFragment(R.layout.fragment_taxi_search)
-public class FragmentTaxiSearch extends Fragment {
+public class FragmentTaxiSearch extends Fragment implements FragmentGoogleMap.OnMapInitialized {
 
     private static final int CONTAINER = R.id.fragmentTaxiSearchFrameLayout;
 
@@ -66,20 +67,18 @@ public class FragmentTaxiSearch extends Fragment {
     public void onStart() {
         super.onStart();
 
-        final SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+        final FragmentGoogleMap mapFragment = FragmentGoogleMap.newInstance();
+        mapFragment.setOnMapInitialized(this);
+
         FragmentHelper.add(getChildFragmentManager(), mapFragment, CONTAINER);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                mapUtils = new GoogleMapUtils(getActivity(), mapFragment.getMap());
-
-                drawRoute = new DrawRoute(mapUtils.getMap());
-
-                setUpCamera();
-            }
-        }, 100);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//
+//            }
+//        }, 100);
     }
 
     private void setUpCamera() {
@@ -106,4 +105,12 @@ public class FragmentTaxiSearch extends Fragment {
         mapUtils.addDriver(listDrivers);
     }
 
+    @Override
+    public void mapWasInitialized(GoogleMap googleMap) {
+        mapUtils = new GoogleMapUtils(getActivity(), googleMap);
+
+        drawRoute = new DrawRoute(getActivity(), mapUtils.getMap());
+
+        setUpCamera();
+    }
 }

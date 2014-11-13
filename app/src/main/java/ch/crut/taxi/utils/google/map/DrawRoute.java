@@ -1,6 +1,7 @@
 package ch.crut.taxi.utils.google.map;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
@@ -8,12 +9,10 @@ import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -28,11 +27,19 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrawRoute {
+import ch.crut.taxi.TaxiApplication;
+import ch.crut.taxi.querymaster.QueryMaster;
+
+public class DrawRoute implements QueryMaster.OnCompleteListener, QueryMaster.OnErrorListener {
 
 
     private static final String TAG = "DRAW_ROUTE";
     private static int DRAW_LINE_DELAY_NONE = 30;
+
+    private static final String ROUTES = "routes";
+    private static final String STEPS = "steps";
+    private static final String LEGS = "legs";
+    private static final String POLYLINE = "polyline";
 
     private Handler handlePoliline = new Handler() {
         @Override
@@ -43,9 +50,11 @@ public class DrawRoute {
         }
     };
     private GoogleMap googleMap;
+    private Context context;
 
-    public DrawRoute(GoogleMap googleMap) {
+    public DrawRoute(Context context, GoogleMap googleMap) {
         this.googleMap = googleMap;
+        this.context = context;
     }
 
     public void draw(final LatLng origin, final LatLng destination) {
@@ -53,11 +62,6 @@ public class DrawRoute {
     }
 
     public void DrawDirection(final LatLng origin, final LatLng destination, String mode) {
-
-        final String ROUTES = "routes";
-        final String STEPS = "steps";
-        final String LEGS = "legs";
-        final String POLYLINE = "polyline";
 
         final String url = "http://maps.googleapis.com/maps/api/directions/json?origin="
                 + origin.latitude
@@ -68,6 +72,14 @@ public class DrawRoute {
                 + ","
                 + destination.longitude
                 + "&sensor=true&mode=" + mode;
+
+        Log.e("", "DrawDirection url -> " + url);
+
+        QueryMaster queryMaster = new QueryMaster(TaxiApplication.getRunningActivityContext(), url, QueryMaster.QUERY_GET);
+        queryMaster.setProgressDialog();
+        queryMaster.setOnCompleteListener(this);
+        queryMaster.setOnErrorListener(this);
+        queryMaster.start();
 
         Thread thread = new Thread(new Runnable() {
 
@@ -110,8 +122,8 @@ public class DrawRoute {
                 }
             }
         });
-        thread.setPriority(Thread.MIN_PRIORITY);
-        thread.start();
+//        thread.setPriority(Thread.MIN_PRIORITY);
+//        thread.start();
     }
 
     private List<LatLng> decodePoly(String encoded) {
@@ -162,7 +174,7 @@ public class DrawRoute {
     }
 
     public static JSONObject createJSONObject(HttpResponse httpResponse) {
-        InputStream is = null;
+        InputStream is;
         String json = "";
         JSONObject jObj = null;
         StringBuilder sb = null;
@@ -196,5 +208,37 @@ public class DrawRoute {
         }
 
         return jObj;
+    }
+
+    @Override
+    public void QMcomplete(JSONObject jsonObject) throws JSONException {
+        JSONArray jRoutes = jsonObject.getJSONArray(ROUTES);
+
+        if (jRoutes.length() > 0) {
+
+            JSONObject jRoutesObj = jRoutes.getJSONObject(0);
+            JSONArray jLegsArr = jRoutesObj.getJSONArray(LEGS);
+            JSONObject jLegsObj = jLegsArr.getJSONObject(0);
+            JSONArray jStepsArr = jLegsObj.getJSONArray(STEPS);
+            final int length = jStepsArr.length();
+            for (int i = 0; i < length; i++) {
+                JSONObject jOneStep = jStepsArr.getJSONObject(i);
+                JSONObject jPolylineObj = jOneStep
+                        .getJSONObject(POLYLINE);
+
+                try {
+                    Thread.sleep(DRAW_LINE_DELAY_NONE);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                decodePoly(jPolylineObj.getString("points"));
+            }
+        }
+    }
+
+    @Override
+    public void QMerror(int errorCode) {
+        QueryMaster.alert(context, String.valueOf(errorCode));
     }
 }
