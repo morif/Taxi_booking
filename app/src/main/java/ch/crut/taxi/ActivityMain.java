@@ -1,5 +1,6 @@
 package ch.crut.taxi;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -52,9 +53,13 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         return taxiBookingHelper;
     }
 
+    private TaxiApplication taxiApplication;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        taxiApplication = (TaxiApplication) getApplication();
 
         UIActionBar uiActionBar = new UIActionBar(getActionBar());
 
@@ -73,14 +78,30 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
 //    protected void attachBaseContext(Context newBase) {
 //        super.attachBaseContext(new CalligraphyContextWrapper(newBase));
 //    }
+    protected void onResume() {
+        super.onResume();
+        taxiApplication.setCurrentActivity(this);
+    }
+
+    protected void onPause() {
+        clearReferences();
+        super.onPause();
+    }
+
+    protected void onDestroy() {
+        clearReferences();
+        super.onDestroy();
+    }
+
+//    @Override
+//    protected void attachBaseContext(Context newBase) {
+//        super.attachBaseContext(new CalligraphyContextWrapper(newBase));
+//    }
 
     @Override
     public void clickSettings(View view) {
         QueryMaster.toast(this, "settings");
     }
-
-
-
 
     @Override
     public void clickBack(View view) {
@@ -121,6 +142,23 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
             taxiBookingHelper.destination = navigationPoint;
         } else {
             taxiBookingHelper.original = navigationPoint;
+        }
+    }
+
+    private void clearReferences() {
+        Activity currActivity = taxiApplication.getCurrentActivity();
+        if (currActivity != null && currActivity.equals(this))
+            taxiApplication.setCurrentActivity(null);
+    }
+
+    @Override
+    public void QMerror(int errorCode) {
+        if (errorCode == QueryMaster.QM_SERVER_ERROR) {
+            QueryMaster.toast(this, R.string.error_server_connection);
+        } else if (errorCode == QueryMaster.QM_NETWORK_ERROR) {
+            QueryMaster.toast(this, R.string.error_network_unavailable);
+        } else if (errorCode == QueryMaster.QM_INVALID_JSON) {
+            QueryMaster.toast(this, R.string.error_invalid_json);
         }
     }
 }

@@ -30,4 +30,8 @@
     <string name="confirm">Подтвердить</string>
     <string name="login">Логин</string>
     <string name="password">Пароль</string>
+    <string name="error_server_connection">Ошибка подключения к серверу</string>
+    <string name="error_network_unavailable">Нет интернет подключения</string>
+    <string name="error_invalid_json">invalid json object</string>
+    <string name="search_auto">Поиск автомобиля</string>
 </resources>

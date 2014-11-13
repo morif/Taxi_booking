@@ -1,7 +1,6 @@
 package ch.crut.taxi.querymaster;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -26,6 +25,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import ch.crut.taxi.views.NiceProgressDialog;
+
 public class QueryMaster extends Thread {
 
     /**
@@ -38,23 +39,39 @@ public class QueryMaster extends Thread {
      */
     public static final String SERVER_RETURN_INVALID_DATA = "Ошибка обработки запроса на сервере";
 
-    protected static final int QUERY_MASTER_COMPLETE = 1;
-    public static final int QUERY_MASTER_ERROR = 2;
-    public static final int NETWORK_UNAVAILABLE = 3;
+    protected static final int QM_COMPLETE = 1;
+
+    public static final int QM_SERVER_ERROR = 2;
+
+    public static final int QM_NETWORK_ERROR = 3;
+    public static final int QM_INVALID_JSON = 4;
 
     public static final int QUERY_GET = 23;
     public static final int QUERY_POST = 24;
+
+    private static final String TAG = "QueryMaster";
 
     public void setProgressDialog() {
         progressHandler.sendEmptyMessage(-1);
     }
 
-    protected ProgressDialog progressDialog;
+    public void setOnCompleteListener(OnCompleteListener onCompleteListener) {
+        this.onCompleteListener = onCompleteListener;
+    }
 
     private OnCompleteListener onCompleteListener;
 
+
+    public void setOnErrorListener(OnErrorListener onErrorListener) {
+        this.onErrorListener = onErrorListener;
+    }
+
+    private OnErrorListener onErrorListener;
+
     protected Handler resultHandler;
     protected Handler progressHandler;
+
+    private NiceProgressDialog niceProgressDialog;
 
     private MultipartEntity entity;
     private Context context;
@@ -93,16 +110,14 @@ public class QueryMaster extends Thread {
         }
 
         if (!isNetworkConnected() && resultHandler != null) {
-            resultHandler.sendEmptyMessage(NETWORK_UNAVAILABLE);
+            resultHandler.sendEmptyMessage(QM_NETWORK_ERROR);
             return;
         }
         HttpParams httpParams = new BasicHttpParams();
         httpParams.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
                 timeoutConnection);
 
-
-        DefaultHttpClient httpclient = new DefaultHttpClient(httpParams);
-//        httpclient.setParams(httpParams);
+        DefaultHttpClient httpClient = new DefaultHttpClient(httpParams);
 
         HttpPost httpPost;
         HttpGet httpGet;
@@ -114,7 +129,7 @@ public class QueryMaster extends Thread {
             if (queryType == QUERY_GET) {
                 httpGet = new HttpGet(url);
 
-                response = httpclient.execute(httpGet);
+                response = httpClient.execute(httpGet);
 
             } else if (queryType == QUERY_POST) {
 
@@ -122,53 +137,40 @@ public class QueryMaster extends Thread {
                 if (entity != null) {
                     httpPost.setEntity(entity);
                 }
-                response = httpclient.execute(httpPost);
+                response = httpClient.execute(httpPost);
             }
 
             serverResponse = response != null ?
                     EntityUtils.toString(response.getEntity()) : null;
 
-            Log.e("", "serverResponse -> " + serverResponse);
-
-            if (successResultListener != null) {
-                successResultListener.result(url, serverResponse);
-            }
+            Log.e(TAG, "serverResponse -> " + serverResponse);
 
             if (resultHandler != null) {
-                resultHandler.sendEmptyMessage(QUERY_MASTER_COMPLETE);
+                resultHandler.sendEmptyMessage(QM_COMPLETE);
             }
 
-        } catch (NullPointerException | IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e(TAG, e.toString());
+
             if (resultHandler != null) {
-                resultHandler.sendEmptyMessage(QUERY_MASTER_ERROR);
+                resultHandler.sendEmptyMessage(QM_SERVER_ERROR);
             }
         }
     }
 
-    public void setOnCompleteListener(OnCompleteListener onCompleteListener) {
-        this.onCompleteListener = onCompleteListener;
+//
+//    public interface OnCompleteListener {
+//        public void complete(String serverResponse);
+//
+//        public void error(int errorCode);
+//    }
+
+    public static interface OnCompleteListener {
+        public void QMcomplete(JSONObject jsonObject) throws JSONException;
     }
 
-    public interface OnCompleteListener {
-        public void complete(String serverResponse);
-
-        public void error(int errorCode);
-    }
-
-    private SuccessResultListener successResultListener;
-
-    protected void add(SuccessResultListener successResultListener) {
-        this.successResultListener = successResultListener;
-    }
-
-    public interface SuccessResultListener {
-        /**
-         * Method called from request background thread
-         *
-         * @param result - string result if all is ok
-         */
-        public void result(String url, String result);
+    public static interface OnErrorListener {
+        public void QMerror(int errorCode);
     }
 
     private void initHandler() {
@@ -176,30 +178,56 @@ public class QueryMaster extends Thread {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if (onCompleteListener != null) {
-                    if (msg.what == QUERY_MASTER_COMPLETE) {
-                        onCompleteListener.complete(serverResponse);
+
+                if (onCompleteListener != null && onErrorListener != null) {
+
+                    if (msg.what == QM_COMPLETE) {
+
+                        JSONObject jsonObject = get(serverResponse);
+
+                        if (jsonObject != null) {
+                            try {
+                                onCompleteListener.QMcomplete(get(serverResponse));
+                            } catch (JSONException e) {
+
+                                Log.e(TAG, e.toString());
+                                e.printStackTrace();
+
+                                onErrorListener.QMerror(QM_INVALID_JSON);
+                            }
+                        } else {
+                            onErrorListener.QMerror(QM_INVALID_JSON);
+                        }
                     }
-                    if (msg.what == QUERY_MASTER_ERROR) {
-                        onCompleteListener.error(QUERY_MASTER_ERROR);
-                    }
-                    if (msg.what == NETWORK_UNAVAILABLE) {
-                        onCompleteListener.error(NETWORK_UNAVAILABLE);
-                    }
+
+                    onErrorListener.QMerror(msg.what);
                 }
-                if (progressDialog != null) {
-                    progressDialog.dismiss();
+
+                if (niceProgressDialog != null) {
+                    niceProgressDialog.dismiss();
                 }
             }
         };
+
         progressHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
 
-                progressDialog = ProgressDialog.show(context, null, "Загрузка...");
+                niceProgressDialog = new NiceProgressDialog(context);
+                niceProgressDialog.show();
+
             }
         };
+    }
+
+    private static JSONObject get(String serverResponse) {
+        try {
+            return new JSONObject(serverResponse);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private boolean isNetworkConnected() {
