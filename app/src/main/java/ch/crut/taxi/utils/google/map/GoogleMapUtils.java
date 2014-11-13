@@ -23,6 +23,9 @@ public class GoogleMapUtils {
     private Map<Marker, Integer> availableMarkersType;
 
     public GoogleMapUtils(Context context, GoogleMap googleMap) {
+        if (googleMap == null) {
+            throw new RuntimeException("GoogleMapUtils googleMap is NuLL");
+        }
         this.googleMap = googleMap;
         this.context = context;
         this.availableMarkersType = new HashMap<>();
@@ -66,10 +69,6 @@ public class GoogleMapUtils {
 
     public void moveCamera(double latitude, double longitude) {
         moveCamera(new LatLng(latitude, longitude));
-    }
-
-    public void drawRoute(LatLng origin, LatLng destination) {
-        new DrawRoute(googleMap).draw(origin, destination);
     }
 
     public void addDriver(List<Entities.SearchTaxi> listDrivers) {
