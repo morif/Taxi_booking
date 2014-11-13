@@ -17,6 +17,8 @@ import org.androidannotations.annotations.WindowFeature;
 import ch.crut.taxi.actionbar.ActionBarController;
 import ch.crut.taxi.actionbar.UIActionBar;
 import ch.crut.taxi.fragmenthelper.FragmentHelper;
+import ch.crut.taxi.fragments.FragmentAuthoritation;
+import ch.crut.taxi.fragments.FragmentRegistration;
 import ch.crut.taxi.fragments.FragmentTaxiBooking;
 import ch.crut.taxi.interfaces.ActionBarClickListener;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
@@ -28,7 +30,7 @@ import ch.crut.taxi.utils.TaxiBookingHelper;
 
 @WindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
 @EActivity(R.layout.activity_main)
-public class ActivityMain extends FragmentActivity implements ActionBarClickListener, OnPlaceSelectedListener {
+public class ActivityMain extends FragmentActivity implements ActionBarClickListener, OnPlaceSelectedListener,QueryMaster.OnErrorListener {
 
     public static final int MAP_CONTAINER = R.id.activityMainMap;
     public static final int FRAME_CONTAINER = R.id.activityMainContainer;
@@ -71,7 +73,7 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         taxiBookingHelper = new TaxiBookingHelper();
 
         FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
-        FragmentHelper.add(fragmentManager, fragmentTaxiBooking, FRAME_CONTAINER);
+        FragmentHelper.add(fragmentManager, FragmentRegistration.newInstance(), FRAME_CONTAINER);
     }
 
 //    @Override

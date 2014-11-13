@@ -183,9 +183,6 @@ public class QueryMaster extends Thread {
 
                     if (msg.what == QM_COMPLETE) {
 
-                        JSONObject jsonObject = get(serverResponse);
-
-                        if (jsonObject != null) {
                             try {
                                 onCompleteListener.QMcomplete(get(serverResponse));
                             } catch (JSONException e) {
@@ -195,9 +192,7 @@ public class QueryMaster extends Thread {
 
                                 onErrorListener.QMerror(QM_INVALID_JSON);
                             }
-                        } else {
-                            onErrorListener.QMerror(QM_INVALID_JSON);
-                        }
+
                     }
 
                     onErrorListener.QMerror(msg.what);
@@ -221,13 +216,10 @@ public class QueryMaster extends Thread {
         };
     }
 
-    private static JSONObject get(String serverResponse) {
-        try {
+    private static JSONObject get(String serverResponse) throws JSONException {
+
             return new JSONObject(serverResponse);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+
     }
 
     private boolean isNetworkConnected() {

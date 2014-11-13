@@ -34,4 +34,5 @@
     <string name="error_network_unavailable">Нет интернет подключения</string>
     <string name="error_invalid_json">invalid json object</string>
     <string name="search_auto">Поиск автомобиля</string>
+    <string name="correct_registration">Вы успешно зарегистрировались</string>
 </resources>
