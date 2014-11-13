@@ -2,18 +2,22 @@ package ch.crut.taxi;
 
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Application;
-import android.content.ComponentName;
-import android.content.Context;
 
+import org.androidannotations.annotations.EApplication;
+import org.androidannotations.annotations.sharedpreferences.Pref;
+
+import ch.crut.taxi.interfaces.UserLocationPref_;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 
+@EApplication
 public class TaxiApplication extends Application {
 
     private static TaxiApplication taxiApplication;
 
+    @Pref
+    protected UserLocationPref_ userLocationPref;
 
     @Override
     public void onCreate() {
@@ -36,5 +40,13 @@ public class TaxiApplication extends Application {
 
     public static Activity getRunningActivityContext() {
         return taxiApplication.getCurrentActivity();
+    }
+
+    public static UserLocationPref_ getUserPrefs() {
+        return taxiApplication.userLocationPref;
+    }
+
+    public static boolean isUserAuthorized() {
+        return !getUserPrefs().id().get().isEmpty();
     }
 }

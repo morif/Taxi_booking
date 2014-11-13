@@ -32,6 +32,7 @@ import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.google.map.GoogleMapUtils;
 import ch.crut.taxi.utils.google.map.LocationAddress;
 import ch.crut.taxi.utils.NavigationPoint;
+import ch.crut.taxi.views.NiceProgressDialog;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -53,6 +54,7 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
     private ActionBarController barController;
     private GoogleMapUtils mapUtils;
     private NavigationPoint navigationPoint;
+    private NiceProgressDialog niceProgressDialog;
 
     public static FragmentPlaceSelector newInstance(OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey, boolean autoLocation) {
         FragmentPlaceSelector placeSelector = new FragmentPlaceSelector_();
@@ -72,6 +74,12 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
 
     @ViewById(R.id.fragmentFromWhereAddress)
     protected EditText addressEditText;
+
+    @ViewById(R.id.fragmentPlaceSelectorEntrance)
+    protected EditText entranceEditText;
+
+    @ViewById(R.id.fragmentPlaceSelectorHome)
+    protected EditText homeEditText;
 
     @Click(R.id.fragmentPlaceSelectorLocation)
     protected void clickLocation() {
@@ -93,6 +101,7 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
         activityMain.replaceActionBarClickListener(this);
 
         barController = activityMain.getActionBarController();
+        niceProgressDialog = new NiceProgressDialog(activity);
     }
 
     @Override
@@ -177,13 +186,18 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
                 navigationPoint.addressString = addressString;
                 navigationPoint.latLng = latLng;
                 navigationPoint.address = userAddress;
+                navigationPoint.setHome();
 
                 addressEditText.setText(addressString);
+                homeEditText.setText(navigationPoint.getHome());
             }
+
+            niceProgressDialog.dismiss();
         }
 
         @Override
         public void error() {
+            niceProgressDialog.dismiss();
             QueryMaster.alert(getActivity(), R.string.fail_getting_address);
         }
     }
@@ -191,8 +205,11 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
     private GoogleMap.OnMapClickListener onMapClick = new GoogleMap.OnMapClickListener() {
         @Override
         public void onMapClick(LatLng latLng) {
+
             mapUtils.getMap().clear();
             mapUtils.me(latLng);
+
+            niceProgressDialog.show();
 
             OnAddressFoundListener onAddressFoundListener =
                     new OnAddressFoundListener(latLng);
@@ -233,7 +250,6 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
                         locationAddress.setOnCompleteListener(onAddressFoundListener);
                         locationAddress.start();
 
-
                         return true;
                     }
                 })
@@ -242,5 +258,7 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
                 .observeOn(AndroidSchedulers.mainThread());
 
         goodEnoughQuicklyOrNothingObservable.subscribe();
+
+        niceProgressDialog.show();
     }
 }

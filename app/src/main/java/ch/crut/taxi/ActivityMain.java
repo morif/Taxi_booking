@@ -2,6 +2,7 @@ package ch.crut.taxi;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +12,7 @@ import android.view.Window;
 
 import com.google.android.gms.maps.SupportMapFragment;
 
+import org.androidannotations.annotations.App;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.WindowFeature;
 
@@ -23,6 +25,10 @@ import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
+import ch.crut.taxi.utils.UserLocation;
+import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
+import rx.Observable;
+import rx.Subscription;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -40,6 +46,8 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
     private FragmentTaxiBooking fragmentTaxiBooking;
     private TaxiBookingHelper taxiBookingHelper;
 
+    private UserLocation userLocation;
+
     // getters
     public ActionBarController getActionBarController() {
         return actionBarController;
@@ -53,13 +61,12 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         return taxiBookingHelper;
     }
 
-    private TaxiApplication taxiApplication;
+    @App
+    protected TaxiApplication taxiApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        taxiApplication = (TaxiApplication) getApplication();
 
         UIActionBar uiActionBar = new UIActionBar(getActionBar());
 
@@ -69,21 +76,35 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         fragmentTaxiBooking = FragmentTaxiBooking.newInstance();
         supportMapFragment = SupportMapFragment.newInstance();
         taxiBookingHelper = new TaxiBookingHelper();
-
-        FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
-        FragmentHelper.add(fragmentManager, fragmentTaxiBooking, FRAME_CONTAINER);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         taxiApplication.setCurrentActivity(this);
+
+        userLocation = new UserLocation(this);
+        userLocation.update();
     }
 
+    @Override
     protected void onPause() {
         clearReferences();
+        userLocation.destroy();
         super.onPause();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         clearReferences();
         super.onDestroy();
@@ -156,6 +177,14 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         } else if (errorCode == QueryMaster.QM_INVALID_JSON) {
             QueryMaster.toast(this, R.string.error_invalid_json);
         }
+    }
+
+    private void getUserLocation() {
+
+    }
+
+    private void getUserAddress() {
+
     }
 }
 

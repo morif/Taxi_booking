@@ -1,8 +1,12 @@
 package ch.crut.taxi.actionbar;
 
 
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ch.crut.taxi.R;
@@ -19,6 +23,9 @@ public class ActionBarController {
     private TextView title;
     private Button leftButton;
     private Button rightButton;
+    private LinearLayout.LayoutParams lpSettings;
+    private LinearLayout.LayoutParams lpDefault;
+//    private LinearLayout.LayoutParams lpTextButton;
 
     public ActionBarController(UIActionBar uiActionBar) {
         View view = uiActionBar.getActionBar().getCustomView();
@@ -26,6 +33,20 @@ public class ActionBarController {
         title = (TextView) view.findViewById(R.id.actionBarUITitle);
         leftButton = (Button) view.findViewById(R.id.actionBarUILeftButton);
         rightButton = (Button) view.findViewById(R.id.actionBarUIRightButton);
+
+        final DisplayMetrics displayMetrics = view.getContext().getResources().getDisplayMetrics();
+
+        final int _35dpInPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 35,
+                displayMetrics);
+        final int _30dpInPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, displayMetrics);
+
+        lpSettings = new LinearLayout.LayoutParams(_35dpInPixels, _35dpInPixels);
+
+        lpDefault = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                _35dpInPixels);
+
+//        lpTextButton = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+//                _30dpInPixels);
     }
 
 
@@ -40,11 +61,13 @@ public class ActionBarController {
         rightButton.setText("");
         rightButton.setBackgroundDrawable(null);
         rightButton.setOnClickListener(null);
+        rightButton.setLayoutParams(lpDefault);
     }
 
     private void showSettings() {
         rightButton.setText("");
         rightButton.setBackgroundResource(R.drawable.icon_settings);
+        rightButton.setLayoutParams(lpSettings);
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +93,7 @@ public class ActionBarController {
         if (enable) {
             leftButton.setBackgroundResource(R.drawable.selector_action_bar_blue);
             leftButton.setText(R.string.cancel);
+//            leftButton.setLayoutParams(lpTextButton);
             leftButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -82,6 +106,7 @@ public class ActionBarController {
             leftButton.setBackgroundDrawable(null);
             leftButton.setText("");
             leftButton.setOnClickListener(null);
+//            leftButton.setLayoutParams(lpDefault);
         }
     }
 
@@ -112,10 +137,12 @@ public class ActionBarController {
                     }
                 }
             });
+//            rightButton.setLayoutParams(lpTextButton);
         } else {
             rightButton.setBackgroundDrawable(null);
             rightButton.setText("");
             rightButton.setOnClickListener(null);
+//            rightButton.setLayoutParams(lpDefault);
         }
     }
 
