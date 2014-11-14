@@ -16,7 +16,7 @@ import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
 import ch.crut.taxi.actionbar.ActionBarController;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
-import ch.crut.taxi.utils.AutoCompliteAsyncTask;
+import ch.crut.taxi.utils.AutoCompleteAsyncTask;
 
 @EFragment(R.layout.fragment_direction_action)
 public class FragmentDirectionAction extends Fragment {
@@ -25,7 +25,7 @@ public class FragmentDirectionAction extends Fragment {
     private ActionBarController barController;
     private OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey;
     private String inputStreetName;
-    private AutoCompliteAsyncTask autoCompliteAsyncTask;
+    private AutoCompleteAsyncTask autoCompleteAsyncTask;
     public static FragmentDirectionAction newInstance(OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey) {
         FragmentDirectionAction fragmentDirectionAction = new FragmentDirectionAction_();
 
@@ -71,15 +71,15 @@ public class FragmentDirectionAction extends Fragment {
         barController.cancelEnabled(true);
         inputStreetName = autoCompleteTextView.getText().toString();
         Log.d(LOG_TAG, "inputString "+inputStreetName);
-        autoCompliteAsyncTask = new AutoCompliteAsyncTask(
+        autoCompleteAsyncTask = new AutoCompleteAsyncTask(
                 FragmentDirectionAction.this, progressBarInAuto, inputStreetName);
-        autoCompliteAsyncTask.execute();
+        autoCompleteAsyncTask.execute();
     }
     @Override
     public void onPause() {
         super.onPause();
         barController.cancelEnabled(false);
-        if(autoCompliteAsyncTask.cancel(true)){
+        if(autoCompleteAsyncTask.cancel(true)){
         }
     }
     public void searchStreet(String[] listStreetsArray) {
@@ -90,9 +90,9 @@ public class FragmentDirectionAction extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!autoCompleteTextView.toString().equals("")) {
                     inputStreetName = autoCompleteTextView.getText().toString();
-                    autoCompliteAsyncTask = new AutoCompliteAsyncTask(
+                    autoCompleteAsyncTask = new AutoCompleteAsyncTask(
                             FragmentDirectionAction.this, progressBarInAuto, inputStreetName);
-                    autoCompliteAsyncTask.execute(inputStreetName);
+                    autoCompleteAsyncTask.execute(inputStreetName);
                 }
             }
             @Override

@@ -25,7 +25,7 @@ import ch.crut.taxi.fragments.FragmentDirectionAction;
 /**
  * Created by Alex on 11.11.2014.
  */
-public class AutoCompliteAsyncTask extends AsyncTask<String, Void, Object> {
+public class AutoCompleteAsyncTask extends AsyncTask<String, Void, Object> {
 
     private static final String TAG = "AutoCompliteAsyncTask";
     private String inputStreetName = "";
@@ -35,7 +35,7 @@ public class AutoCompliteAsyncTask extends AsyncTask<String, Void, Object> {
     private ProgressBar progressBarInAutoText;
     private FragmentDirectionAction fragmentDirectionAction;
 
-    public AutoCompliteAsyncTask(FragmentDirectionAction fragmentDirectionAction,
+    public AutoCompleteAsyncTask(FragmentDirectionAction fragmentDirectionAction,
                                  ProgressBar progressBarInAutoText, String inputStringName) {
     this.fragmentDirectionAction = fragmentDirectionAction;
     this.progressBarInAutoText = progressBarInAutoText;
