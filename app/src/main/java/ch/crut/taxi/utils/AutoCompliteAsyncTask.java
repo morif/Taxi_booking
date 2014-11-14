@@ -49,31 +49,31 @@ public class AutoCompliteAsyncTask extends AsyncTask<String, Void, Object> {
         JSONObject jObj = null;
         StringBuilder sb = null;
 
-//        try {
-//            HttpEntity httpEntity = httpResponse.getEntity();
-//            is = httpEntity.getContent();
-//            if (is != null) {
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(
-//                        is, "UTF-8"), 8);
-//                sb = new StringBuilder();
-//                String line = null;
-//                while ((line = reader.readLine()) != null) {
-//                    sb.append(line + "\n");
-//                }
-//                // is.close();
-//            }
-//            json = sb.toString();
-//            Log.d(TAG, json.toString());
-//            jObj = new JSONObject(json);
-//
-//            is.close();
-//        } catch (JSONException e) {
-//
-//            Log.e("log_tag", "Error parsing data " + e.toString());
-//
-//        } catch (Exception e) {
-//            Log.e("log_tag", "Exception " + e.toString());
-//        }
+        try {
+            HttpEntity httpEntity = httpResponse.getEntity();
+            is = httpEntity.getContent();
+            if (is != null) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(
+                        is, "UTF-8"), 8);
+                sb = new StringBuilder();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                // is.close();
+            }
+            json = sb.toString();
+            Log.d(TAG, json.toString());
+            jObj = new JSONObject(json);
+
+            is.close();
+        } catch (JSONException e) {
+
+            Log.e("log_tag", "Error parsing data " + e.toString());
+
+        } catch (Exception e) {
+            Log.e("log_tag", "Exception " + e.toString());
+        }
 
         return jObj;
     }
