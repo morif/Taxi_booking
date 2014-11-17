@@ -35,4 +35,12 @@
     <string name="error_invalid_json">invalid json object</string>
     <string name="search_auto">Поиск автомобиля</string>
     <string name="correct_registration">Вы успешно зарегистрировались</string>
+    <string name="leavReview">Оставить отзыв</string>
+    <string name="car_brend">Марка авто</string>
+    <string name="color_auto">Цвет</string>
+    <string name="type_car">тип транспорта</string>
+    <string name="state_number">Гос номер</string>
+    <string name="edition_year">Год выпуска</string>
+    <string name="order_auto">Заказать авто</string>
+    <string name="add_in_favorites">Добавить в избранное</string>
 </resources>
