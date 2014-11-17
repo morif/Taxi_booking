@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:background="@color/light_grey">
+    android:background="@android:color/white">
 
 
     <LinearLayout
@@ -26,6 +26,7 @@
             android:textColor="#000"
             android:hint="@string/hint_address"
             android:ems="10"
+            android:singleLine="true"
             android:layout_weight="1" />
 
         <ProgressBar
@@ -42,15 +43,14 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/my_location"
-        android:background="@null" />
-
-    <Button
         android:id="@+id/fragmentDirectionActionSetLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/map_point"
         android:background="@null" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 </LinearLayout>

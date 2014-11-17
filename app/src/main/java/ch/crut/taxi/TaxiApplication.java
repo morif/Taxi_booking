@@ -7,6 +7,7 @@ import android.app.Application;
 import org.androidannotations.annotations.EApplication;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
+import ch.crut.taxi.database.DAOFavorite;
 import ch.crut.taxi.interfaces.UserLocationPref_;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -19,6 +20,8 @@ public class TaxiApplication extends Application {
     @Pref
     protected UserLocationPref_ userLocationPref;
 
+    private DAOFavorite daoFavorite;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -26,6 +29,9 @@ public class TaxiApplication extends Application {
         taxiApplication = this;
 
         CalligraphyConfig.initDefault("fonts/SegoePrint.ttf", R.attr.fontPath);
+
+
+        daoFavorite = new DAOFavorite(this);
     }
 
     private Activity mCurrentActivity = null;
@@ -48,5 +54,9 @@ public class TaxiApplication extends Application {
 
     public static boolean isUserAuthorized() {
         return !getUserPrefs().id().get().isEmpty();
+    }
+
+    public static DAOFavorite getDaoFavorite() {
+        return taxiApplication.daoFavorite;
     }
 }

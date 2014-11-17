@@ -24,11 +24,12 @@ import java.util.concurrent.TimeUnit;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
-import ch.crut.taxi.actionbar.ActionBarController;
+import ch.crut.taxi.utils.actionbar.NBController;
 import ch.crut.taxi.fragmenthelper.FragmentHelper;
-import ch.crut.taxi.interfaces.ActionBarClickListener;
+import ch.crut.taxi.utils.actionbar.ActionBarClickListener;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.querymaster.QueryMaster;
+import ch.crut.taxi.utils.FavoriteHelper;
 import ch.crut.taxi.utils.google.map.GoogleMapUtils;
 import ch.crut.taxi.utils.google.map.LocationAddress;
 import ch.crut.taxi.utils.NavigationPoint;
@@ -47,14 +48,16 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
     public static final String SELECTED_PLACE_KEY = "SELECTED_PLACE_KEY";
     public static final String AUTO_LOCATION = "AUTO_LOCATION";
 
+
     private OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey;
     private boolean autoLocation;
 
 
-    private ActionBarController barController;
+    private NBController barController;
     private GoogleMapUtils mapUtils;
     private NavigationPoint navigationPoint;
     private NiceProgressDialog niceProgressDialog;
+
 
     public static FragmentPlaceSelector newInstance(OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey, boolean autoLocation) {
         FragmentPlaceSelector placeSelector = new FragmentPlaceSelector_();
@@ -86,6 +89,11 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
         findMyLocation(getActivity());
     }
 
+    @Click(R.id.fragmentPlaceSelectorAddFavorite)
+    protected void clickAddFavorite() {
+        FavoriteHelper.add(navigationPoint, placeSelectedKey);
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -100,7 +108,7 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
         final ActivityMain activityMain = (ActivityMain) activity;
         activityMain.replaceActionBarClickListener(this);
 
-        barController = activityMain.getActionBarController();
+        barController = activityMain.getNBController();
         niceProgressDialog = new NiceProgressDialog(activity);
     }
 
@@ -109,8 +117,8 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
         super.onStart();
 
         barController.title(getString(R.string.elaboration));
-        barController.cancelEnabled(true);
-        barController.doneEnabled(true);
+//        barController.cancelEnabled(true);
+//        barController.doneEnabled(true);
 
         final SupportMapFragment mapFragment = SupportMapFragment.newInstance();
         FragmentHelper.add(getChildFragmentManager(), mapFragment, FRAME_CONTAINER);
@@ -135,8 +143,8 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
     public void onPause() {
         super.onPause();
 
-        barController.cancelEnabled(false);
-        barController.doneEnabled(false);
+//        barController.cancelEnabled(false);
+//        barController.doneEnabled(false);
     }
 
     @Override

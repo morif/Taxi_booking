@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 
@@ -15,7 +14,7 @@ import org.androidannotations.annotations.ViewById;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
-import ch.crut.taxi.actionbar.ActionBarController;
+import ch.crut.taxi.utils.actionbar.NBController;
 import ch.crut.taxi.adapters.AdapterAutoComplete;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.utils.AutoCompleteAsyncTask;
@@ -24,7 +23,7 @@ import ch.crut.taxi.utils.AutoCompleteAsyncTask;
 public class FragmentDirectionAction extends Fragment {
 
     //    private static final String LOG_TAG = "FragmentDirectionAction";
-    private ActionBarController barController;
+    private NBController barController;
     private OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey;
     private String inputStreetName;
     private AutoCompleteAsyncTask autoCompleteAsyncTask;
@@ -76,9 +75,9 @@ public class FragmentDirectionAction extends Fragment {
     public void onStart() {
         super.onStart();
 
-        barController = ((ActivityMain) getActivity()).getActionBarController();
+        barController = ((ActivityMain) getActivity()).getNBController();
         barController.title(getString(R.string.from_where));
-        barController.cancelEnabled(true);
+//        barController.cancelEnabled(true);
 
         inputStreetName = autoCompleteTextView.getText().toString();
 //        Log.d(LOG_TAG, "inputString " + inputStreetName);
@@ -92,7 +91,7 @@ public class FragmentDirectionAction extends Fragment {
     public void onPause() {
         super.onPause();
 
-        barController.cancelEnabled(false);
+//        barController.cancelEnabled(false);
         autoCompleteAsyncTask.cancel(true);
     }
 

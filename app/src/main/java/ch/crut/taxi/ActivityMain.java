@@ -2,7 +2,6 @@ package ch.crut.taxi;
 
 import android.app.Activity;
 import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,41 +15,41 @@ import org.androidannotations.annotations.App;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.WindowFeature;
 
-import ch.crut.taxi.actionbar.ActionBarController;
-import ch.crut.taxi.actionbar.UIActionBar;
+import ch.crut.taxi.utils.actionbar.NBConnector;
+import ch.crut.taxi.utils.actionbar.NBController;
+import ch.crut.taxi.utils.actionbar.NBItemSelector;
+import ch.crut.taxi.utils.actionbar.UINotificationBar;
 import ch.crut.taxi.fragmenthelper.FragmentHelper;
+import ch.crut.taxi.fragments.FragmentAuthorization;
 import ch.crut.taxi.fragments.FragmentTaxiBooking;
-import ch.crut.taxi.interfaces.ActionBarClickListener;
+import ch.crut.taxi.utils.actionbar.ActionBarClickListener;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
 import ch.crut.taxi.utils.UserLocation;
-import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
-import rx.Observable;
-import rx.Subscription;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 @WindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
 @EActivity(R.layout.activity_main)
-public class ActivityMain extends FragmentActivity implements ActionBarClickListener, OnPlaceSelectedListener, QueryMaster.OnErrorListener {
-
+public class ActivityMain extends FragmentActivity implements ActionBarClickListener, OnPlaceSelectedListener, QueryMaster.OnErrorListener,
+        NBConnector, NBItemSelector {
     public static final int MAP_CONTAINER = R.id.activityMainMap;
     public static final int FRAME_CONTAINER = R.id.activityMainContainer;
 
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private SupportMapFragment supportMapFragment;
-    private ActionBarController actionBarController;
+    private NBController NBController;
     private FragmentTaxiBooking fragmentTaxiBooking;
     private TaxiBookingHelper taxiBookingHelper;
 
     private UserLocation userLocation;
 
     // getters
-    public ActionBarController getActionBarController() {
-        return actionBarController;
+    public NBController getNBController() {
+        return NBController;
     }
 
     public FragmentTaxiBooking getFragmentTaxiBooking() {
@@ -68,18 +67,19 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UIActionBar uiActionBar = new UIActionBar(getActionBar());
+        UINotificationBar uiNotificationBar = new UINotificationBar(getActionBar());
 
-        actionBarController = new ActionBarController(uiActionBar);
-        setActionBarDefaultListener();
+        NBController = new NBController(uiNotificationBar);
+//        setActionBarDefaultListener();
+//
+//        fragmentTaxiBooking = FragmentTaxiBooking.newInstance();
+//        supportMapFragment = SupportMapFragment.newInstance();
+//        taxiBookingHelper = new TaxiBookingHelper();
 
-        fragmentTaxiBooking = FragmentTaxiBooking.newInstance();
-        supportMapFragment = SupportMapFragment.newInstance();
-        taxiBookingHelper = new TaxiBookingHelper();
 
-
-        FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
-        FragmentHelper.add(fragmentManager, fragmentTaxiBooking, FRAME_CONTAINER);
+        FragmentHelper.add(fragmentManager, FragmentAuthorization.newInstance(), FRAME_CONTAINER);
+//        FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
+//        FragmentHelper.add(fragmentManager, fragmentTaxiBooking, FRAME_CONTAINER);
     }
 
     @Override
@@ -144,11 +144,11 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
     }
 
     public void replaceActionBarClickListener(ActionBarClickListener clickListener) {
-        actionBarController.setActionBarClickListener(clickListener);
+//        notificationBarController.setActionBarClickListener(clickListener);
     }
 
     public void setActionBarDefaultListener() {
-        actionBarController.setActionBarClickListener(this);
+//        notificationBarController.setActionBarClickListener(this);
     }
 
 
@@ -184,6 +184,16 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
 
     private void getUserAddress() {
 
+    }
+
+    @Override
+    public NBController nbConnected() {
+        return NBController;
+    }
+
+    @Override
+    public void NBItemSelected(int id) {
+        QueryMaster.toast(this, ActivityMain.this.toString() + ", " + String.valueOf(id));
     }
 }
 

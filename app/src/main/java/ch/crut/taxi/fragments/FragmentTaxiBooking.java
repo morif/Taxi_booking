@@ -14,7 +14,7 @@ import java.util.Date;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
-import ch.crut.taxi.actionbar.ActionBarController;
+import ch.crut.taxi.utils.actionbar.NBController;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
@@ -22,7 +22,7 @@ import ch.crut.taxi.utils.TaxiBookingHelper;
 @EFragment(R.layout.fragment_taxi_booking)
 public class FragmentTaxiBooking extends Fragment {
 
-    private ActionBarController barController;
+    private NBController barController;
 
     private NavigationPoint originalPoint;
     private NavigationPoint destinationPoint;
@@ -65,9 +65,9 @@ public class FragmentTaxiBooking extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        barController = ((ActivityMain) getActivity()).getActionBarController();
+        barController = ((ActivityMain) getActivity()).getNBController();
         barController.title(getString(R.string.taxi_booking));
-        barController.settingEnabled(true);
+//        barController.settingEnabled(true);
 
 
         TaxiBookingHelper bookingHelper = ((ActivityMain) getActivity()).getTaxiBookingHelper();
@@ -89,7 +89,7 @@ public class FragmentTaxiBooking extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        barController.settingEnabled(false);
+//        barController.settingEnabled(false);
     }
 
     public void setFrom(String fromAddress) {
