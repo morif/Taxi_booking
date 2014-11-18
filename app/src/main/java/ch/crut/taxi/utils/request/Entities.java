@@ -39,6 +39,8 @@ public class Entities {
         public String yearAuto;
         public String modelCar;
         public String numberGos;
+        public String status;
+        public String rating;
 
 
         public SearchTaxi(JSONObject jsonObject) throws JSONException {
@@ -65,6 +67,8 @@ public class Entities {
             this.yearAuto = jsonObject.getString("yearAuto");
             this.modelCar = jsonObject.getString("modelCar");
             this.numberGos = jsonObject.getString("numberGos");
+            this.status = jsonObject.getString("status");
+            this.rating = jsonObject.getString("rating");
         }
 
         public static List<SearchTaxi> get(JSONArray data) throws JSONException {
@@ -83,6 +87,10 @@ public class Entities {
 
         public LatLng getLatLng() {
             return new LatLng(Double.valueOf(lat), Double.valueOf(lng));
+        }
+
+        public boolean freeDriver() {
+            return status.equalsIgnoreCase("1");
         }
     }
 }
