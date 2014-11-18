@@ -55,7 +55,7 @@ public class FragmentDriverTaxiInfo extends Fragment {
         super.onStart();
 
 
-         taxiDriverInfo(driver);
+        taxiDriverInfo(driver);
 
         ArrayList<String> numberList = new ArrayList<String>();
         numberList.add(0, "11111111");
@@ -154,7 +154,7 @@ public class FragmentDriverTaxiInfo extends Fragment {
         gosNumberCarText.setText(driver.numberGos);
         yearCarText.setText(driver.yearAuto);
         ImageLoader imageLoader = new ImageLoader(activityMain);
-imageLoader.DisplayImage(driver.photo1, firstPhotoCarImage);
+        imageLoader.DisplayImage(driver.photo1, firstPhotoCarImage);
         imageLoader.DisplayImage(driver.photo2, secondPhotoCarImage);
 
     }
