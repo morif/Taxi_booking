@@ -25,7 +25,7 @@ import ch.crut.taxi.utils.request.ServerRequest;
 
 
 @EFragment(R.layout.fragment_authorization)
-@SmartFragment(title = "FragmentAuthorization", items = {NBItems.SETTING, NBItems.DONE})
+@SmartFragment(title = R.string.authoritation, items = {NBItems.REGISTER, NBItems.CANCEL})
 public class FragmentAuthorization extends NBFragment implements NBItemSelector {
 
 
@@ -87,7 +87,12 @@ public class FragmentAuthorization extends NBFragment implements NBItemSelector 
 
     @Override
     public void NBItemSelected(int id) {
-        QueryMaster.toast(getActivity(), FragmentAuthorization.this.toString() + ", " + String.valueOf(id));
+        switch (id){
+            case NBItems.REGISTER:
+//                ((ActivityMain) getActivity()).add();
+                break;
+        }
+//        QueryMaster.toast(getActivity(), FragmentAuthorization.this.toString() + ", " + String.valueOf(id));
     }
 
     public static interface OnAuthorizationComplete {

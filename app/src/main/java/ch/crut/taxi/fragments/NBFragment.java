@@ -32,18 +32,13 @@ public class NBFragment extends Fragment {
         } else if (activity instanceof NBItemSelector) {
             this.NBController.set((NBItemSelector) activity);
         }
-
-        init();
     }
 
-    private void init() {
-        if (annotationFragment != null) {
-            NBController.title(annotationFragment.title());
+    @Override
+    public void onResume() {
+        super.onResume();
 
-            NBController.set(annotationFragment.items());
-        } else {
-            NBController.title("NuLL");
-        }
+        init();
     }
 
     @Override
@@ -53,4 +48,24 @@ public class NBFragment extends Fragment {
         NBController.title("");
         NBController.hide(annotationFragment.items());
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        if (getActivity() instanceof NBItemSelector) {
+            NBController.set((NBItemSelector) getActivity());
+        }
+    }
+
+    private void init() {
+        if (annotationFragment != null) {
+            NBController.title(getString(annotationFragment.title()));
+
+            NBController.set(annotationFragment.items());
+        } else {
+            NBController.title("NuLL");
+        }
+    }
+
 }

@@ -37,4 +37,5 @@
     <string name="hint_login">Логин</string>
     <string name="hint_password">Пароль</string>
     <string name="add_favorite">Добавить в избранное</string>
+    <string name="no_text" />
 </resources>

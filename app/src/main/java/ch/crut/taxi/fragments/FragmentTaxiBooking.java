@@ -14,6 +14,7 @@ import java.util.Date;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
+import ch.crut.taxi.TaxiApplication;
 import ch.crut.taxi.utils.actionbar.NBController;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.utils.NavigationPoint;
@@ -58,7 +59,11 @@ public class FragmentTaxiBooking extends Fragment {
 
     @Click(R.id.fragmentTaxiBookingSearchAuto)
     protected void clickSearchAuto() {
-        ((ActivityMain) getActivity()).add(FragmentTaxiSearch.newInstance());
+        if (TaxiApplication.isUserAuthorized()) {
+            ((ActivityMain) getActivity()).add(FragmentTaxiSearch.newInstance());
+        } else {
+            ((ActivityMain) getActivity()).add(FragmentAuthorization.newInstance());
+        }
     }
 
 
