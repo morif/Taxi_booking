@@ -143,7 +143,10 @@ public class QueryMaster extends Thread {
             serverResponse = response != null ?
                     EntityUtils.toString(response.getEntity()) : null;
 
+
+            Log.e(TAG, "url -> " + url);
             Log.e(TAG, "serverResponse -> " + serverResponse);
+
 
             if (resultHandler != null) {
                 resultHandler.sendEmptyMessage(QM_COMPLETE);
@@ -157,13 +160,6 @@ public class QueryMaster extends Thread {
             }
         }
     }
-
-//
-//    public interface OnCompleteListener {
-//        public void complete(String serverResponse);
-//
-//        public void error(int errorCode);
-//    }
 
     public static interface OnCompleteListener {
         public void QMcomplete(JSONObject jsonObject) throws JSONException;

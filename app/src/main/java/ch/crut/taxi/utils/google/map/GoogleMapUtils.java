@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.crut.taxi.R;
 import ch.crut.taxi.utils.request.Entities;
 
 public class GoogleMapUtils {
@@ -20,7 +22,9 @@ public class GoogleMapUtils {
     private final GoogleMap googleMap;
     private final Context context;
 
-    private Map<Marker, Integer> availableMarkersType;
+    private final Map<Marker, Integer> availableMarkersType;
+    private final Map<Marker, Entities.SearchTaxi> drivers;
+    private final AdapterInfoWindow adapterInfoWindow;
 
     public GoogleMapUtils(Context context, GoogleMap googleMap) {
         if (googleMap == null) {
@@ -29,8 +33,12 @@ public class GoogleMapUtils {
         this.googleMap = googleMap;
         this.context = context;
         this.availableMarkersType = new HashMap<>();
+        this.drivers = new HashMap<>();
 
-        this.googleMap.setInfoWindowAdapter(new AdapterInfoWindow(context, availableMarkersType));
+        adapterInfoWindow = new AdapterInfoWindow(context,
+                availableMarkersType, drivers);
+
+        this.googleMap.setInfoWindowAdapter(adapterInfoWindow);
     }
 
     public void moveCamera(LatLng latLng) {
@@ -42,17 +50,40 @@ public class GoogleMapUtils {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13), duration, null);
     }
 
+    public void addOriginMarker(LatLng latLng) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_route_origin));
+        markerOptions.position(latLng);
+
+        addMarker(markerOptions);
+    }
+
+    public void addDestinationMarker(LatLng latLng) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_route_destination));
+        markerOptions.position(latLng);
+
+        addMarker(markerOptions);
+    }
+
+    public void addMarker(MarkerOptions markerOptions) {
+        Marker marker = googleMap.addMarker(markerOptions);
+        availableMarkersType.put(marker, MarkerType.DEFAULT);
+    }
+
     public void addMarker(LatLng latLng) {
         addMarker(latLng, MarkerType.DEFAULT);
     }
 
-    public void addMarker(LatLng latLng, int markerType) {
+    public Marker addMarker(LatLng latLng, int markerType) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
 
         Marker marker = googleMap.addMarker(markerOptions);
 
         availableMarkersType.put(marker, markerType);
+
+        return marker;
     }
 
     public void me(LatLng myLocation) {
@@ -81,6 +112,26 @@ public class GoogleMapUtils {
     }
 
     public void addDriver(Entities.SearchTaxi driver) {
-        addMarker(driver.getLatLng(), MarkerType.AUTO);
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        if (driver.freeDriver()) {
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_taxi_free));
+        } else {
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_taxi_busy));
+        }
+        markerOptions.position(driver.getLatLng());
+
+        Marker driverMarker = googleMap.addMarker(markerOptions);
+
+        availableMarkersType.put(driverMarker, MarkerType.AUTO);
+        drivers.put(driverMarker, driver);
+    }
+
+    public void clearDrivers() {
+        drivers.clear();
+    }
+
+    public void setOnDriverMarkerClick(AdapterInfoWindow.OnDriverMarkerClickListener onDriverMarkerClick) {
+        adapterInfoWindow.setOnDriverMarkerClickListener(onDriverMarkerClick);
     }
 }

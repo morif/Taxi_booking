@@ -56,7 +56,7 @@ public class NBController extends NBAbstractController {
         }
     }
 
-    public void set(NBItemSelector listener) {
+    public void clickListener(NBItemSelector listener) {
         this.NBItemSelector = listener;
     }
 

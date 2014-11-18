@@ -6,8 +6,6 @@ import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.gms.location.LocationRequest;
@@ -24,15 +22,16 @@ import java.util.concurrent.TimeUnit;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
-import ch.crut.taxi.utils.actionbar.NBController;
 import ch.crut.taxi.fragmenthelper.FragmentHelper;
-import ch.crut.taxi.utils.actionbar.ActionBarClickListener;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
+import ch.crut.taxi.interfaces.SmartFragment;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.FavoriteHelper;
+import ch.crut.taxi.utils.NavigationPoint;
+import ch.crut.taxi.utils.actionbar.NBItemSelector;
+import ch.crut.taxi.utils.actionbar.NBItems;
 import ch.crut.taxi.utils.google.map.GoogleMapUtils;
 import ch.crut.taxi.utils.google.map.LocationAddress;
-import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.views.NiceProgressDialog;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Observable;
@@ -40,8 +39,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 
 
+@SmartFragment(items = {NBItems.CANCEL, NBItems.DONE})
 @EFragment(R.layout.fragment_place_selector)
-public class FragmentPlaceSelector extends Fragment implements ActionBarClickListener {
+public class FragmentPlaceSelector extends NBFragment implements NBItemSelector {
 
     private static final int FRAME_CONTAINER = R.id.fragmentFromWhereFrameLayout;
 
@@ -53,7 +53,7 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
     private boolean autoLocation;
 
 
-    private NBController barController;
+    //    private NBController barController;
     private GoogleMapUtils mapUtils;
     private NavigationPoint navigationPoint;
     private NiceProgressDialog niceProgressDialog;
@@ -96,7 +96,7 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
 
     @Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
+        super.onAttach(activity, FragmentPlaceSelector.class);
 
         Bundle bundle = getArguments();
 
@@ -106,19 +106,14 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
 
 
         final ActivityMain activityMain = (ActivityMain) activity;
-        activityMain.replaceActionBarClickListener(this);
+//        activityMain.replaceActionBarClickListener(this);
 
-        barController = activityMain.getNBController();
         niceProgressDialog = new NiceProgressDialog(activity);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        barController.title(getString(R.string.elaboration));
-//        barController.cancelEnabled(true);
-//        barController.doneEnabled(true);
 
         final SupportMapFragment mapFragment = SupportMapFragment.newInstance();
         FragmentHelper.add(getChildFragmentManager(), mapFragment, FRAME_CONTAINER);
@@ -140,40 +135,45 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-//        barController.cancelEnabled(false);
-//        barController.doneEnabled(false);
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
 
-        ((ActivityMain) getActivity()).setActionBarDefaultListener();
+//        ((ActivityMain) getActivity()).setActionBarDefaultListener();
     }
 
-    @Override
-    public void clickSettings(View view) {
-        ((ActivityMain) getActivity()).clickSettings(view);
-    }
+//    @Override
+//    public void clickSettings(View view) {
+//        ((ActivityMain) getActivity()).clickSettings(view);
+//    }
+//
+//    @Override
+//    public void clickBack(View view) {
+//        ((ActivityMain) getActivity()).clickBack(view);
+//
+//    }
+//
+//    @Override
+//    public void clickCancel(View view) {
+//        ((ActivityMain) getActivity()).clickCancel(view);
+//    }
+//
+//    @Override
+//    public void clickDone(View view) {
+//        ((ActivityMain) getActivity()).placeSelected(navigationPoint, placeSelectedKey);
+//        ((ActivityMain) getActivity()).initialScreen();
+//    }
 
     @Override
-    public void clickBack(View view) {
-        ((ActivityMain) getActivity()).clickBack(view);
-
-    }
-
-    @Override
-    public void clickCancel(View view) {
-        ((ActivityMain) getActivity()).clickCancel(view);
-    }
-
-    @Override
-    public void clickDone(View view) {
-        ((ActivityMain) getActivity()).placeSelected(navigationPoint, placeSelectedKey);
-        ((ActivityMain) getActivity()).initialScreen();
+    public void NBItemSelected(int id) {
+        switch (id) {
+            case NBItems.DONE:
+                ((ActivityMain) getActivity()).placeSelected(navigationPoint, placeSelectedKey);
+                ((ActivityMain) getActivity()).initialScreen();
+                break;
+            case NBItems.CANCEL:
+                FragmentHelper.pop(getFragmentManager());
+                break;
+        }
     }
 
     public final class OnAddressFoundListener implements LocationAddress.OnCompleteListener {

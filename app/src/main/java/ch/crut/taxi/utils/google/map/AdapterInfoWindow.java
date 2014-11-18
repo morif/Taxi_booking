@@ -1,8 +1,10 @@
 package ch.crut.taxi.utils.google.map;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
@@ -11,16 +13,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.crut.taxi.R;
+import ch.crut.taxi.querymaster.QueryMaster;
+import ch.crut.taxi.utils.request.Entities;
 
 
 public class AdapterInfoWindow implements GoogleMap.InfoWindowAdapter {
 
     private final Context context;
     private final Map<Marker, Integer> availableMarkersType;
+    private Map<Marker, Entities.SearchTaxi> drivers;
 
-    public AdapterInfoWindow(Context context, Map<Marker, Integer> availableMarkersType) {
+    public AdapterInfoWindow(Context context, Map<Marker, Integer> availableMarkersType,
+                             Map<Marker, Entities.SearchTaxi> drivers) {
         this.context = context;
         this.availableMarkersType = availableMarkersType;
+        this.drivers = drivers;
     }
 
     @Override
@@ -30,23 +37,48 @@ public class AdapterInfoWindow implements GoogleMap.InfoWindowAdapter {
 
         if (markerType == MarkerType.AUTO) {
 
-            ImageView imageView = new ImageView(context);
-            imageView.setImageResource(R.drawable.icon_auto);
-            return imageView;
-        } else if (markerType == MarkerType.ME) {
+            if (drivers.containsKey(marker)) {
 
-            ImageView imageView = new ImageView(context);
-            imageView.setImageResource(R.drawable.icon_me);
-            return imageView;
-        } else if (markerType == MarkerType.DEFAULT) {
+
+                final Entities.SearchTaxi driver = drivers.get(marker);
+
+                LayoutInflater inflater = (LayoutInflater)
+                        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View infoView = inflater.inflate(R.layout.info_window_driver, null);
+
+                ((TextView) infoView.findViewById(R.id.infoWindowDriverMarkAuto))
+                        .setText(driver.modelCar);
+
+                infoView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (onDriverMarkerClickListener != null) {
+                            onDriverMarkerClickListener.driverClick(driver);
+                        }
+                    }
+                });
+
+                return infoView;
+            }
 
             return null;
         }
+
         return null;
     }
 
     @Override
     public View getInfoContents(Marker marker) {
         return null;
+    }
+
+    public void setOnDriverMarkerClickListener(OnDriverMarkerClickListener onDriverMarkerClickListener) {
+        this.onDriverMarkerClickListener = onDriverMarkerClickListener;
+    }
+
+    private OnDriverMarkerClickListener onDriverMarkerClickListener;
+
+    public static interface OnDriverMarkerClickListener {
+        public void driverClick(Entities.SearchTaxi driver);
     }
 }

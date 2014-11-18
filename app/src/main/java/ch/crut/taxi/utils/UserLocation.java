@@ -2,7 +2,6 @@ package ch.crut.taxi.utils;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.location.Address;
 import android.location.Location;
 
@@ -10,9 +9,8 @@ import com.google.android.gms.location.LocationRequest;
 
 import java.util.List;
 
-import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.TaxiApplication;
-import ch.crut.taxi.interfaces.UserLocationPref_;
+import ch.crut.taxi.interfaces.UserPref_;
 import ch.crut.taxi.querymaster.QueryMaster;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Observable;
@@ -52,7 +50,7 @@ public class UserLocation {
 
                         addressSubscription.unsubscribe();
 
-                        UserLocationPref_ userLocationPref = TaxiApplication.getUserPrefs();
+                        UserPref_ userLocationPref = TaxiApplication.getUserPrefs();
                         userLocationPref.edit()
                                 .latitude().put((float) location.getLatitude())
                                 .longitude().put((float) location.getLongitude())

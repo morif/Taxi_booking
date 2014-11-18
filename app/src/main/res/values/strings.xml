@@ -38,4 +38,8 @@
     <string name="hint_password">Пароль</string>
     <string name="add_favorite">Добавить в избранное</string>
     <string name="no_text" />
+    <string name="register_success">Вы успешно зарегистрировались</string>
+    <string name="uncorrect_data">Некорректные данные</string>
+    <string name="go_driver_info">Перейти к странице водителя</string>
+    <string name="auto_mark">Марка автомобиля:</string>
 </resources>

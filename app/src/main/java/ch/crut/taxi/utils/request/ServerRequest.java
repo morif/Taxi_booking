@@ -20,8 +20,6 @@ import ch.crut.taxi.utils.RequestEntities;
 public class ServerRequest {
 
     public static final String SERVER = "http://beestore.com.ua/taxi/api/main.php";
-    private static final String LOG_TAG = "ServerRequest";
-
 
     public static void searchTaxi(LatLng origin, QueryMaster.OnErrorListener errorListener, QueryMaster.OnCompleteListener onCompleteListener) {
         final Map<Object, String> map = new HashMap<>();

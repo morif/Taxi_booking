@@ -8,7 +8,7 @@ import org.androidannotations.annotations.EApplication;
 import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import ch.crut.taxi.database.DAOFavorite;
-import ch.crut.taxi.interfaces.UserLocationPref_;
+import ch.crut.taxi.interfaces.UserPref_;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 
@@ -18,7 +18,7 @@ public class TaxiApplication extends Application {
     private static TaxiApplication taxiApplication;
 
     @Pref
-    protected UserLocationPref_ userLocationPref;
+    protected UserPref_ userLocationPref;
 
     private DAOFavorite daoFavorite;
 
@@ -48,7 +48,7 @@ public class TaxiApplication extends Application {
         return taxiApplication.getCurrentActivity();
     }
 
-    public static UserLocationPref_ getUserPrefs() {
+    public static UserPref_ getUserPrefs() {
         return taxiApplication.userLocationPref;
     }
 

@@ -6,13 +6,16 @@ import org.androidannotations.annotations.sharedpreferences.DefaultString;
 import org.androidannotations.annotations.sharedpreferences.SharedPref;
 
 @SharedPref
-public interface UserLocationPref {
+public interface UserPref {
 
     @DefaultString("")
     public String id();
 
     @DefaultString("")
     public String login();
+
+    @DefaultString("")
+    public String password();
 
     @DefaultString("")
     public String email();

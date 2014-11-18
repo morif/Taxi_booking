@@ -44,6 +44,7 @@ public class Entities {
 
 
         public SearchTaxi(JSONObject jsonObject) throws JSONException {
+            this.id = jsonObject.getString("id");
             this.taximeter = jsonObject.getString("taximeter");
             this.bill = jsonObject.getString("bill");
             this.photo1 = jsonObject.getString("photo1");

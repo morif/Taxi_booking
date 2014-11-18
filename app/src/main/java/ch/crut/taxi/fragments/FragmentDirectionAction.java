@@ -14,19 +14,24 @@ import org.androidannotations.annotations.ViewById;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
+import ch.crut.taxi.fragmenthelper.FragmentHelper;
+import ch.crut.taxi.interfaces.SmartFragment;
 import ch.crut.taxi.utils.actionbar.NBController;
 import ch.crut.taxi.adapters.AdapterAutoComplete;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.utils.AutoCompleteAsyncTask;
+import ch.crut.taxi.utils.actionbar.NBItemSelector;
+import ch.crut.taxi.utils.actionbar.NBItems;
 
+@SmartFragment(items = {NBItems.CANCEL})
 @EFragment(R.layout.fragment_direction_action)
-public class FragmentDirectionAction extends Fragment {
+public class FragmentDirectionAction extends NBFragment implements NBItemSelector {
 
-    //    private static final String LOG_TAG = "FragmentDirectionAction";
-    private NBController barController;
+
     private OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey;
     private String inputStreetName;
     private AutoCompleteAsyncTask autoCompleteAsyncTask;
+
 
     public static FragmentDirectionAction newInstance(OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey) {
         FragmentDirectionAction fragmentDirectionAction = new FragmentDirectionAction_();
@@ -63,7 +68,7 @@ public class FragmentDirectionAction extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
+        super.onAttach(activity, FragmentDirectionAction.class);
 
         Bundle bundle = getArguments();
 
@@ -75,15 +80,7 @@ public class FragmentDirectionAction extends Fragment {
     public void onStart() {
         super.onStart();
 
-        barController = ((ActivityMain) getActivity()).getNBController();
-        barController.title(getString(R.string.from_where));
-//        barController.cancelEnabled(true);
-
         inputStreetName = autoCompleteTextView.getText().toString();
-//        Log.d(LOG_TAG, "inputString " + inputStreetName);
-//        autoCompleteAsyncTask = new AutoCompleteAsyncTask(
-//                FragmentDirectionAction.this, progressBarInAuto, inputStreetName);
-//        autoCompleteAsyncTask.execute();
         autoCompleteTextView.addTextChangedListener(autoCompleteTextWatcher);
     }
 
@@ -91,8 +88,8 @@ public class FragmentDirectionAction extends Fragment {
     public void onPause() {
         super.onPause();
 
-//        barController.cancelEnabled(false);
-        autoCompleteAsyncTask.cancel(true);
+        if (autoCompleteAsyncTask != null)
+            autoCompleteAsyncTask.cancel(true);
     }
 
     public void searchStreet(String[] listStreetsArray) {
@@ -125,4 +122,13 @@ public class FragmentDirectionAction extends Fragment {
 
         }
     };
+
+    @Override
+    public void NBItemSelected(int id) {
+        switch (id) {
+            case NBItems.CANCEL:
+                FragmentHelper.pop(getFragmentManager());
+                break;
+        }
+    }
 }

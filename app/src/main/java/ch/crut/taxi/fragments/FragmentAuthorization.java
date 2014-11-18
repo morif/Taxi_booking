@@ -14,8 +14,9 @@ import org.json.JSONObject;
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
 import ch.crut.taxi.TaxiApplication;
+import ch.crut.taxi.fragmenthelper.FragmentHelper;
 import ch.crut.taxi.interfaces.SmartFragment;
-import ch.crut.taxi.interfaces.UserLocationPref_;
+import ch.crut.taxi.interfaces.UserPref_;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.RequestEntities.AuthorizationEntity;
 import ch.crut.taxi.utils.TextUtils;
@@ -64,6 +65,23 @@ public class FragmentAuthorization extends NBFragment implements NBItemSelector 
     @Override
     public void onStart() {
         super.onStart();
+
+        UserPref_ userPref = TaxiApplication.getUserPrefs();
+        ETlogin.setText(userPref.login().get());
+        ETpassword.setText(userPref.password().get());
+    }
+
+    @Override
+    public void NBItemSelected(int id) {
+        switch (id) {
+            case NBItems.REGISTER:
+                ((ActivityMain) getActivity()).add(FragmentRegistration.newInstance());
+                break;
+            case NBItems.CANCEL:
+                FragmentHelper.pop(getFragmentManager());
+                break;
+
+        }
     }
 
     private QueryMaster.OnCompleteListener onCompleteListener = new QueryMaster.OnCompleteListener() {
@@ -72,28 +90,19 @@ public class FragmentAuthorization extends NBFragment implements NBItemSelector 
 
             JSONObject user = jsonObject.getJSONObject("user");
 
-            UserLocationPref_ userLocationPref = TaxiApplication.getUserPrefs();
+            UserPref_ userPref = TaxiApplication.getUserPrefs();
 
-            userLocationPref.edit()
+            userPref.edit()
                     .email().put(user.getString("email"))
                     .phoneFirst().put(user.getString("tel1"))
                     .phoneSecond().put(user.has("tel2") ? user.getString("tel2") : "")
                     .id().put(user.getString("id"))
-                    .login().put(user.getString("login"))
+                    .login().put(TextUtils.get(ETlogin))
+                    .password().put(TextUtils.get(ETpassword))
                     .name().put(user.getString("name")).apply();
         }
     };
 
-
-    @Override
-    public void NBItemSelected(int id) {
-        switch (id){
-            case NBItems.REGISTER:
-//                ((ActivityMain) getActivity()).add();
-                break;
-        }
-//        QueryMaster.toast(getActivity(), FragmentAuthorization.this.toString() + ", " + String.valueOf(id));
-    }
 
     public static interface OnAuthorizationComplete {
 

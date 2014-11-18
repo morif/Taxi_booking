@@ -1,5 +1,6 @@
 package ch.crut.taxi.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.EditText;
@@ -15,15 +16,20 @@ import java.util.Date;
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
 import ch.crut.taxi.TaxiApplication;
+import ch.crut.taxi.interfaces.SmartFragment;
+import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.actionbar.NBController;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
+import ch.crut.taxi.utils.actionbar.NBItemSelector;
+import ch.crut.taxi.utils.actionbar.NBItems;
 
+@SmartFragment(title = R.string.taxi_booking, items = {NBItems.SETTING})
 @EFragment(R.layout.fragment_taxi_booking)
-public class FragmentTaxiBooking extends Fragment {
+public class FragmentTaxiBooking extends NBFragment implements NBItemSelector {
 
-    private NBController barController;
+//    private NBController barController;
 
     private NavigationPoint originalPoint;
     private NavigationPoint destinationPoint;
@@ -66,12 +72,16 @@ public class FragmentTaxiBooking extends Fragment {
         }
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity, FragmentTaxiBooking.class);
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-        barController = ((ActivityMain) getActivity()).getNBController();
-        barController.title(getString(R.string.taxi_booking));
+//        barController = ((ActivityMain) getActivity()).getNBController();
+//        barController.title(getString(R.string.taxi_booking));
 //        barController.settingEnabled(true);
 
 
@@ -110,6 +120,15 @@ public class FragmentTaxiBooking extends Fragment {
 
     public static String getOrderTime() {
         return millisecToDate(new Date().getTime() + (15 * 60000));
+    }
+
+    @Override
+    public void NBItemSelected(int id) {
+        switch (id) {
+            case NBItems.SETTING:
+                QueryMaster.toast(getActivity(), "settings");
+                break;
+        }
     }
 }
 
