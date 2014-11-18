@@ -24,7 +24,6 @@ import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
-// import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 @WindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
@@ -72,7 +71,7 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         taxiBookingHelper = new TaxiBookingHelper();
 
         FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
-        FragmentHelper.add(fragmentManager, FragmentDriverTaxiInfo.newInstance(), FRAME_CONTAINER);
+        FragmentHelper.add(fragmentManager, fragmentTaxiBooking, FRAME_CONTAINER);
     }
 
 //    @Override
@@ -94,10 +93,6 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         super.onDestroy();
     }
 
-//    @Override
-//    protected void attachBaseContext(Context newBase) {
-//        super.attachBaseContext(new CalligraphyContextWrapper(newBase));
-//    }
 
     @Override
     public void clickSettings(View view) {

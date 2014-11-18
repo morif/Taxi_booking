@@ -7,13 +7,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Entities {
 
-    public static class SearchTaxi {
-
+    public static class SearchTaxi implements Serializable {
+        private static final long serialVersionUID = 42L;
         public String taximeter;
         public String bill;
         public String photo1;
@@ -34,6 +35,9 @@ public class Entities {
         public String yearAuto;
         public String modelCar;
         public String numberGos;
+        public String status;
+        public String rating;
+
 
         public SearchTaxi(JSONObject jsonObject) throws JSONException {
             this.taximeter = jsonObject.getString("taximeter");
@@ -59,6 +63,8 @@ public class Entities {
             this.yearAuto = jsonObject.getString("yearAuto");
             this.modelCar = jsonObject.getString("modelCar");
             this.numberGos = jsonObject.getString("numberGos");
+            this.status = jsonObject.getString("status");
+            this.rating = jsonObject.getString("rating");
         }
 
         public static List<SearchTaxi> get(JSONArray data) throws JSONException {
@@ -77,6 +83,10 @@ public class Entities {
 
         public LatLng getLatLng() {
             return new LatLng(Double.valueOf(lat), Double.valueOf(lng));
+        }
+
+        public boolean freeDriver() {
+            return status.equalsIgnoreCase("1");
         }
     }
 }

@@ -1,46 +1,42 @@
 package ch.crut.taxi.fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
-import ch.crut.taxi.adapter.MyBaseAdapter;
-import ch.crut.taxi.querymaster.QueryMaster;
-import ch.crut.taxi.utils.request.ServerRequest;
-import ch.crut.taxi.utils.request.UserInfo;
+import ch.crut.taxi.lazylist.ImageLoader;
+import ch.crut.taxi.utils.RequestEntities;
+import ch.crut.taxi.utils.request.Entities;
 
 @EFragment(R.layout.fragment_driver_taxi_info)
 public class FragmentDriverTaxiInfo extends Fragment {
     private Activity activityMain;
+    private final static String SEARCH_TAXI = "searchTaxi";
+    private final String LOG_TAG = "FragmentDriverTaxiInfo";
+    private Entities.SearchTaxi driver;
 
-    private QueryMaster.OnCompleteListener onCompleteListener = new QueryMaster.OnCompleteListener() {
-        @Override
-        public void QMcomplete(JSONObject jsonObject) throws JSONException {
-
-        }
-    };
-
-    public static FragmentDriverTaxiInfo newInstance() {
+    public static FragmentDriverTaxiInfo newInstance(Entities.SearchTaxi driver) {
         FragmentDriverTaxiInfo fragmentDriverTaxiInfo = new FragmentDriverTaxiInfo_();
         Bundle bundle = new Bundle();
+        bundle.putSerializable(SEARCH_TAXI, driver);
         fragmentDriverTaxiInfo.setArguments(bundle);
         return fragmentDriverTaxiInfo;
     }
@@ -49,17 +45,28 @@ public class FragmentDriverTaxiInfo extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         activityMain = activity;
-
+        driver = (Entities.SearchTaxi) getArguments().getSerializable(SEARCH_TAXI);
 
     }
+
 
     @Override
     public void onStart() {
         super.onStart();
+
+
+         taxiDriverInfo(driver);
+
         ArrayList<String> numberList = new ArrayList<String>();
         numberList.add(0, "11111111");
         numberList.add(1, "222222");
         numberList.add(2, "12121212");
+
+        LayerDrawable stars = (LayerDrawable) ratingBar_default.getProgressDrawable();
+        float a = new Float(3.5);
+        ratingBar_default.setRating(a);
+        stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
+
 
         for (int i = 0; i < numberList.size(); i++) {
 
@@ -84,7 +91,7 @@ public class FragmentDriverTaxiInfo extends Fragment {
     @ViewById(R.id.nameDriverTaxi)
     protected TextView nameDriverText;
 
-    @ViewById(R.id.confirmButton)
+    @ViewById(R.id.addServiceButton)
     protected Button confButton;
 
     @ViewById(R.id.firstTelephoneLinearLayout)
@@ -104,9 +111,53 @@ public class FragmentDriverTaxiInfo extends Fragment {
     @ViewById(R.id.threedTelephoneText)
     protected TextView threedTextView;
 
+    @ViewById(R.id.ratingbar_default)
+    protected RatingBar ratingBar_default;
 
-    private void requestToServer() {
-        ServerRequest.carDriverInfo((QueryMaster.OnErrorListener) activityMain, onCompleteListener);
+    @ViewById(R.id.carBrendTextView)
+    protected TextView carBrendText;
+
+    @ViewById(R.id.colorAutoTextView)
+    protected TextView colorAutoText;
+
+    @ViewById(R.id.typeCarTextView)
+    protected TextView typeCarText;
+
+    @ViewById(R.id.gosNumberCarTextView)
+    protected TextView gosNumberCarText;
+
+    @ViewById(R.id.yearCarTextView)
+    protected TextView yearCarText;
+
+    @ViewById(R.id.firstPhotoCar)
+    protected ImageView firstPhotoCarImage;
+
+    @ViewById(R.id.secondPhotoCar)
+    protected ImageView secondPhotoCarImage;
+
+    @Click(R.id.addServiceButton)
+    protected void clickToButton() {
+        Log.d(LOG_TAG, "start now");
 
     }
+
+
+    private void taxiDriverInfo(Entities.SearchTaxi driver) {
+
+        nameDriverText.setText(driver.name);
+        firstTextView.setText(driver.tel1);
+        secondTextView.setText(driver.tel2);
+        threedTextView.setText(driver.tel3);
+        carBrendText.setText(driver.modelCar);
+        colorAutoText.setText(driver.color);
+        typeCarText.setText(driver.carClass);
+        gosNumberCarText.setText(driver.numberGos);
+        yearCarText.setText(driver.yearAuto);
+        ImageLoader imageLoader = new ImageLoader(activityMain);
+imageLoader.DisplayImage(driver.photo1, firstPhotoCarImage);
+        imageLoader.DisplayImage(driver.photo2, secondPhotoCarImage);
+
+    }
+
+
 }

@@ -27,7 +27,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/from"
-                style="@style/fragmentBeginButton"
                 android:layout_weight="26" />
 
             <EditText
@@ -36,7 +35,6 @@
                 android:id="@+id/fragmentTaxiBookingOrigin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/fragmentBeginButton"
                 android:layout_weight="10" />
         </LinearLayout>
 
@@ -56,7 +54,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/whereabouts"
-                style="@style/fragmentBeginButton"
                 android:layout_weight="26" />
 
             <EditText
@@ -65,7 +62,6 @@
                 android:id="@+id/fragmentTaxiBookingDestination"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/fragmentBeginButton"
                 android:layout_weight="10" />
         </LinearLayout>
 
@@ -84,14 +80,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/when"
-                style="@style/fragmentBeginButton"
                 android:layout_weight="26" />
 
             <TextView
                 android:id="@+id/fragmentTaxiBookingOrderTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/fragmentBeginButton"
                 android:layout_weight="10" />
         </LinearLayout>
 
@@ -111,13 +105,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/wishes"
-                style="@style/fragmentBeginButton"
                 android:layout_weight="26" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/fragmentBeginButton"
                 android:layout_weight="10" />
         </LinearLayout>
 

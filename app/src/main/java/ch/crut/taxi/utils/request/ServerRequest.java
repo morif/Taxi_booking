@@ -119,30 +119,9 @@ public class ServerRequest {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
         sendQuery(errorListener, onCompleteListener, entity);
-
     }
 
-    public static void carDriverInfo(QueryMaster.OnErrorListener errorListener,
-                                     QueryMaster.OnCompleteListener onCompleteListener) {
-
-        final Map<Object, String> map = new HashMap<>();
-        map.put("id", "%@");
-       // map.put("password", registrer.getPassword());
-        map.put("token", "1111111111111111111111111");
-        MultipartEntity entity;
-        try {
-            entity = getEntity(map, TaxiActions.AUTORITATION_CLIENT);
-        } catch (UnsupportedEncodingException | JSONException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-
-        sendQuery(errorListener, onCompleteListener, entity);
-
-
-    }
 
     private static class TaxiActions {
         public static final String SEARCH_TAXI = "users.order-taxi";
