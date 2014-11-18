@@ -7,12 +7,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Entities {
 
-    public static class SearchTaxi {
+    public static class SearchTaxi implements Serializable {
+
+
+        private static final long serialVersionUID = 42L;
+
 
         public String taximeter;
         public String bill;
@@ -34,6 +39,7 @@ public class Entities {
         public String yearAuto;
         public String modelCar;
         public String numberGos;
+
 
         public SearchTaxi(JSONObject jsonObject) throws JSONException {
             this.taximeter = jsonObject.getString("taximeter");
