@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Marker;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
@@ -54,7 +55,7 @@ public class FragmentTaxiSearch extends NBFragment implements FragmentGoogleMap.
 
     @Click(R.id.fragmentTaxiSearchDrawRoute)
     protected void clickDrawRoute() {
-        drawRoute.draw(original.latLng, destination.latLng);
+        drawRoute.draw(original.getLatLng(), destination.getLatLng());
     }
 
     @Override
@@ -65,8 +66,6 @@ public class FragmentTaxiSearch extends NBFragment implements FragmentGoogleMap.
         original = activityMain.getTaxiBookingHelper().original;
         destination = activityMain.getTaxiBookingHelper().destination;
 
-        ServerRequest.searchTaxi(original.latLng, (QueryMaster.OnErrorListener) getActivity(),
-                onCompleteListener);
     }
 
     @Override
@@ -77,16 +76,19 @@ public class FragmentTaxiSearch extends NBFragment implements FragmentGoogleMap.
         mapFragment.setOnMapInitialized(this);
 
         FragmentHelper.add(getChildFragmentManager(), mapFragment, CONTAINER);
+
+        ServerRequest.searchTaxi(original.getLatLng(), (QueryMaster.OnErrorListener) getActivity(),
+                onCompleteListener);
     }
 
     private void setUpCamera() {
-        mapUtils.moveCamera(original.latLng);
+        mapUtils.moveCamera(original.getLatLng());
     }
 
     private QueryMaster.OnCompleteListener onCompleteListener = new QueryMaster.OnCompleteListener() {
         @Override
         public void QMcomplete(JSONObject jsonObject) throws JSONException {
-            QueryMaster.alert(getActivity(), jsonObject.toString());
+//            QueryMaster.alert(getActivity(), jsonObject.toString());
 
             JSONArray data = QueryMaster.getData(jsonObject);
 
@@ -102,24 +104,25 @@ public class FragmentTaxiSearch extends NBFragment implements FragmentGoogleMap.
         mapUtils.addDriver(listDrivers);
     }
 
-    private AdapterInfoWindow.OnDriverMarkerClickListener onDriverMarkerClickListener = new AdapterInfoWindow.OnDriverMarkerClickListener() {
+    private GoogleMapUtils.OnDriverInfoWindowClick onDriverInfoWindowClick = new GoogleMapUtils.OnDriverInfoWindowClick() {
         @Override
-        public void driverClick(Entities.SearchTaxi driver) {
-            QueryMaster.toast(getActivity(), driver.id);
-            //((ActivityMain) getActivity()).add();
+        public void infoWindowClick(Entities.SearchTaxi driver) {
+            ((ActivityMain) getActivity()).add(FragmentDriverTaxiInfo.newInstance(driver));
         }
     };
 
     @Override
     public void mapWasInitialized(GoogleMap googleMap) {
         mapUtils = new GoogleMapUtils(getActivity(), googleMap);
-        mapUtils.setOnDriverMarkerClick(onDriverMarkerClickListener);
+        mapUtils.setOnDriverInfoWindowClick(onDriverInfoWindowClick);
 
-        mapUtils.addOriginMarker(original.latLng);
-        mapUtils.addDestinationMarker(destination.latLng);
+
+        mapUtils.addOriginMarker(original.getLatLng());
+        mapUtils.addDestinationMarker(destination.getLatLng());
 
         drawRoute = new DrawRoute(getActivity(), mapUtils);
 
         setUpCamera();
+
     }
 }

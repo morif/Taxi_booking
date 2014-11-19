@@ -9,11 +9,14 @@ import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import ch.crut.taxi.database.DAOFavorite;
 import ch.crut.taxi.interfaces.UserPref_;
+import sqlitesimple.library.SQLiteSimple;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 
 @EApplication
 public class TaxiApplication extends Application {
+
+    private static final int DB_VERSION = 1;
 
     private static TaxiApplication taxiApplication;
 
@@ -29,6 +32,9 @@ public class TaxiApplication extends Application {
         taxiApplication = this;
 
         CalligraphyConfig.initDefault("fonts/SegoePrint.ttf", R.attr.fontPath);
+
+        SQLiteSimple databaseSimple = new SQLiteSimple(this, DB_VERSION);
+        databaseSimple.create(DAOFavorite.tableClass);
 
 
         daoFavorite = new DAOFavorite(this);

@@ -4,10 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/activityMainMap"
+    <ImageView
+        android:background="@drawable/map_background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <!--<FrameLayout-->
+    <!--android:id="@+id/activityMainMap"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" />-->
 
     <FrameLayout
         android:layout_marginTop="40dp"

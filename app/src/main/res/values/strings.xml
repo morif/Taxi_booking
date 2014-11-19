@@ -38,8 +38,22 @@
     <string name="hint_password">Пароль</string>
     <string name="add_favorite">Добавить в избранное</string>
     <string name="no_text" />
-    <string name="register_success">Вы успешно зарегистрировались</string>
-    <string name="uncorrect_data">Некорректные данные</string>
-    <string name="go_driver_info">Перейти к странице водителя</string>
-    <string name="auto_mark">Марка автомобиля:</string>
+    <string name="correct_registration">Вы успешно зарегистрировались</string>
+    <string name="leavReview">Оставить отзыв</string>
+    <string name="car_brend">Марка авто</string>
+    <string name="color_auto">Цвет</string>
+    <string name="type_car">тип транспорта</string>
+    <string name="state_number">Гос номер</string>
+    <string name="edition_year">Год выпуска</string>
+    <string name="order_auto">Заказать авто</string>
+    <string name="add_in_favorites">Добавить в избранное</string>
+    <string name="auto_mark">Марка авто:</string>
+    <string name="go_driver_info">Перейти к экрану водителя</string>
+    <string name="register_success">Регистрация успешна</string>
+    <string name="uncorrect_data">Введены некорректные данные</string>
+    <string name="favorite_addresses">Избранные адреса</string>
+    <string name="already_favorite">Уже в избранном</string>
+    <string name="added_favorite">Добавлено в избранное</string>
+    <string name="hint_enter_comment">Введите комментарий</string>
+    <string name="settings">Настройки</string>
 </resources>

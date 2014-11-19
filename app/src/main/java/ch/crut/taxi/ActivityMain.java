@@ -34,12 +34,12 @@ public class ActivityMain extends FragmentActivity implements OnPlaceSelectedLis
         NBConnector, NBItemSelector {
 
 
-    public static final int MAP_CONTAINER = R.id.activityMainMap;
+    //    public static final int MAP_CONTAINER = R.id.activityMainMap;
     public static final int FRAME_CONTAINER = R.id.activityMainContainer;
 
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
-    private SupportMapFragment supportMapFragment;
+    //    private SupportMapFragment supportMapFragment;
     private NBController NBController;
     private FragmentTaxiBooking fragmentTaxiBooking;
     private TaxiBookingHelper taxiBookingHelper;
@@ -68,12 +68,12 @@ public class ActivityMain extends FragmentActivity implements OnPlaceSelectedLis
 //        setActionBarDefaultListener();
 //
         fragmentTaxiBooking = FragmentTaxiBooking.newInstance();
-        supportMapFragment = SupportMapFragment.newInstance();
+//        supportMapFragment = SupportMapFragment.newInstance();
         taxiBookingHelper = new TaxiBookingHelper();
 
 
 //        FragmentHelper.add(fragmentManager, FragmentAuthorization.newInstance(), FRAME_CONTAINER);
-        FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
+//        FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
         FragmentHelper.add(fragmentManager, fragmentTaxiBooking, FRAME_CONTAINER);
     }
 
@@ -114,7 +114,7 @@ public class ActivityMain extends FragmentActivity implements OnPlaceSelectedLis
     }
 
     public void initialScreen() {
-        FragmentHelper.clear(fragmentManager, 2);
+        FragmentHelper.clear(fragmentManager, 1);
     }
 
     @Override

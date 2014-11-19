@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.location.LocationRequest;
@@ -22,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
+import ch.crut.taxi.dialogs.DialogComment;
 import ch.crut.taxi.fragmenthelper.FragmentHelper;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.interfaces.SmartFragment;
@@ -57,6 +59,7 @@ public class FragmentPlaceSelector extends NBFragment implements NBItemSelector 
     private GoogleMapUtils mapUtils;
     private NavigationPoint navigationPoint;
     private NiceProgressDialog niceProgressDialog;
+    private DialogComment dialogComment;
 
 
     public static FragmentPlaceSelector newInstance(OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey, boolean autoLocation) {
@@ -84,6 +87,10 @@ public class FragmentPlaceSelector extends NBFragment implements NBItemSelector 
     @ViewById(R.id.fragmentPlaceSelectorHome)
     protected EditText homeEditText;
 
+    @ViewById(R.id.fragmentPlaceSelectorComment)
+    protected Button commentButton;
+
+
     @Click(R.id.fragmentPlaceSelectorLocation)
     protected void clickLocation() {
         findMyLocation(getActivity());
@@ -91,8 +98,14 @@ public class FragmentPlaceSelector extends NBFragment implements NBItemSelector 
 
     @Click(R.id.fragmentPlaceSelectorAddFavorite)
     protected void clickAddFavorite() {
-        FavoriteHelper.add(navigationPoint, placeSelectedKey);
+        FavoriteHelper.add(getActivity(), navigationPoint, placeSelectedKey);
     }
+
+    @Click(R.id.fragmentPlaceSelectorComment)
+    protected void clickComment() {
+        dialogComment.show();
+    }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -104,9 +117,8 @@ public class FragmentPlaceSelector extends NBFragment implements NBItemSelector 
         autoLocation = bundle.getBoolean(AUTO_LOCATION);
         navigationPoint = new NavigationPoint();
 
-
-        final ActivityMain activityMain = (ActivityMain) activity;
-//        activityMain.replaceActionBarClickListener(this);
+        dialogComment = new DialogComment(getActivity());
+        dialogComment.setOnCommentComplete(onCommentComplete);
 
         niceProgressDialog = new NiceProgressDialog(activity);
     }
@@ -134,34 +146,6 @@ public class FragmentPlaceSelector extends NBFragment implements NBItemSelector 
         }, 100);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-//        ((ActivityMain) getActivity()).setActionBarDefaultListener();
-    }
-
-//    @Override
-//    public void clickSettings(View view) {
-//        ((ActivityMain) getActivity()).clickSettings(view);
-//    }
-//
-//    @Override
-//    public void clickBack(View view) {
-//        ((ActivityMain) getActivity()).clickBack(view);
-//
-//    }
-//
-//    @Override
-//    public void clickCancel(View view) {
-//        ((ActivityMain) getActivity()).clickCancel(view);
-//    }
-//
-//    @Override
-//    public void clickDone(View view) {
-//        ((ActivityMain) getActivity()).placeSelected(navigationPoint, placeSelectedKey);
-//        ((ActivityMain) getActivity()).initialScreen();
-//    }
 
     @Override
     public void NBItemSelected(int id) {
@@ -191,13 +175,17 @@ public class FragmentPlaceSelector extends NBFragment implements NBItemSelector 
                 final Address userAddress = addresses.get(0);
                 final String addressString = userAddress.getAddressLine(0) + ", " + userAddress.getAddressLine(1);
 
-                navigationPoint.addressString = addressString;
-                navigationPoint.latLng = latLng;
-                navigationPoint.address = userAddress;
+                navigationPoint.setAddressString(addressString);
+                navigationPoint.setLatLng(latLng);
+                navigationPoint.setAddress(userAddress);
                 navigationPoint.setHome();
 
                 addressEditText.setText(addressString);
                 homeEditText.setText(navigationPoint.getHome());
+
+                if (userAddress.hasLatitude() && userAddress.hasLongitude()) {
+                    mapUtils.moveCamera(userAddress.getLatitude(), userAddress.getLongitude());
+                }
             }
 
             niceProgressDialog.dismiss();
@@ -229,6 +217,9 @@ public class FragmentPlaceSelector extends NBFragment implements NBItemSelector 
     };
 
     private void findMyLocation(final Context context) {
+
+        mapUtils.getMap().clear();
+
         long LOCATION_UPDATE_INTERVAL = 10;
         long WAIT_TIME = 10;
         long LOCATION_TIMEOUT_IN_SECONDS = 10;
@@ -252,7 +243,7 @@ public class FragmentPlaceSelector extends NBFragment implements NBItemSelector 
                         final LocationAddress locationAddress = new LocationAddress(context,
                                 location.getLatitude(), location.getLongitude());
 
-                        mapUtils.moveCamera(latLng);
+//                        mapUtils.moveCamera(latLng);
 
 
                         locationAddress.setOnCompleteListener(onAddressFoundListener);
@@ -269,4 +260,11 @@ public class FragmentPlaceSelector extends NBFragment implements NBItemSelector 
 
         niceProgressDialog.show();
     }
+
+    private DialogComment.OnCommentComplete onCommentComplete = new DialogComment.OnCommentComplete() {
+        @Override
+        public void commentComplete(String commentBody) {
+            commentButton.setText(commentBody);
+        }
+    };
 }

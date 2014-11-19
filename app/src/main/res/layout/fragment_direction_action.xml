@@ -11,23 +11,29 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:background="@drawable/xml_light_grey_background"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/icon_search" />
 
-        <AutoCompleteTextView
+        <ch.crut.taxi.views.AutoCompleteTextViewCustomAdapter
             android:id="@+id/fragmentDirectionActionAddressAutoCompleteTextView"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textColor="#000"
             android:hint="@string/hint_address"
             android:ems="10"
             android:singleLine="true"
-            android:layout_weight="1" />
+            android:background="@null"
+            android:selectAllOnFocus="true" />
 
         <ProgressBar
             android:layout_width="30dp"
@@ -49,7 +55,30 @@
         android:text="@string/map_point"
         android:background="@null" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/xml_light_grey_background"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_launcher" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:text="@string/favorite_addresses" />
+
+    </LinearLayout>
+
     <ListView
+        android:id="@+id/fragmentDirectionActionFavoriteListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

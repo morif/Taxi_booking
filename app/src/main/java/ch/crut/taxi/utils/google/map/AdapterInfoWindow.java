@@ -49,15 +49,6 @@ public class AdapterInfoWindow implements GoogleMap.InfoWindowAdapter {
                 ((TextView) infoView.findViewById(R.id.infoWindowDriverMarkAuto))
                         .setText(driver.modelCar);
 
-                infoView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (onDriverMarkerClickListener != null) {
-                            onDriverMarkerClickListener.driverClick(driver);
-                        }
-                    }
-                });
-
                 return infoView;
             }
 
@@ -72,13 +63,4 @@ public class AdapterInfoWindow implements GoogleMap.InfoWindowAdapter {
         return null;
     }
 
-    public void setOnDriverMarkerClickListener(OnDriverMarkerClickListener onDriverMarkerClickListener) {
-        this.onDriverMarkerClickListener = onDriverMarkerClickListener;
-    }
-
-    private OnDriverMarkerClickListener onDriverMarkerClickListener;
-
-    public static interface OnDriverMarkerClickListener {
-        public void driverClick(Entities.SearchTaxi driver);
-    }
 }

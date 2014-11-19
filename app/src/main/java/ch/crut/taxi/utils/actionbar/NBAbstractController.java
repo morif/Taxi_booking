@@ -20,4 +20,6 @@ public abstract class NBAbstractController {
 
     public abstract void hide(int[] items);
 
+    public abstract void show(int item);
+
 }

@@ -1,25 +1,28 @@
 package ch.crut.taxi.fragments;
 
 import android.app.Activity;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
 import ch.crut.taxi.TaxiApplication;
+import ch.crut.taxi.dialogs.TimePickerFragment;
+import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.interfaces.SmartFragment;
 import ch.crut.taxi.querymaster.QueryMaster;
-import ch.crut.taxi.utils.actionbar.NBController;
-import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
 import ch.crut.taxi.utils.actionbar.NBItemSelector;
@@ -72,6 +75,11 @@ public class FragmentTaxiBooking extends NBFragment implements NBItemSelector {
         }
     }
 
+    @Click(R.id.fragmentTaxiBookingOrderTime)
+    protected void clickOrderTime() {
+        new TimePickerFragment(getActivity(), onOrderTimePicked).show(getFragmentManager(), "");
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity, FragmentTaxiBooking.class);
@@ -91,11 +99,11 @@ public class FragmentTaxiBooking extends NBFragment implements NBItemSelector {
         destinationPoint = bookingHelper.destination;
 
         if (originalPoint != null) {
-            originAddress.setText(originalPoint.addressString);
+            originAddress.setText(originalPoint.getAddressString());
         }
 
         if (destinationPoint != null) {
-            destinationAddress.setText(destinationPoint.addressString);
+            destinationAddress.setText(destinationPoint.getAddressString());
         }
 
         orderTime.setText(getOrderTime());
@@ -130,5 +138,27 @@ public class FragmentTaxiBooking extends NBFragment implements NBItemSelector {
                 break;
         }
     }
+
+    private TimePickerDialog.OnTimeSetListener onOrderTimePicked = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+            String time = "";
+            if (hourOfDay < 10)
+                time += "0" + hourOfDay;
+            else
+                time += hourOfDay;
+            time += ":";
+            if (minute < 10)
+                time += "0" + minute;
+            else
+                time += minute;
+
+            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+
+            orderTime.setText(formatDate.format(new Date()) + " " + time);
+        }
+    };
 }
+
 

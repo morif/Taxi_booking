@@ -12,7 +12,7 @@ import ch.crut.taxi.utils.actionbar.NBItemSelector;
 public class NBFragment extends Fragment {
 
 
-    protected NBController NBController;
+    private NBController NBController;
     private SmartFragment annotationFragment;
 
     public void onAttach(Activity activity, Class<? extends NBFragment> instance) {
@@ -59,6 +59,10 @@ public class NBFragment extends Fragment {
         } else {
             QueryMaster.toast(getActivity(), NBFragment.this.toString() + " was not annotated");
         }
+    }
+
+    public NBController getNBController() {
+        return NBController;
     }
 
 }

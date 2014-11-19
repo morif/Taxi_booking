@@ -122,4 +122,9 @@ public class LocationAddress extends Thread {
 
         return addresses;
     }
+
+    public static List<Address> getFromLoсationName(Context context, String locationName) throws IOException {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        return geocoder.getFromLocationName(locationName, 1);
+    }
 }

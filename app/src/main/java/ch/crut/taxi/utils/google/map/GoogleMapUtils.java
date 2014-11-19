@@ -17,7 +17,7 @@ import java.util.Map;
 import ch.crut.taxi.R;
 import ch.crut.taxi.utils.request.Entities;
 
-public class GoogleMapUtils {
+public class GoogleMapUtils implements GoogleMap.OnInfoWindowClickListener {
 
     private final GoogleMap googleMap;
     private final Context context;
@@ -38,7 +38,13 @@ public class GoogleMapUtils {
         adapterInfoWindow = new AdapterInfoWindow(context,
                 availableMarkersType, drivers);
 
+
         this.googleMap.setInfoWindowAdapter(adapterInfoWindow);
+        this.googleMap.setOnInfoWindowClickListener(this);
+
+
+        this.googleMap.getUiSettings().setZoomControlsEnabled(false);
+        this.googleMap.getUiSettings().setMyLocationButtonEnabled(false);
     }
 
     public void moveCamera(LatLng latLng) {
@@ -131,7 +137,20 @@ public class GoogleMapUtils {
         drivers.clear();
     }
 
-    public void setOnDriverMarkerClick(AdapterInfoWindow.OnDriverMarkerClickListener onDriverMarkerClick) {
-        adapterInfoWindow.setOnDriverMarkerClickListener(onDriverMarkerClick);
+    public void setOnDriverInfoWindowClick(OnDriverInfoWindowClick onDriverInfoWindowClick) {
+        this.onDriverInfoWindowClick = onDriverInfoWindowClick;
+    }
+
+    private OnDriverInfoWindowClick onDriverInfoWindowClick;
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        if (onDriverInfoWindowClick != null) {
+            onDriverInfoWindowClick.infoWindowClick(drivers.get(marker));
+        }
+    }
+
+    public static interface OnDriverInfoWindowClick {
+        public void infoWindowClick(Entities.SearchTaxi driver);
     }
 }
