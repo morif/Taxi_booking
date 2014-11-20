@@ -9,9 +9,11 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
+
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
 import ch.crut.taxi.actionbar.ActionBarController;
@@ -25,7 +27,9 @@ public class FragmentDirectionAction extends Fragment {
     private ActionBarController barController;
     private OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey;
     private String inputStreetName;
+    private ActivityMain activityMain;
     private AutoCompliteAsyncTask autoCompliteAsyncTask;
+
     public static FragmentDirectionAction newInstance(OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey) {
         FragmentDirectionAction fragmentDirectionAction = new FragmentDirectionAction_();
 
@@ -37,6 +41,7 @@ public class FragmentDirectionAction extends Fragment {
 
         return fragmentDirectionAction;
     }
+
 
     @ViewById(R.id.serchAddressAutoCompleteTextView)
     protected AutoCompleteTextView autoCompleteTextView;
@@ -50,19 +55,23 @@ public class FragmentDirectionAction extends Fragment {
                 placeSelectedKey, true);
         ((ActivityMain) getActivity()).add(placeSelector);
     }
+
     @Click(R.id.fragmentDirectionActionSetLocation)
     protected void clickSetLocation() {
         final FragmentPlaceSelector placeSelector = FragmentPlaceSelector
                 .newInstance(placeSelectedKey);
         ((ActivityMain) getActivity()).add(placeSelector);
     }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        activityMain = (ActivityMain) activity;
         Bundle bundle = getArguments();
         placeSelectedKey = (OnPlaceSelectedListener.PlaceSelectedKeys)
                 bundle.getSerializable(OnPlaceSelectedListener.PLACE_SELECTED_KEY_SERIALIZABLE);
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -70,18 +79,23 @@ public class FragmentDirectionAction extends Fragment {
         barController.title(getString(R.string.from_where));
         barController.cancelEnabled(true);
         inputStreetName = autoCompleteTextView.getText().toString();
-        Log.d(LOG_TAG, "inputString "+inputStreetName);
-        autoCompliteAsyncTask = new AutoCompliteAsyncTask(
-                FragmentDirectionAction.this, progressBarInAuto, inputStreetName);
+
+        Log.d(LOG_TAG, "inputString " + inputStreetName);
+        autoCompliteAsyncTask = new AutoCompliteAsyncTask(activityMain,
+                FragmentDirectionAction.this, progressBarInAuto, autoCompleteTextView);
+
         autoCompliteAsyncTask.execute();
+
     }
+
     @Override
     public void onPause() {
         super.onPause();
         barController.cancelEnabled(false);
-        if(autoCompliteAsyncTask.cancel(true)){
+        if (autoCompliteAsyncTask.cancel(true)) {
         }
     }
+
     public void searchStreet(String[] listStreetsArray) {
         ArrayAdapter adapter = new ArrayAdapter<String>
                 (getActivity(), android.R.layout.select_dialog_item, listStreetsArray);
@@ -90,15 +104,17 @@ public class FragmentDirectionAction extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!autoCompleteTextView.toString().equals("")) {
                     inputStreetName = autoCompleteTextView.getText().toString();
-                    autoCompliteAsyncTask = new AutoCompliteAsyncTask(
-                            FragmentDirectionAction.this, progressBarInAuto, inputStreetName);
+                    autoCompliteAsyncTask = new AutoCompliteAsyncTask(activityMain,
+                            FragmentDirectionAction.this, progressBarInAuto, autoCompleteTextView);
                     autoCompliteAsyncTask.execute(inputStreetName);
                 }
             }
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }

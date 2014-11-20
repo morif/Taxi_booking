@@ -1,12 +1,11 @@
-<ch.crut.taxi.parallax.ParallaxScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ch.crut.taxi.parallax.ParallaxScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:inner_parallax_factor="1.9"
     app:parallax_factor="2.5"
-    app:parallax_views_num="5"
-    tools:context=".MainActivity">
+    app:parallax_views_num="5">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +27,7 @@
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:background="@drawable/ic_launcher"></ImageView>
+                    android:background="@drawable/ic_launcher"/>
 
 
 
@@ -36,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
-                    android:text="name taxi driver"></TextView>
+                    android:text="name taxi driver"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -64,7 +63,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/leavReview"></TextView>
+                android:text="@string/leavReview"/>
         </LinearLayout>
 
         <LinearLayout
@@ -174,13 +173,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/car_brend"></TextView>
+                android:text="@string/car_brend"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:id="@+id/carBrendTextView"></TextView>
+                android:id="@+id/carBrendTextView"/>
 
         </LinearLayout>
         <LinearLayout
@@ -199,7 +198,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:id="@+id/colorAutoTextView"></TextView>
+                android:id="@+id/colorAutoTextView"/>
 
         </LinearLayout>
         <LinearLayout
@@ -211,12 +210,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/type_car"></TextView>
+                android:text="@string/type_car"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/typeCarTextView"></TextView>
+                android:id="@+id/typeCarTextView"/>
 
         </LinearLayout>
 
@@ -229,13 +228,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/state_number"></TextView>
+                android:text="@string/state_number"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:id="@+id/gosNumberCarTextView"></TextView>
+                android:id="@+id/gosNumberCarTextView"/>
 
         </LinearLayout>
 
@@ -248,13 +247,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/edition_year"></TextView>
+                android:text="@string/edition_year"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:id="@+id/yearCarTextView"></TextView>
+                android:id="@+id/yearCarTextView"/>
 
         </LinearLayout>
 
@@ -275,7 +274,7 @@
                 android:layout_weight="4"
                 android:padding="10dp"
                 android:background="@drawable/blue_button_bg"
-                android:text="@string/order_auto"></Button>
+                android:text="@string/order_auto"/>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -288,15 +287,13 @@
                 android:layout_weight="4"
                 android:padding="10dp"
                 android:background="@drawable/blue_button_bg"
-                android:text="@string/add_in_favorites"></Button>
+                android:text="@string/add_in_favorites"/>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
                 android:background="@null"/>
         </LinearLayout>
-
-
 
     </LinearLayout>
 

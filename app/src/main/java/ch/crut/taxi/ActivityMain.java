@@ -1,30 +1,25 @@
 package ch.crut.taxi;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.Window;
-
 import com.google.android.gms.maps.SupportMapFragment;
-
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.WindowFeature;
-
 import ch.crut.taxi.actionbar.ActionBarController;
 import ch.crut.taxi.actionbar.UIActionBar;
 import ch.crut.taxi.fragmenthelper.FragmentHelper;
-import ch.crut.taxi.fragments.FragmentDriverTaxiInfo;
+import ch.crut.taxi.fragments.FragmentSettings;
 import ch.crut.taxi.fragments.FragmentTaxiBooking;
 import ch.crut.taxi.interfaces.ActionBarClickListener;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
-
 
 @WindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
 @EActivity(R.layout.activity_main)
@@ -71,13 +66,9 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         taxiBookingHelper = new TaxiBookingHelper();
 
         FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
-        FragmentHelper.add(fragmentManager, fragmentTaxiBooking, FRAME_CONTAINER);
+        FragmentHelper.add(fragmentManager, FragmentSettings.newInstance(), FRAME_CONTAINER);
     }
 
-//    @Override
-//    protected void attachBaseContext(Context newBase) {
-//        super.attachBaseContext(new CalligraphyContextWrapper(newBase));
-//    }
     protected void onResume() {
         super.onResume();
         taxiApplication.setCurrentActivity(this);
@@ -130,7 +121,6 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
     public void setActionBarDefaultListener() {
         actionBarController.setActionBarClickListener(this);
     }
-
 
     @Override
     public void placeSelected(NavigationPoint navigationPoint, PlaceSelectedKeys selectedKey) {

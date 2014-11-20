@@ -43,4 +43,16 @@
     <string name="edition_year">Год выпуска:</string>
     <string name="order_auto">Заказать авто</string>
     <string name="add_in_favorites">Добавить в избранное</string>
+    <string name="wifi_zona">Wifi зона</string>
+    <string name="not_smokes">Салон для некурящих</string>
+    <string name="animals_transportation">Перевозка животных</string>
+    <string name="air_conditioning">Кондиционер</string>
+    <string name="child_set">Детское кресло</string>
+    <string name="payment_card">Оплата карточкой</string>
+    <string name="you_entry">Вы вошли как:</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="by_app">О приложении</string>
+    <string name="tell_friends">Рассказать друзьям</string>
+    <string name="radius_search">Радиус поиска, км</string>
+    <string name="exit">Выход</string>
 </resources>
