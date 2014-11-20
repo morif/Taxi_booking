@@ -42,6 +42,9 @@
     <string name="state_number">Гос номер:</string>
     <string name="edition_year">Год выпуска:</string>
     <string name="order_auto">Заказать авто</string>
+
+
+
     <string name="add_in_favorites">Добавить в избранное</string>
     <string name="wifi_zona">Wifi зона</string>
     <string name="not_smokes">Салон для некурящих</string>
