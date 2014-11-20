@@ -94,6 +94,4 @@ public class FragmentSettings extends Fragment {
         });
 
     }
-
-
 }

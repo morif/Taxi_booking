@@ -13,6 +13,7 @@ import org.androidannotations.annotations.WindowFeature;
 import ch.crut.taxi.actionbar.ActionBarController;
 import ch.crut.taxi.actionbar.UIActionBar;
 import ch.crut.taxi.fragmenthelper.FragmentHelper;
+import ch.crut.taxi.fragments.FragmentListCars;
 import ch.crut.taxi.fragments.FragmentSettings;
 import ch.crut.taxi.fragments.FragmentTaxiBooking;
 import ch.crut.taxi.interfaces.ActionBarClickListener;
@@ -66,7 +67,7 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         taxiBookingHelper = new TaxiBookingHelper();
 
         FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
-        FragmentHelper.add(fragmentManager, FragmentSettings.newInstance(), FRAME_CONTAINER);
+        FragmentHelper.add(fragmentManager, FragmentListCars.newInstance(), FRAME_CONTAINER);
     }
 
     protected void onResume() {

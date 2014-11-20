@@ -154,8 +154,8 @@ public class FragmentDriverTaxiInfo extends Fragment {
         gosNumberCarText.setText(driver.numberGos);
         yearCarText.setText(driver.yearAuto);
         ImageLoader imageLoader = new ImageLoader(activityMain);
-        imageLoader.DisplayImage(driver.photo1, firstPhotoCarImage);
-        imageLoader.DisplayImage(driver.photo2, secondPhotoCarImage);
+    //    imageLoader.DisplayImage(driver.photo1, firstPhotoCarImage);
+     //   imageLoader.DisplayImage(driver.photo2, secondPhotoCarImage);
 
     }
 
