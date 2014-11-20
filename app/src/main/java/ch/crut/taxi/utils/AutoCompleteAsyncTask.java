@@ -167,7 +167,9 @@ public class AutoCompleteAsyncTask extends AsyncTask<String, Void, Object> {
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
 
-        progressBarInAutoText.setVisibility(View.INVISIBLE);
-        fragmentDirectionAction.searchStreet(listStreetsArray);
+        if (!isCancelled()) {
+            progressBarInAutoText.setVisibility(View.INVISIBLE);
+            fragmentDirectionAction.searchStreet(listStreetsArray);
+        }
     }
 }

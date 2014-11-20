@@ -19,7 +19,7 @@
     <string name="back">Назад</string>
     <string name="hint_address">Адресс</string>
     <string name="show_route">Показать маршрут</string>
-    <string name="taxi_order">Заказать такси</string>
+    <string name="taxi_order">Заказать</string>
     <string name="authoritation">Авторизация</string>
     <string name="registration">Регистрация</string>
     <string name="email_address">Электронный адрес</string>
@@ -56,4 +56,24 @@
     <string name="added_favorite">Добавлено в избранное</string>
     <string name="hint_enter_comment">Введите комментарий</string>
     <string name="settings">Настройки</string>
+    <string name="enter_all_data">Введите все данные</string>
+    <string name="driver_info">Информация о водителе</string>
+    <string name="wifi_zona">Wifi зона</string>
+    <string name="not_smokes">Салон для некурящих</string>
+    <string name="animals_transportation">Перевозка животных</string>
+    <string name="air_conditioning">Кондиционер</string>
+    <string name="child_set">Детское кресло</string>
+    <string name="payment_card">Оплата карточкой</string>
+    <string name="you_entry">Вы вошли как:</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="by_app">О приложении</string>
+    <string name="tell_friends">Рассказать друзьям</string>
+    <string name="radius_search">Радиус поиска, км</string>
+    <string name="exit">Выход</string>
+    <string name="distance">Расстояние:</string>
+    <string name="send_order_request">Отправить заказ</string>
+    <string name="send">Отправить</string>
+    <string name="hint_email">Ваш email</string>
+    <string name="authorization_success">Вы успешно авторизовались</string>
+    <string name="auto_list">Список автомобилей</string>
 </resources>

@@ -49,6 +49,9 @@ public class AdapterInfoWindow implements GoogleMap.InfoWindowAdapter {
                 ((TextView) infoView.findViewById(R.id.infoWindowDriverMarkAuto))
                         .setText(driver.modelCar);
 
+                ((TextView) infoView.findViewById(R.id.infoWindowDriverDistance))
+                        .setText(driver.distance);
+
                 return infoView;
             }
 

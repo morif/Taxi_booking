@@ -21,16 +21,20 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 
 import ch.crut.taxi.R;
+import ch.crut.taxi.fragmenthelper.FragmentHelper;
+import ch.crut.taxi.interfaces.SmartFragment;
 import ch.crut.taxi.lazylist.ImageLoader;
+import ch.crut.taxi.utils.actionbar.NBItemSelector;
+import ch.crut.taxi.utils.actionbar.NBItems;
 import ch.crut.taxi.utils.request.Entities;
 
 @EFragment(R.layout.fragment_driver_taxi_info)
-public class FragmentDriverTaxiInfo extends Fragment {
+@SmartFragment(title = R.string.driver_info, items = {NBItems.BACK})
+public class FragmentDriverTaxiInfo extends NBFragment implements NBItemSelector {
 
 
     private Activity activityMain;
     private final static String SEARCH_TAXI = "searchTaxi";
-    private final String LOG_TAG = "FragmentDriverTaxiInfo";
     private Entities.SearchTaxi driver;
 
 
@@ -109,6 +113,11 @@ public class FragmentDriverTaxiInfo extends Fragment {
     protected ImageView driverPhoto;
 
 
+    @Click(R.id.fragmentDriverInfoComment)
+    protected void clickComment() {
+
+    }
+
 //    @Click(R.id.addServiceButton)
 //    protected void clickToButton() {
 //        Log.d(LOG_TAG, "start now");
@@ -119,7 +128,7 @@ public class FragmentDriverTaxiInfo extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
+        super.onAttach(activity, FragmentDriverTaxiInfo.class);
         activityMain = activity;
         driver = (Entities.SearchTaxi) getArguments().getSerializable(SEARCH_TAXI);
 
@@ -181,9 +190,28 @@ public class FragmentDriverTaxiInfo extends Fragment {
         yearCarText.setText(driver.yearAuto);
 
         ImageLoader imageLoader = new ImageLoader(activityMain);
-//        imageLoader.DisplayImage(driver.photo1, firstPhotoCarImage);
+
+        if (!driver.carPhoto.isEmpty()) {
+            imageLoader.DisplayImage(driver.carPhoto, firstPhotoCarImage);
+        } else {
+            firstPhotoCarImage.setVisibility(View.GONE);
+        }
 //        imageLoader.DisplayImage(driver.photo2, secondPhotoCarImage);
 
-        imageLoader.DisplayImage(driver.driverPhoto, driverPhoto);
+        if (!driver.driverPhoto.isEmpty()) {
+            imageLoader.DisplayImage(driver.driverPhoto, driverPhoto);
+        } else {
+            driverPhoto.setImageResource(R.drawable.no_foto_taxist);
+        }
+
+    }
+
+    @Override
+    public void NBItemSelected(int id) {
+        switch (id) {
+            case NBItems.BACK:
+                FragmentHelper.pop(getFragmentManager());
+                break;
+        }
     }
 }

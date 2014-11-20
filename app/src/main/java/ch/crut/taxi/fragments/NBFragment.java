@@ -21,10 +21,6 @@ public class NBFragment extends Fragment {
         this.annotationFragment = instance.getAnnotation(SmartFragment.class);
 
         this.NBController = ((NBConnector) activity).nbConnected();
-
-        if (NBFragment.this instanceof NBItemSelector) {
-            this.NBController.clickListener((NBItemSelector) this);
-        }
     }
 
     @Override
@@ -56,8 +52,16 @@ public class NBFragment extends Fragment {
             NBController.title(getString(annotationFragment.title()));
 
             NBController.set(annotationFragment.items());
+
         } else {
             QueryMaster.toast(getActivity(), NBFragment.this.toString() + " was not annotated");
+        }
+
+        if (NBFragment.this instanceof NBItemSelector) {
+            this.NBController.clickListener((NBItemSelector) this);
+
+        } else if (getActivity() instanceof NBItemSelector) {
+            this.NBController.clickListener((NBItemSelector) getActivity());
         }
     }
 

@@ -18,8 +18,8 @@
             android:padding="10dp"
             android:background="@drawable/xml_button_def_bg"
             android:inputType="textEmailAddress"
-            android:hint="@string/hint_login"
-            android:id="@+id/fragmentAuthorizationLogin" />
+            android:hint="@string/hint_email"
+            android:id="@+id/fragmentAuthorizationEmail" />
     </LinearLayout>
 
     <LinearLayout

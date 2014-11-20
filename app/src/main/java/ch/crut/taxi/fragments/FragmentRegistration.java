@@ -45,9 +45,6 @@ public class FragmentRegistration extends NBFragment implements NBItemSelector {
     }
 
 
-    @ViewById(R.id.loginRegistrationEdit)
-    protected EditText ETlogin;
-
     @ViewById(R.id.passwordRegistrationEdit)
     protected EditText ETpassword;
 
@@ -94,7 +91,7 @@ public class FragmentRegistration extends NBFragment implements NBItemSelector {
                 UserPref_ userLocationPref = TaxiApplication.getUserPrefs();
 
                 userLocationPref.edit()
-                        .login().put(TextUtils.get(ETlogin))
+                        .email().put(TextUtils.get(ETemail))
                         .password().put(TextUtils.get(ETpassword))
                         .apply();
 
@@ -110,10 +107,9 @@ public class FragmentRegistration extends NBFragment implements NBItemSelector {
     };
 
     private void confirm() {
-        if (!TextUtils.emptyAnimate(ETlogin, ETpassword, ETemail, ETname, ETphone, ETphoneSecond)) {
+        if (!TextUtils.emptyAnimate(ETpassword, ETemail, ETname, ETphone, ETphoneSecond)) {
 
             String passwordRegistrationString = ETpassword.getText().toString();
-            String loginRegistrationString = ETlogin.getText().toString();
             String emailAddressRegistrationString = ETemail.getText().toString();
             String nameRegistrationString = ETname.getText().toString();
             String telephoneFirstRegistrationString = ETphone.getText().toString();
@@ -121,11 +117,6 @@ public class FragmentRegistration extends NBFragment implements NBItemSelector {
 
             RequestEntities.RegisterEntity registrer = new RequestEntities.RegisterEntity();
 
-            Log.d(LOG_TAG, loginRegistrationString + passwordRegistrationString
-                    + emailAddressRegistrationString + nameRegistrationString
-                    + telephoneFirstRegistrationString + telephoneSecondRegistrationString);
-
-            registrer.setLogin(loginRegistrationString);
             registrer.setPassword(passwordRegistrationString);
             registrer.setEmail(emailAddressRegistrationString);
             registrer.setName(nameRegistrationString);

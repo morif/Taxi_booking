@@ -3,7 +3,9 @@ package ch.crut.taxi.fragments;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -12,6 +14,7 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -25,6 +28,7 @@ import ch.crut.taxi.interfaces.SmartFragment;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
+import ch.crut.taxi.utils.WishObjects;
 import ch.crut.taxi.utils.actionbar.NBItemSelector;
 import ch.crut.taxi.utils.actionbar.NBItems;
 
@@ -53,6 +57,24 @@ public class FragmentTaxiBooking extends NBFragment implements NBItemSelector {
     @ViewById(R.id.fragmentTaxiBookingOrderTime)
     protected TextView orderTime;
 
+    @ViewById(R.id.animalImage)
+    protected ImageView animalImageView;
+
+    @ViewById(R.id.notSmokesImage)
+    protected ImageView notSmokesImageView;
+
+    @ViewById(R.id.wifiImage)
+    protected ImageView wifiImageView;
+
+    @ViewById(R.id.airConditionImage)
+    protected ImageView airConditionImageView;
+
+    @ViewById(R.id.chieldImage)
+    protected ImageView chieldImageView;
+
+    @ViewById(R.id.paymentImage)
+    protected ImageView paymentImageView;
+
 
     @Click(R.id.fragmentTaxiBookingOriginButton)
     protected void clickOriginal() {
@@ -68,11 +90,26 @@ public class FragmentTaxiBooking extends NBFragment implements NBItemSelector {
 
     @Click(R.id.fragmentTaxiBookingSearchAuto)
     protected void clickSearchAuto() {
+
+
         if (TaxiApplication.isUserAuthorized()) {
-            ((ActivityMain) getActivity()).add(FragmentTaxiSearch.newInstance());
+            if (dataEntered()) {
+                ((ActivityMain) getActivity()).add(FragmentTaxiSearch.newInstance());
+            } else {
+                QueryMaster.toast(getActivity(), R.string.enter_all_data);
+            }
         } else {
             ((ActivityMain) getActivity()).add(FragmentAuthorization.newInstance());
         }
+    }
+
+    @Click(R.id.fragmentTaxiBookingAddWishes)
+    protected void clickWishes() {
+        ((ActivityMain) getActivity()).add(FragmentWish.newInstance());
+    }
+
+    private boolean dataEntered() {
+        return !((ActivityMain) getActivity()).getTaxiBookingHelper().isEmpty();
     }
 
     @Click(R.id.fragmentTaxiBookingOrderTime)
@@ -98,15 +135,18 @@ public class FragmentTaxiBooking extends NBFragment implements NBItemSelector {
         originalPoint = bookingHelper.original;
         destinationPoint = bookingHelper.destination;
 
-        if (originalPoint != null) {
+
+        if (!originalPoint.isEmpty()) {
             originAddress.setText(originalPoint.getAddressString());
         }
 
-        if (destinationPoint != null) {
+        if (!destinationPoint.isEmpty()) {
             destinationAddress.setText(destinationPoint.getAddressString());
         }
 
         orderTime.setText(getOrderTime());
+
+        creatingWish(((ActivityMain) getActivity()).getUserWishes());
     }
 
     @Override
@@ -134,7 +174,7 @@ public class FragmentTaxiBooking extends NBFragment implements NBItemSelector {
     public void NBItemSelected(int id) {
         switch (id) {
             case NBItems.SETTING:
-                QueryMaster.toast(getActivity(), "settings");
+                ((ActivityMain) getActivity()).add(FragmentSettings.newInstance());
                 break;
         }
     }
@@ -159,6 +199,74 @@ public class FragmentTaxiBooking extends NBFragment implements NBItemSelector {
             orderTime.setText(formatDate.format(new Date()) + " " + time);
         }
     };
+
+    public void creatingWish(ArrayList<WishObjects> wishObjectsArrayList) {
+        if (wishObjectsArrayList != null) {
+
+            int wishObjectSize = wishObjectsArrayList.size();
+
+            switch (wishObjectSize) {
+                case 1:
+                    animalImageView.setImageResource(wishObjectsArrayList.get(0).getImageViewResurs());
+                    animalImageView.setVisibility(View.VISIBLE);
+                    break;
+                case 2:
+                    animalImageView.setImageResource(wishObjectsArrayList.get(0).getImageViewResurs());
+                    notSmokesImageView.setImageResource(wishObjectsArrayList.get(1).getImageViewResurs());
+                    animalImageView.setVisibility(View.VISIBLE);
+                    notSmokesImageView.setVisibility(View.VISIBLE);
+                    break;
+                case 3:
+                    animalImageView.setImageResource(wishObjectsArrayList.get(0).getImageViewResurs());
+                    notSmokesImageView.setImageResource(wishObjectsArrayList.get(1).getImageViewResurs());
+                    wifiImageView.setImageResource(wishObjectsArrayList.get(2).getImageViewResurs());
+                    animalImageView.setVisibility(View.VISIBLE);
+                    notSmokesImageView.setVisibility(View.VISIBLE);
+                    wifiImageView.setVisibility(View.VISIBLE);
+                    break;
+                case 4:
+                    animalImageView.setImageResource(wishObjectsArrayList.get(0).getImageViewResurs());
+                    notSmokesImageView.setImageResource(wishObjectsArrayList.get(1).getImageViewResurs());
+                    wifiImageView.setImageResource(wishObjectsArrayList.get(2).getImageViewResurs());
+                    airConditionImageView.setImageResource(wishObjectsArrayList.get(3).getImageViewResurs());
+                    animalImageView.setVisibility(View.VISIBLE);
+                    notSmokesImageView.setVisibility(View.VISIBLE);
+                    wifiImageView.setVisibility(View.VISIBLE);
+                    airConditionImageView.setVisibility(View.VISIBLE);
+                    break;
+                case 5:
+                    animalImageView.setImageResource(wishObjectsArrayList.get(0).getImageViewResurs());
+                    notSmokesImageView.setImageResource(wishObjectsArrayList.get(1).getImageViewResurs());
+                    wifiImageView.setImageResource(wishObjectsArrayList.get(2).getImageViewResurs());
+                    airConditionImageView.setImageResource(wishObjectsArrayList.get(3).getImageViewResurs());
+                    chieldImageView.setImageResource(wishObjectsArrayList.get(4).getImageViewResurs());
+                    animalImageView.setVisibility(View.VISIBLE);
+                    notSmokesImageView.setVisibility(View.VISIBLE);
+                    wifiImageView.setVisibility(View.VISIBLE);
+                    airConditionImageView.setVisibility(View.VISIBLE);
+                    chieldImageView.setVisibility(View.VISIBLE);
+
+
+                    break;
+                case 6:
+                    animalImageView.setImageResource(wishObjectsArrayList.get(0).getImageViewResurs());
+                    notSmokesImageView.setImageResource(wishObjectsArrayList.get(1).getImageViewResurs());
+                    wifiImageView.setImageResource(wishObjectsArrayList.get(2).getImageViewResurs());
+                    airConditionImageView.setImageResource(wishObjectsArrayList.get(3).getImageViewResurs());
+                    chieldImageView.setImageResource(wishObjectsArrayList.get(4).getImageViewResurs());
+                    paymentImageView.setImageResource(wishObjectsArrayList.get(5).getImageViewResurs());
+                    animalImageView.setVisibility(View.VISIBLE);
+                    notSmokesImageView.setVisibility(View.VISIBLE);
+                    wifiImageView.setVisibility(View.VISIBLE);
+                    airConditionImageView.setVisibility(View.VISIBLE);
+                    chieldImageView.setVisibility(View.VISIBLE);
+                    paymentImageView.setVisibility(View.VISIBLE);
+
+
+                    break;
+            }
+        }
+    }
 }
 
 

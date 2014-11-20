@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffc4c4c4"
+        android:background="@color/sand"
         android:alpha="0.9" />
 
     <LinearLayout
@@ -69,6 +69,18 @@
                 android:text="@string/done"
                 style="@style/NotificationBar.Text" />
 
+            <Button
+                android:id="@+id/NBAutoList"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/action_list_auto" />
+
+            <TextView
+                android:id="@+id/NBSendComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/NotificationBar.Text"
+                android:text="@string/send"/>
         </LinearLayout>
 
     </LinearLayout>

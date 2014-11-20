@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
@@ -41,7 +42,7 @@ import ch.crut.taxi.utils.actionbar.NBItems;
 import ch.crut.taxi.utils.google.map.LocationAddress;
 import ch.crut.taxi.views.AutoCompleteTextViewCustomAdapter;
 
-@SmartFragment(items = {NBItems.CANCEL, NBItems.DONE})
+@SmartFragment(items = {NBItems.CANCEL})
 @EFragment(R.layout.fragment_direction_action)
 public class FragmentDirectionAction extends NBFragment implements NBItemSelector {
 
@@ -160,6 +161,8 @@ public class FragmentDirectionAction extends NBFragment implements NBItemSelecto
 
     private TextWatcher autoCompleteTextWatcher = new TextWatcher() {
 
+        private int beforeSize;
+
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (!autoCompleteTextView.toString().equals("")) {
@@ -173,6 +176,7 @@ public class FragmentDirectionAction extends NBFragment implements NBItemSelecto
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count,
                                       int after) {
+            beforeSize = s.length();
         }
 
         @Override
@@ -181,6 +185,11 @@ public class FragmentDirectionAction extends NBFragment implements NBItemSelecto
                 navigationPoint = new NavigationPoint();
 
                 getNBController().hide(NBItems.DONE);
+
+            }
+
+            if (s.length() < beforeSize) {
+                autoCompleteTextView.getText().clear();
             }
         }
     };
@@ -211,7 +220,7 @@ public class FragmentDirectionAction extends NBFragment implements NBItemSelecto
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            QueryMaster.toast(context, "itemClick");
+//            QueryMaster.toast(context, "itemClick");
 
             String correctStreetName = autoCompleteTextView.getText().toString();
 
@@ -231,7 +240,14 @@ public class FragmentDirectionAction extends NBFragment implements NBItemSelecto
 
                 getNBController().show(NBItems.DONE);
 
-                Log.d("", " lat, lng -> " + latitude + ", " + longitude);
+//                autoCompleteTextView.clearFocus();
+                ActivityMain.hideKeyboard(getActivity());
+
+                // i can't made autoCompleteTextView remove focus
+                // try this
+
+
+//                Log.d("", " lat, lng -> " + latitude + ", " + longitude);
 
             } catch (IOException e) {
                 e.printStackTrace();

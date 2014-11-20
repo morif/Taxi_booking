@@ -4,20 +4,11 @@ public class RequestEntities {
 
     public static class RegisterEntity {
 
-        private String login;
         private String password;
         private String email;
         private String telephoneFirst;
         private String telephoneSecond;
         private String name;
-
-        public String getLogin() {
-            return login;
-        }
-
-        public void setLogin(String login) {
-            this.login = login;
-        }
 
         public String getPassword() {
             return password;

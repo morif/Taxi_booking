@@ -37,8 +37,8 @@ public class FragmentAuthorization extends NBFragment implements NBItemSelector 
         return fragmentAuthorization;
     }
 
-    @ViewById(R.id.fragmentAuthorizationLogin)
-    protected EditText ETlogin;
+    @ViewById(R.id.fragmentAuthorizationEmail)
+    protected EditText ETemail;
 
     @ViewById(R.id.fragmentAuthorizationPassword)
     protected EditText ETpassword;
@@ -49,9 +49,9 @@ public class FragmentAuthorization extends NBFragment implements NBItemSelector 
         AuthorizationEntity entity = new AuthorizationEntity();
         entity.token = "1111";
         entity.password = TextUtils.get(ETpassword);
-        entity.login = TextUtils.get(ETlogin);
+        entity.login = TextUtils.get(ETemail);
 
-        if (!TextUtils.emptyAnimate(ETlogin, ETpassword)) {
+        if (!TextUtils.emptyAnimate(ETemail, ETpassword)) {
             ServerRequest.authorizationClient(entity,
                     ((ActivityMain) getActivity()), onCompleteListener);
         }
@@ -67,7 +67,7 @@ public class FragmentAuthorization extends NBFragment implements NBItemSelector 
         super.onStart();
 
         UserPref_ userPref = TaxiApplication.getUserPrefs();
-        ETlogin.setText(userPref.login().get());
+        ETemail.setText(userPref.email().get());
         ETpassword.setText(userPref.password().get());
     }
 
@@ -88,18 +88,25 @@ public class FragmentAuthorization extends NBFragment implements NBItemSelector 
         @Override
         public void QMcomplete(JSONObject jsonObject) throws JSONException {
 
-            JSONObject user = jsonObject.getJSONObject("user");
+            if (QueryMaster.isSuccess(jsonObject)) {
+                JSONObject user = jsonObject.getJSONObject("user");
 
-            UserPref_ userPref = TaxiApplication.getUserPrefs();
+                UserPref_ userPref = TaxiApplication.getUserPrefs();
 
-            userPref.edit()
-                    .email().put(user.getString("email"))
-                    .phoneFirst().put(user.getString("tel1"))
-                    .phoneSecond().put(user.has("tel2") ? user.getString("tel2") : "")
-                    .id().put(user.getString("id"))
-                    .login().put(TextUtils.get(ETlogin))
-                    .password().put(TextUtils.get(ETpassword))
-                    .name().put(user.getString("name")).apply();
+                userPref.edit()
+                        .phoneFirst().put(user.getString("tel1"))
+                        .phoneSecond().put(user.has("tel2") ? user.getString("tel2") : "")
+                        .id().put(user.getString("id"))
+                        .email().put(TextUtils.get(ETemail))
+                        .password().put(TextUtils.get(ETpassword))
+                        .name().put(user.getString("name")).apply();
+
+                QueryMaster.toast(getActivity(), R.string.authorization_success);
+
+                FragmentHelper.pop(getFragmentManager());
+            } else {
+                QueryMaster.toast(getActivity(), R.string.uncorrect_data);
+            }
         }
     };
 

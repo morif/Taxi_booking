@@ -44,7 +44,7 @@ public class ServerRequest {
                                            QueryMaster.OnCompleteListener onCompleteListener) {
         final Map<Object, String> map = new HashMap<>();
 
-        map.put("login", authorizationEntity.login);
+        map.put("email", authorizationEntity.login);
         map.put("password", authorizationEntity.password);
         map.put("token", authorizationEntity.token);
         MultipartEntity entity;
@@ -92,7 +92,6 @@ public class ServerRequest {
 
         final Map<Object, String> map = new HashMap<>();
 
-        map.put("login", registerEntity.getLogin());
         map.put("password", registerEntity.getPassword());
         map.put("email", registerEntity.getEmail());
         map.put("tel1", registerEntity.getTelephoneFirst());

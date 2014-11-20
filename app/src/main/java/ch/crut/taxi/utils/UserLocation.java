@@ -93,10 +93,14 @@ public class UserLocation {
 
             String street = address.getAddressLine(0);
 
-            TaxiApplication.getUserPrefs().street().put(street);
+            UserPref_ userPref = TaxiApplication.getUserPrefs();
 
-            QueryMaster.alert(TaxiApplication.getRunningActivityContext(), TaxiApplication.getUserPrefs().street().get() + "," +
-                    TaxiApplication.getUserPrefs().latitude().get() + ", " + TaxiApplication.getUserPrefs().longitude().get());
+            userPref.street().put(street);
+            userPref.longitude().put((float) address.getLongitude());
+            userPref.latitude().put((float) address.getLatitude());
+
+//            QueryMaster.alert(TaxiApplication.getRunningActivityContext(), TaxiApplication.getUserPrefs().street().get() + "," +
+//                    TaxiApplication.getUserPrefs().latitude().get() + ", " + TaxiApplication.getUserPrefs().longitude().get());
 
             return null;
         }

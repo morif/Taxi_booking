@@ -12,9 +12,6 @@ public interface UserPref {
     public String id();
 
     @DefaultString("")
-    public String login();
-
-    @DefaultString("")
     public String password();
 
     @DefaultString("")

@@ -9,6 +9,7 @@ import org.androidannotations.annotations.EFragment;
 import ch.crut.taxi.R;
 import ch.crut.taxi.interfaces.SmartFragment;
 
+import ch.crut.taxi.utils.actionbar.NBItemSelector;
 import ch.crut.taxi.utils.actionbar.NBItems;
 
 @SmartFragment(title = R.string.settings, items = {NBItems.BACK})
@@ -26,4 +27,5 @@ public class FragmentSettings extends NBFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity, FragmentSettings.class);
     }
+
 }

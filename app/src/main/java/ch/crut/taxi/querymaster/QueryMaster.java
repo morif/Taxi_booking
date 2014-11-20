@@ -189,10 +189,9 @@ public class QueryMaster extends Thread {
 
                             onErrorListener.QMerror(QM_INVALID_JSON);
                         }
-
+                    } else {
+                        onErrorListener.QMerror(msg.what);
                     }
-
-                    onErrorListener.QMerror(msg.what);
                 }
 
                 if (niceProgressDialog != null) {

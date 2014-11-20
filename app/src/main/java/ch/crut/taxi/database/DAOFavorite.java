@@ -32,8 +32,6 @@ public class DAOFavorite extends SQLiteSimpleDAO<DAOFavorite.FavoriteAddress> {
 
         if (lastObj == null) {
             return create(object);
-        } else {
-            Log.e("", "lastObj.street -> " + lastObj.street);
         }
 
         return -1;

@@ -231,6 +231,7 @@ public class FragmentPlaceSelector extends NBFragment implements NBItemSelector 
 
         ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(context);
 
+
         Observable<Location> goodEnoughQuicklyOrNothingObservable = locationProvider.getUpdatedLocation(req)
                 .filter(new Func1<Location, Boolean>() {
                     @Override
@@ -242,8 +243,6 @@ public class FragmentPlaceSelector extends NBFragment implements NBItemSelector 
                                 OnAddressFoundListener(latLng);
                         final LocationAddress locationAddress = new LocationAddress(context,
                                 location.getLatitude(), location.getLongitude());
-
-//                        mapUtils.moveCamera(latLng);
 
 
                         locationAddress.setOnCompleteListener(onAddressFoundListener);

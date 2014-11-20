@@ -6,13 +6,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 import android.view.Window;
-
-import com.google.android.gms.maps.SupportMapFragment;
+import android.view.inputmethod.InputMethodManager;
 
 import org.androidannotations.annotations.App;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.WindowFeature;
+
+import java.util.ArrayList;
 
 import ch.crut.taxi.fragmenthelper.FragmentHelper;
 import ch.crut.taxi.fragments.FragmentTaxiBooking;
@@ -21,9 +23,11 @@ import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
 import ch.crut.taxi.utils.UserLocation;
+import ch.crut.taxi.utils.WishObjects;
 import ch.crut.taxi.utils.actionbar.NBConnector;
 import ch.crut.taxi.utils.actionbar.NBController;
 import ch.crut.taxi.utils.actionbar.NBItemSelector;
+import ch.crut.taxi.utils.actionbar.NBItems;
 import ch.crut.taxi.utils.actionbar.UINotificationBar;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -45,6 +49,8 @@ public class ActivityMain extends FragmentActivity implements OnPlaceSelectedLis
     private TaxiBookingHelper taxiBookingHelper;
 
     private UserLocation userLocation;
+
+    private ArrayList<WishObjects> userWishes;
 
     // getters
 //    public NBController getNBController() {
@@ -71,6 +77,8 @@ public class ActivityMain extends FragmentActivity implements OnPlaceSelectedLis
 //        supportMapFragment = SupportMapFragment.newInstance();
         taxiBookingHelper = new TaxiBookingHelper();
 
+
+        userWishes = new ArrayList<WishObjects>();
 
 //        FragmentHelper.add(fragmentManager, FragmentAuthorization.newInstance(), FRAME_CONTAINER);
 //        FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
@@ -104,6 +112,12 @@ public class ActivityMain extends FragmentActivity implements OnPlaceSelectedLis
         super.onDestroy();
     }
 
+//    @Override
+//    public void onBackPressed() {
+//        if (FragmentHelper.pop(fragmentManager, 2))
+//            super.onBackPressed();
+//    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(new CalligraphyContextWrapper(newBase));
@@ -111,6 +125,10 @@ public class ActivityMain extends FragmentActivity implements OnPlaceSelectedLis
 
     public void add(Fragment fragment) {
         FragmentHelper.add(fragmentManager, fragment, FRAME_CONTAINER);
+    }
+
+    public void addNoReplace(Fragment fragment) {
+        FragmentHelper.addNoReplace(fragmentManager, fragment, FRAME_CONTAINER);
     }
 
     public void initialScreen() {
@@ -143,14 +161,6 @@ public class ActivityMain extends FragmentActivity implements OnPlaceSelectedLis
         }
     }
 
-    private void getUserLocation() {
-
-    }
-
-    private void getUserAddress() {
-
-    }
-
     @Override
     public NBController nbConnected() {
         return NBController;
@@ -158,7 +168,33 @@ public class ActivityMain extends FragmentActivity implements OnPlaceSelectedLis
 
     @Override
     public void NBItemSelected(int id) {
-        QueryMaster.toast(this, ActivityMain.this.toString() + ", " + String.valueOf(id));
+        switch (id) {
+            case NBItems.BACK:
+                FragmentHelper.pop(fragmentManager);
+                break;
+        }
+//        QueryMaster.toast(this, ActivityMain.this.toString() + ", " + String.valueOf(id));
     }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        // check if no view has focus:
+        View view = activity.getCurrentFocus();
+
+        if (view != null) {
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+
+    public void setUserWishes(ArrayList<WishObjects> userWishes) {
+        this.userWishes = userWishes;
+    }
+
+    public ArrayList<WishObjects> getUserWishes() {
+        return userWishes;
+    }
+
 }
 

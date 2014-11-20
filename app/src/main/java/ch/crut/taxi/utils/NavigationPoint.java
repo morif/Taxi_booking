@@ -54,4 +54,7 @@ public class NavigationPoint implements Serializable {
         return home;
     }
 
+    public boolean isEmpty() {
+        return address == null || latLng == null;
+    }
 }

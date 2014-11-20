@@ -23,6 +23,7 @@ import ch.crut.taxi.fragmenthelper.FragmentHelper;
 import ch.crut.taxi.interfaces.SmartFragment;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.NavigationPoint;
+import ch.crut.taxi.utils.actionbar.NBItemSelector;
 import ch.crut.taxi.utils.actionbar.NBItems;
 import ch.crut.taxi.utils.google.map.AdapterInfoWindow;
 import ch.crut.taxi.utils.google.map.DrawRoute;
@@ -30,9 +31,10 @@ import ch.crut.taxi.utils.google.map.GoogleMapUtils;
 import ch.crut.taxi.utils.request.Entities;
 import ch.crut.taxi.utils.request.ServerRequest;
 
-@SmartFragment(title = R.string.elaboration, items = {NBItems.CANCEL, NBItems.DONE})
+@SmartFragment(title = R.string.elaboration, items = {NBItems.BACK, NBItems.AUTO_LIST})
 @EFragment(R.layout.fragment_taxi_search)
-public class FragmentTaxiSearch extends NBFragment implements FragmentGoogleMap.OnMapInitialized {
+public class FragmentTaxiSearch extends NBFragment implements FragmentGoogleMap.OnMapInitialized,
+        NBItemSelector {
 
     private static final int CONTAINER = R.id.fragmentTaxiSearchFrameLayout;
 
@@ -42,6 +44,7 @@ public class FragmentTaxiSearch extends NBFragment implements FragmentGoogleMap.
     private GoogleMapUtils mapUtils;
     private DrawRoute drawRoute;
 
+    private List<Entities.SearchTaxi> drives;
 
     public static FragmentTaxiSearch newInstance() {
         FragmentTaxiSearch fragmentTaxiSearch = new FragmentTaxiSearch_();
@@ -77,25 +80,42 @@ public class FragmentTaxiSearch extends NBFragment implements FragmentGoogleMap.
 
         FragmentHelper.add(getChildFragmentManager(), mapFragment, CONTAINER);
 
-        ServerRequest.searchTaxi(original.getLatLng(), (QueryMaster.OnErrorListener) getActivity(),
-                onCompleteListener);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (drives == null) {
+                    ServerRequest.searchTaxi(original.getLatLng(), (QueryMaster.OnErrorListener) getActivity(),
+                            onCompleteListener);
+                } else {
+                    setUpTaxiDrivers(drives);
+
+                    setUpCamera();
+                }
+            }
+        }, 100);
     }
 
     private void setUpCamera() {
-        mapUtils.moveCamera(original.getLatLng());
+        if (original != null)
+            mapUtils.moveCamera(original.getLatLng());
     }
+
 
     private QueryMaster.OnCompleteListener onCompleteListener = new QueryMaster.OnCompleteListener() {
         @Override
         public void QMcomplete(JSONObject jsonObject) throws JSONException {
 //            QueryMaster.alert(getActivity(), jsonObject.toString());
 
-            JSONArray data = QueryMaster.getData(jsonObject);
+            setUpCamera();
 
-            List<Entities.SearchTaxi> drives = Entities.SearchTaxi.get(data);
+            if (QueryMaster.isSuccess(jsonObject)) {
+                JSONArray data = QueryMaster.getData(jsonObject);
 
-            setUpTaxiDrivers(drives);
+                drives = Entities.SearchTaxi.get(data);
 
+                setUpTaxiDrivers(drives);
+            }
         }
     };
 
@@ -122,7 +142,17 @@ public class FragmentTaxiSearch extends NBFragment implements FragmentGoogleMap.
 
         drawRoute = new DrawRoute(getActivity(), mapUtils);
 
-        setUpCamera();
+    }
 
+    @Override
+    public void NBItemSelected(int id) {
+        switch (id) {
+            case NBItems.BACK:
+                FragmentHelper.pop(getFragmentManager());
+                break;
+            case NBItems.AUTO_LIST:
+                ((ActivityMain) getActivity()).add(FragmentListCars.newInstance((java.util.ArrayList<Entities.SearchTaxi>) drives));
+                break;
+        }
     }
 }
