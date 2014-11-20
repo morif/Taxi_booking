@@ -1,74 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/layout"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
         android:paddingBottom="10dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/you_entry" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/you_entry"/>
 
         <TextView
-            android:id="@+id/loginTextView"
+            android:id="@+id/fragmentSettingsLoginTextView"
+            android:paddingLeft="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
-
     <TextView
-        android:id="@+id/changePasswordTextView"
+        android:id="@+id/fragmentSettingsChangePasswordTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:text="@string/change_password" />
-
+        android:text="@string/change_password"
+        android:paddingBottom="10dp"/>
     <TextView
-        android:id="@+id/byAppTextView"
+        android:id="@+id/fragmentSettingsByAppTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:text="@string/by_app" />
-
+        android:text="@string/by_app"
+        android:paddingBottom="10dp"/>
     <TextView
-        android:id="@+id/tellFriendstExtView"
+        android:id="@+id/fragmentSettingsTellFriendstExitView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:text="@string/tell_friends" />
+        android:text="@string/tell_friends"/>
+
+
 
     <Switch
-        android:id="@+id/switcher"
+        android:id="@+id/fragmentSettingsSwitcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="32dip"
         android:text="@string/radius_search"
+        android:textOn="10"
         android:textOff="5"
-        android:textOn="10" />
+        android:textSize="14sp"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/exitTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:text="@string/exit" />
+    <TextView
+        android:id="@+id/fragmentSettingsExitTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/exit"
+        android:gravity="center_horizontal"/>
 
 
     </LinearLayout>

@@ -6,9 +6,10 @@ import android.widget.CheckBox;
  * Created by Alex on 18.11.2014.
  */
 public class WishObjects {
+
     private int ImageViewResurs;
     private int wishNameResurse;
-    private boolean isAddWish;
+    private boolean isAddWish = false;
 
     public int getImageViewResurs() {
 
