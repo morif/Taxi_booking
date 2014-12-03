@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,84 +14,78 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
             android:background="@drawable/xml_button_def_bg"
             android:orientation="horizontal">
 
             <Button
-                android:background="@drawable/xml_button_def_bg_left"
                 android:id="@+id/fragmentTaxiBookingOriginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/from"
-                style="@style/fragmentBeginButton"
-                android:layout_weight="26" />
+                android:layout_weight="26"
+                android:background="@drawable/xml_button_def_bg_left"
+                android:text="@string/from" />
 
             <EditText
-                android:inputType="none"
-                android:focusable="false"
                 android:id="@+id/fragmentTaxiBookingOrigin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/fragmentBeginButton"
-                android:layout_weight="10" />
+                android:layout_weight="10"
+                android:focusable="false"
+                android:inputType="none" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/fragmentBeginWhereBouts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
             android:background="@drawable/xml_button_def_bg">
 
             <Button
-                android:background="@drawable/xml_button_def_bg_left"
                 android:id="@+id/fragmentTaxiBookingDestinationButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/whereabouts"
-                style="@style/fragmentBeginButton"
-                android:layout_weight="26" />
+                android:layout_weight="26"
+                android:background="@drawable/xml_button_def_bg_left"
+                android:text="@string/whereabouts" />
 
             <EditText
-                android:inputType="none"
-                android:focusable="false"
                 android:id="@+id/fragmentTaxiBookingDestination"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/fragmentBeginButton"
-                android:layout_weight="10" />
+                android:layout_weight="10"
+                android:focusable="false"
+                android:inputType="none" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/fragmentBeginWhen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
             android:background="@drawable/xml_button_def_bg">
 
             <Button
-                android:background="@drawable/xml_button_def_bg_left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/when"
-                style="@style/fragmentBeginButton"
-                android:layout_weight="26" />
+                android:layout_weight="26"
+                android:background="@drawable/xml_button_def_bg_left"
+                android:text="@string/when" />
 
             <TextView
                 android:id="@+id/fragmentTaxiBookingOrderTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/fragmentBeginButton"
                 android:layout_weight="10" />
         </LinearLayout>
 
@@ -100,32 +94,79 @@
             android:id="@+id/fragmentBeginWishes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
             android:background="@drawable/xml_button_def_bg">
 
             <Button
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_weight="26"
                 android:background="@drawable/xml_button_def_bg_left"
+                android:text="@string/wishes" />
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/wishes"
-                style="@style/fragmentBeginButton"
-                android:layout_weight="26" />
+                android:layout_weight="10"
+                android:layout_marginBottom="1dp"
+                android:layout_marginTop="1dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/fragmentBeginButton"
-                android:layout_weight="10" />
+                <ImageView
+                    android:id="@+id/wifiImage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/notSmokesImage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/animalImage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/airConditionImage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/chieldImage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/paymentImage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:visibility="gone"/>
+
+
+            </LinearLayout>
+            </HorizontalScrollView>
+
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:background="@color/light_grey_translucent">
+            android:background="@color/light_grey_translucent"
+            android:gravity="center">
 
             <Button
                 android:id="@+id/fragmentTaxiBookingSearchAuto"

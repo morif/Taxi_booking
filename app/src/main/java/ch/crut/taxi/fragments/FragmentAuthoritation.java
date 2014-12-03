@@ -65,8 +65,8 @@ public class FragmentAuthoritation extends Fragment {
             userInfo.setId(jsonObject1.getString("id"));
             userInfo.setLogin(jsonObject1.getString("login"));
             userInfo.setName(jsonObject1.getString("name"));
-           saveUserInfo(userInfo);
-             QueryMaster.alert(getActivity(), userInfo.getId());
+            saveUserInfo(userInfo);
+            QueryMaster.alert(getActivity(), userInfo.getId());
 
 
         }
@@ -107,7 +107,7 @@ public class FragmentAuthoritation extends Fragment {
         ed.putString("telephoneFirst", userInfo.getTelephoneFirst());
         ed.putString("telephoneSecond", userInfo.getTelephoneSecond());
         ed.putString("login", userInfo.getLogin());
-Log.d(LOG_TAG, sPref.getString("name",""));
+        Log.d(LOG_TAG, sPref.getString("name", ""));
         ed.commit();
 
     }

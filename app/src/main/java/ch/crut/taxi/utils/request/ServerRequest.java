@@ -50,25 +50,27 @@ public class ServerRequest {
 
         queryMaster.start();
     }
-public static void authoritationClient(RequestEntities.Registrer registrer, QueryMaster.OnErrorListener errorListener,
-                                       QueryMaster.OnCompleteListener onCompleteListener){
-    final Map<Object, String> map = new HashMap<>();
-    map.put("login", registrer.getLogin());
-    map.put("password", registrer.getPassword());
-    map.put("token", "1111111111111111111111111");
-    MultipartEntity entity;
-    try {
-        entity = getEntity(map, TaxiActions.AUTORITATION_CLIENT);
-    } catch (UnsupportedEncodingException | JSONException e) {
-        e.printStackTrace();
-        throw new RuntimeException(e);
+
+    public static void authoritationClient(RequestEntities.Registrer registrer, QueryMaster.OnErrorListener errorListener,
+                                           QueryMaster.OnCompleteListener onCompleteListener) {
+        final Map<Object, String> map = new HashMap<>();
+        map.put("login", registrer.getLogin());
+        map.put("password", registrer.getPassword());
+        map.put("token", "1111111111111111111111111");
+        MultipartEntity entity;
+        try {
+            entity = getEntity(map, TaxiActions.AUTORITATION_CLIENT);
+        } catch (UnsupportedEncodingException | JSONException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+        sendQuery(errorListener, onCompleteListener, entity);
+
     }
 
-    sendQuery(errorListener, onCompleteListener, entity);
-
-}
     public static void sendQuery(QueryMaster.OnErrorListener errorListener, QueryMaster.OnCompleteListener onCompleteListener,
-                                 MultipartEntity entity){
+                                 MultipartEntity entity) {
         QueryMaster queryMaster = new QueryMaster(TaxiApplication
                 .getRunningActivityContext(), SERVER, QueryMaster.QUERY_POST, entity);
         queryMaster.setProgressDialog();
@@ -95,7 +97,7 @@ public static void authoritationClient(RequestEntities.Registrer registrer, Quer
     }
 
     public static void registrationClient(RequestEntities.Registrer registrer, QueryMaster.OnErrorListener errorListener,
-            QueryMaster.OnCompleteListener onCompleteListener){
+                                          QueryMaster.OnCompleteListener onCompleteListener) {
 
         final Map<Object, String> map = new HashMap<>();
         map.put("login", registrer.getLogin());
@@ -105,11 +107,11 @@ public static void authoritationClient(RequestEntities.Registrer registrer, Quer
         map.put("tel2", registrer.getTelephoneSecond());
         map.put("name", registrer.getName());
         Log.d(LOG_TAG, registrer.getLogin()
-                +registrer.getPassword()
-                +registrer.getEmail()
-                +registrer.getTelephoneFirst()
-                +registrer.getTelephoneSecond()
-                +registrer.getName());
+                + registrer.getPassword()
+                + registrer.getEmail()
+                + registrer.getTelephoneFirst()
+                + registrer.getTelephoneSecond()
+                + registrer.getName());
         MultipartEntity entity;
         try {
             entity = getEntity(map, TaxiActions.REGISTRATION_CLIENT);
@@ -117,9 +119,7 @@ public static void authoritationClient(RequestEntities.Registrer registrer, Quer
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
         sendQuery(errorListener, onCompleteListener, entity);
-
     }
 
 

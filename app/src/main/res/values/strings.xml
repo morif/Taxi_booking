@@ -35,4 +35,27 @@
     <string name="error_invalid_json">invalid json object</string>
     <string name="search_auto">Поиск автомобиля</string>
     <string name="correct_registration">Вы успешно зарегистрировались</string>
+    <string name="leavReview">Оставить отзыв</string>
+    <string name="car_brend">Марка авто:</string>
+    <string name="color_auto">Цвет:</string>
+    <string name="type_car">Tип транспорта:</string>
+    <string name="state_number">Гос номер:</string>
+    <string name="edition_year">Год выпуска:</string>
+    <string name="order_auto">Заказать авто</string>
+
+
+
+    <string name="add_in_favorites">Добавить в избранное</string>
+    <string name="wifi_zona">Wifi зона</string>
+    <string name="not_smokes">Салон для некурящих</string>
+    <string name="animals_transportation">Перевозка животных</string>
+    <string name="air_conditioning">Кондиционер</string>
+    <string name="child_set">Детское кресло</string>
+    <string name="payment_card">Оплата карточкой</string>
+    <string name="you_entry">Вы вошли как:</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="by_app">О приложении</string>
+    <string name="tell_friends">Рассказать друзьям</string>
+    <string name="radius_search">Радиус поиска, км</string>
+    <string name="exit">Выход</string>
 </resources>
