@@ -19,18 +19,20 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import actionbar.NBFragment;
+import actionbar.SmartFragment;
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
 import ch.crut.taxi.TaxiApplication;
 import ch.crut.taxi.dialogs.TimePickerFragment;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
-import ch.crut.taxi.interfaces.SmartFragment;
+//import actionbar.SmartFragment;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
 import ch.crut.taxi.utils.WishObjects;
-import ch.crut.taxi.utils.actionbar.NBItemSelector;
-import ch.crut.taxi.utils.actionbar.NBItems;
+import actionbar.NBItemSelector;
+import actionbar.NBItems;
 
 @SmartFragment(title = R.string.taxi_booking, items = {NBItems.SETTING})
 @EFragment(R.layout.fragment_taxi_booking)

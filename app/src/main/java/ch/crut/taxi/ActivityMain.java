@@ -2,6 +2,7 @@ package ch.crut.taxi;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,7 +17,8 @@ import org.androidannotations.annotations.WindowFeature;
 
 import java.util.ArrayList;
 
-import ch.crut.taxi.fragmenthelper.FragmentHelper;
+
+
 import ch.crut.taxi.fragments.FragmentTaxiBooking;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.querymaster.QueryMaster;
@@ -24,11 +26,13 @@ import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
 import ch.crut.taxi.utils.UserLocation;
 import ch.crut.taxi.utils.WishObjects;
-import ch.crut.taxi.utils.actionbar.NBConnector;
-import ch.crut.taxi.utils.actionbar.NBController;
-import ch.crut.taxi.utils.actionbar.NBItemSelector;
-import ch.crut.taxi.utils.actionbar.NBItems;
-import ch.crut.taxi.utils.actionbar.UINotificationBar;
+
+import actionbar.NBConnector;
+import actionbar.NBController;
+import actionbar.NBItemSelector;
+import actionbar.NBItems;
+import actionbar.UINotificationBar;
+import fragmenthelper.FragmentHelper;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -187,6 +191,9 @@ public class ActivityMain extends FragmentActivity implements OnPlaceSelectedLis
         }
     }
 
+    public static Intent getLaunchIntent(Context context) {
+        return new Intent(context, ActivityMain_.class);
+    }
 
     public void setUserWishes(ArrayList<WishObjects> userWishes) {
         this.userWishes = userWishes;

@@ -9,13 +9,14 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
+import actionbar.NBFragment;
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
 import ch.crut.taxi.adapters.ListCarsAdapter;
-import ch.crut.taxi.fragmenthelper.FragmentHelper;
-import ch.crut.taxi.interfaces.SmartFragment;
-import ch.crut.taxi.utils.actionbar.NBItemSelector;
-import ch.crut.taxi.utils.actionbar.NBItems;
+import fragmenthelper.FragmentHelper;
+import actionbar.SmartFragment;
+import actionbar.NBItemSelector;
+import actionbar.NBItems;
 import ch.crut.taxi.utils.request.Entities;
 
 @EFragment(R.layout.fragment_list_cars)

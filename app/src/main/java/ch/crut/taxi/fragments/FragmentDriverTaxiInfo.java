@@ -20,12 +20,13 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
+import actionbar.NBFragment;
 import ch.crut.taxi.R;
-import ch.crut.taxi.fragmenthelper.FragmentHelper;
-import ch.crut.taxi.interfaces.SmartFragment;
+import fragmenthelper.FragmentHelper;
+import actionbar.SmartFragment;
 import ch.crut.taxi.lazylist.ImageLoader;
-import ch.crut.taxi.utils.actionbar.NBItemSelector;
-import ch.crut.taxi.utils.actionbar.NBItems;
+import actionbar.NBItemSelector;
+import actionbar.NBItems;
 import ch.crut.taxi.utils.request.Entities;
 
 @EFragment(R.layout.fragment_driver_taxi_info)

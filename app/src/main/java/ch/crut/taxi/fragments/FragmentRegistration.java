@@ -15,17 +15,18 @@ import org.androidannotations.annotations.ViewById;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import actionbar.NBFragment;
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
 import ch.crut.taxi.TaxiApplication;
-import ch.crut.taxi.fragmenthelper.FragmentHelper;
-import ch.crut.taxi.interfaces.SmartFragment;
+import fragmenthelper.FragmentHelper;
+import actionbar.SmartFragment;
 import ch.crut.taxi.interfaces.UserPref_;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.RequestEntities;
 import ch.crut.taxi.utils.TextUtils;
-import ch.crut.taxi.utils.actionbar.NBItemSelector;
-import ch.crut.taxi.utils.actionbar.NBItems;
+import actionbar.NBItemSelector;
+import actionbar.NBItems;
 import ch.crut.taxi.utils.request.ServerRequest;
 
 

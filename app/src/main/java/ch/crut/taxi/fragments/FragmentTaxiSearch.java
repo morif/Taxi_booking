@@ -17,14 +17,15 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import actionbar.NBFragment;
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
-import ch.crut.taxi.fragmenthelper.FragmentHelper;
-import ch.crut.taxi.interfaces.SmartFragment;
+import fragmenthelper.FragmentHelper;
+import actionbar.SmartFragment;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.NavigationPoint;
-import ch.crut.taxi.utils.actionbar.NBItemSelector;
-import ch.crut.taxi.utils.actionbar.NBItems;
+import actionbar.NBItemSelector;
+import actionbar.NBItems;
 import ch.crut.taxi.utils.google.map.AdapterInfoWindow;
 import ch.crut.taxi.utils.google.map.DrawRoute;
 import ch.crut.taxi.utils.google.map.GoogleMapUtils;

@@ -6,11 +6,12 @@ import android.support.v4.app.Fragment;
 
 import org.androidannotations.annotations.EFragment;
 
+import actionbar.NBFragment;
 import ch.crut.taxi.R;
-import ch.crut.taxi.interfaces.SmartFragment;
+import actionbar.SmartFragment;
 
-import ch.crut.taxi.utils.actionbar.NBItemSelector;
-import ch.crut.taxi.utils.actionbar.NBItems;
+import actionbar.NBItemSelector;
+import actionbar.NBItems;
 
 @SmartFragment(title = R.string.settings, items = {NBItems.BACK})
 @EFragment(R.layout.fragment_settings)

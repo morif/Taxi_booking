@@ -4,43 +4,38 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.androidannotations.annotations.AfterTextChange;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.IOException;
 
+import actionbar.NBFragment;
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
+import ch.crut.taxi.adapters.AdapterAutoComplete;
 import ch.crut.taxi.adapters.AdapterFavoriteAddresses;
 import ch.crut.taxi.database.DAOFavorite;
 import ch.crut.taxi.effects.swipedismiss.SwipeDismissListViewTouchListener;
-import ch.crut.taxi.fragmenthelper.FragmentHelper;
-import ch.crut.taxi.interfaces.SmartFragment;
-import ch.crut.taxi.querymaster.QueryMaster;
-import ch.crut.taxi.utils.NavigationPoint;
-import ch.crut.taxi.utils.actionbar.NBController;
-import ch.crut.taxi.adapters.AdapterAutoComplete;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
+import actionbar.SmartFragment;
+import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.AutoCompleteAsyncTask;
-import ch.crut.taxi.utils.actionbar.NBItemSelector;
-import ch.crut.taxi.utils.actionbar.NBItems;
+import ch.crut.taxi.utils.NavigationPoint;
+import actionbar.NBItemSelector;
+import actionbar.NBItems;
 import ch.crut.taxi.utils.google.map.LocationAddress;
 import ch.crut.taxi.views.AutoCompleteTextViewCustomAdapter;
+import fragmenthelper.FragmentHelper;
 
 @SmartFragment(items = {NBItems.CANCEL})
 @EFragment(R.layout.fragment_direction_action)

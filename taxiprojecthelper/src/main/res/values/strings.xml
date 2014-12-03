@@ -1,0 +1,9 @@
+<resources>
+    <string name="no_text" />
+    <string name="app_name">TaxiProjectHelper</string>
+    <string name="cancel">Отмена</string>
+    <string name="back">Назад</string>
+    <string name="registration">Регистрация</string>
+    <string name="done">Готово</string>
+    <string name="send">Отправить</string>
+</resources>
