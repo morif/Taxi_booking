@@ -2,20 +2,33 @@ package ch.crut.taxi;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
+
 import com.google.android.gms.maps.SupportMapFragment;
+
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.WindowFeature;
+
 import ch.crut.taxi.actionbar.ActionBarController;
 import ch.crut.taxi.actionbar.UIActionBar;
+import ch.crut.taxi.client.StartClient;
 import ch.crut.taxi.fragmenthelper.FragmentHelper;
+import ch.crut.taxi.fragments.FragmentChangePassword;
+import ch.crut.taxi.fragments.FragmentComentAndRating;
+import ch.crut.taxi.fragments.FragmentDriverCorrectInfo;
+import ch.crut.taxi.fragments.FragmentDriverRegistration;
+import ch.crut.taxi.fragments.FragmentDrivierAuthoritation;
 import ch.crut.taxi.fragments.FragmentListCars;
+import ch.crut.taxi.fragments.FragmentPopup;
 import ch.crut.taxi.fragments.FragmentSettings;
 import ch.crut.taxi.fragments.FragmentTaxiBooking;
+import ch.crut.taxi.fragments.FragmentUserOrderHistory;
 import ch.crut.taxi.interfaces.ActionBarClickListener;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
 import ch.crut.taxi.querymaster.QueryMaster;
@@ -24,7 +37,7 @@ import ch.crut.taxi.utils.TaxiBookingHelper;
 
 @WindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
 @EActivity(R.layout.activity_main)
-public class ActivityMain extends FragmentActivity implements ActionBarClickListener, OnPlaceSelectedListener,QueryMaster.OnErrorListener {
+public class ActivityMain extends FragmentActivity implements ActionBarClickListener, OnPlaceSelectedListener, QueryMaster.OnErrorListener {
 
     public static final int MAP_CONTAINER = R.id.activityMainMap;
     public static final int FRAME_CONTAINER = R.id.activityMainContainer;
@@ -35,6 +48,8 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
     private ActionBarController actionBarController;
     private FragmentTaxiBooking fragmentTaxiBooking;
     private TaxiBookingHelper taxiBookingHelper;
+    private Handler handler;
+    private String LOG_TAG = "ActivityMain";
 
     // getters
     public ActionBarController getActionBarController() {
@@ -67,7 +82,15 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         taxiBookingHelper = new TaxiBookingHelper();
 
         FragmentHelper.add(fragmentManager, supportMapFragment, MAP_CONTAINER);
-        FragmentHelper.add(fragmentManager, FragmentListCars.newInstance(), FRAME_CONTAINER);
+        FragmentHelper.add(fragmentManager, FragmentDriverCorrectInfo.newInstance(), FRAME_CONTAINER);
+        handler = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                Log.d(LOG_TAG, "masage: " + msg);
+            }
+        };
+      //  StartClient startClient = new StartClient(handler);
+      //  startClient.start();
+        Log.d(LOG_TAG, "started tread");
     }
 
     protected void onResume() {
@@ -84,7 +107,6 @@ public class ActivityMain extends FragmentActivity implements ActionBarClickList
         clearReferences();
         super.onDestroy();
     }
-
 
     @Override
     public void clickSettings(View view) {

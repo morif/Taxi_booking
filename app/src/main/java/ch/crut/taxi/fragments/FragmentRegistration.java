@@ -59,7 +59,7 @@ public class FragmentRegistration extends Fragment {
             if (QueryMaster.isSuccess(jsonObject)) {
 
                 Log.d(LOG_TAG, jsonObject.toString());
-                UserInfo userInfo = new UserInfo();
+                UserInfo userInfo = UserInfo.getUserInfo();
 
                 Toast.makeText(activityMain, "Вы успешно зарегистрировались", Toast.LENGTH_LONG).show();
             } else {

@@ -42,9 +42,6 @@
     <string name="state_number">Гос номер:</string>
     <string name="edition_year">Год выпуска:</string>
     <string name="order_auto">Заказать авто</string>
-
-
-
     <string name="add_in_favorites">Добавить в избранное</string>
     <string name="wifi_zona">Wifi зона</string>
     <string name="not_smokes">Салон для некурящих</string>
@@ -58,4 +55,40 @@
     <string name="tell_friends">Рассказать друзьям</string>
     <string name="radius_search">Радиус поиска, км</string>
     <string name="exit">Выход</string>
+    <string name="old_password">Старый пароль</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="correct_password">Подтвердите пароль</string>
+    <string name="star_for_rating">звезда для рейтинга</string>
+    <string name="show_time">Выберете время, на которое должно</string>
+    <string name="taxi">приехать такси</string>
+    <string name="email">Email</string>
+    <string name="entrance">Вход</string>
+    <string name="emaill">E-mail</string>
+    <string name="type_auto">Тип авто</string>
+    <string name="brend_car">Марка и модель автомобиля</string>
+    <string name="class_car">Класс автомобиля</string>
+    <string name="soname">ФИО</string>
+    <string name="town">Город</string>
+    <string name="startRegistration">Зарегистрироваться</string>
+    <string name="points">...</string>
+    <string name="minutsAgo">минут назад</string>
+    <string name="from_street">от:</string>
+    <string name="to">до:</string>
+    <string name="distance">расстояние:</string>
+    <string name="price">цена:</string>
+    <string name="km">км,</string>
+    <string name="grn">грн</string>
+    <string name="mode_button">Режимы работы</string>
+    <string name="call_client">Звонок клиенту</string>
+    <string name="take">Принять</string>
+    <string name="reject">Отказать</string>
+    <string name="amend_password">Изменить пароль</string>
+    <string name="amend_town">Изменить город</string>
+    <string name="add_telephone">Добавить телефон</string>
+    <string name="callsign_number">Позывной номер</string>
+    <string name="additional_services">Дополнительные услуги и тарифы:</string>
+    <string name="delivery_checks">Выдача чеков</string>
+    <string name="selery_taximeter">Оплата по таксометру</string>
+    <string name="download_in_car">Загрузка салона</string>
+    <string name="save_change">Сохранить изминения</string>
 </resources>

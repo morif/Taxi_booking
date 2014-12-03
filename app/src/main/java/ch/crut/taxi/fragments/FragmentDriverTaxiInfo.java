@@ -17,13 +17,11 @@ import android.widget.TextView;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 
 import ch.crut.taxi.R;
 import ch.crut.taxi.lazylist.ImageLoader;
-import ch.crut.taxi.utils.RequestEntities;
 import ch.crut.taxi.utils.request.Entities;
 
 @EFragment(R.layout.fragment_driver_taxi_info)
@@ -62,9 +60,9 @@ public class FragmentDriverTaxiInfo extends Fragment {
         numberList.add(1, "222222");
         numberList.add(2, "12121212");
 
-        LayerDrawable stars = (LayerDrawable) ratingBar_default.getProgressDrawable();
+        LayerDrawable stars = (LayerDrawable) ratingBarDefault.getProgressDrawable();
         float a = new Float(3.5);
-        ratingBar_default.setRating(a);
+        ratingBarDefault.setRating(a);
         stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
 
 
@@ -72,7 +70,6 @@ public class FragmentDriverTaxiInfo extends Fragment {
 
             if (i == 0) {
                 firstTextView.setText(numberList.get(0));
-
                 firstLayout.setVisibility(View.VISIBLE);
             } else if (i == 1) {
                 secondTextView.setText(numberList.get(1));
@@ -82,7 +79,6 @@ public class FragmentDriverTaxiInfo extends Fragment {
                 threeLayout.setVisibility(View.VISIBLE);
             }
         }
-
     }
 
     @ViewById(R.id.photoDriverTaxi)
@@ -111,8 +107,8 @@ public class FragmentDriverTaxiInfo extends Fragment {
     @ViewById(R.id.threedTelephoneText)
     protected TextView threedTextView;
 
-    @ViewById(R.id.ratingbar_default)
-    protected RatingBar ratingBar_default;
+    @ViewById(R.id.ratingbarDefault)
+    protected RatingBar ratingBarDefault;
 
     @ViewById(R.id.carBrendTextView)
     protected TextView carBrendText;

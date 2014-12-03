@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.ListView;
-
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
-
 import java.util.ArrayList;
-
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
 import ch.crut.taxi.adapter.ListCarsAdapter;
@@ -31,13 +28,11 @@ public class FragmentListCars extends Fragment {
     @ViewById(R.id.fragmentListCarListView)
     protected ListView listViewCars;
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         activityMain = (ActivityMain) activity;
     }
-
 
     @Override
     public void onStart() {
@@ -50,14 +45,10 @@ public class FragmentListCars extends Fragment {
             searchTaxi.modelCar = "audi 6";
             searchTaxis.add(searchTaxi);
         }
-
-
         ListCarsAdapter listCarsAdapter = new ListCarsAdapter(activityMain, searchTaxis);
         Log.d(LOG_TAG, "1");
         listViewCars.setAdapter(listCarsAdapter);
 
-
     }
-
 
 }

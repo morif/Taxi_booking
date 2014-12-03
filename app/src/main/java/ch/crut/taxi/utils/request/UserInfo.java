@@ -4,12 +4,26 @@ package ch.crut.taxi.utils.request;
  * Created by Alex on 13.11.2014.
  */
 public class UserInfo {
+
+    private static UserInfo userInfo;
     private String id;
     private String email;
     private String name;
     private String telephoneFirst;
     private String telephoneSecond;
     private String login;
+
+    private UserInfo(){
+
+    }
+
+    public static synchronized UserInfo getUserInfo(){
+        if(userInfo == null){
+            userInfo = new UserInfo();
+        }
+        return userInfo;
+    }
+
 
     public String getId() {
         return id;

@@ -1,0 +1,192 @@
+<ch.crut.taxi.parallax.ParallaxScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:inner_parallax_factor="3.5"
+    app:parallax_factor="2.5"
+    app:parallax_views_num="5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/fragmentDriverCorrectDriverPhoto"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/ic_launcher" />
+
+
+                <TextView
+                    android:id="@+id/fragmentDriverCorrectInfoNameDriver"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:text="name taxi driver"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/fragmentDriverCorrectInfoFirstPhotoCar"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_launcher" />
+
+
+            <ImageView
+                android:id="@+id/fragmentDriverCorrectInfoSecondPhotoCar"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_launcher" />
+
+            <ImageView
+                android:id="@+id/fragmentDriverCorrectInfoThreedPhotoCar"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_launcher" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/fragmentDriverCorrectInfoAmendPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/amend_password"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/fragmentDriverCorrectInfoAmendTown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/amend_town"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/fragmentDriverCorrectInfoAddTelephone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_telephone"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/fragmentDriverCorrectInfoCallSignNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/callsign_number"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/additional_services"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <CheckBox
+                android:id="@+id/fragmentDriverCorrectInfoChieldSet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/child_set"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/fragmentDriverCorrectInfoDownloadInCar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/download_in_car"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/fragmentDriverCorrectInfoAnimalsTransportation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/animals_transportation"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/fragmentDriverCorrectInfoAirConditioning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/air_conditioning"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/fragmentDriverCorrectInfoWifiZona"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/wifi_zona"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/fragmentDriverCorrectInfoNotSmockes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/not_smokes"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/fragmentDriverCorrectInfoPaymentCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_card"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/fragmentDriverCorrectInfoSeleryTaximer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/selery_taximeter"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/fragmentDriverCorrectInfoDeliveryChecks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delivery_checks"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/fragmentDriverCorrectInfoSaveChange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save_change"
+            android:textSize="14sp" />
+    </LinearLayout>
+</ch.crut.taxi.parallax.ParallaxScrollView>

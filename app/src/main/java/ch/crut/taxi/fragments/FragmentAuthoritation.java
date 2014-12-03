@@ -53,12 +53,10 @@ public class FragmentAuthoritation extends Fragment {
         @Override
         public void QMcomplete(JSONObject jsonObject) throws JSONException {
 
-            UserInfo userInfo = new UserInfo();
+            UserInfo userInfo = UserInfo.getUserInfo();
             Log.d(LOG_TAG, "json: " + jsonObject.toString());
-
             JSONObject jsonObject1 = jsonObject.getJSONObject("user");
             Log.d(LOG_TAG, "json: " + jsonObject1.toString());
-
             userInfo.setEmail(jsonObject1.getString("email"));
             userInfo.setTelephoneFirst(jsonObject1.getString("tel1"));
             userInfo.setTelephoneSecond(jsonObject1.getString("tel2"));
@@ -67,7 +65,6 @@ public class FragmentAuthoritation extends Fragment {
             userInfo.setName(jsonObject1.getString("name"));
             saveUserInfo(userInfo);
             QueryMaster.alert(getActivity(), userInfo.getId());
-
 
         }
     };
@@ -84,7 +81,6 @@ public class FragmentAuthoritation extends Fragment {
     @Click(R.id.confirmButton)
     protected void clickConfirmButton() {
 
-
         loginString = loginEditText.getText().toString();
         passwordString = passwordEditText.getText().toString();
 
@@ -94,7 +90,6 @@ public class FragmentAuthoritation extends Fragment {
             registrer.setLogin(loginString);
             registrer.setPassword(passwordString);
             ServerRequest.authoritationClient(registrer, activityMain, onCompleteListener);
-
         }
     }
 
@@ -109,8 +104,6 @@ public class FragmentAuthoritation extends Fragment {
         ed.putString("login", userInfo.getLogin());
         Log.d(LOG_TAG, sPref.getString("name", ""));
         ed.commit();
-
     }
-
 
 }
