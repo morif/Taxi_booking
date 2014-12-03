@@ -1,4 +1,4 @@
-package ch.crut.taxi.utils.google.map;
+package studiovision.disconto.util;
 
 
 import android.content.Context;
@@ -83,4 +83,5 @@ public class GoogleMapUtils {
     public void addDriver(Entities.SearchTaxi driver) {
         addMarker(driver.getLatLng(), MarkerType.AUTO);
     }
+
 }
