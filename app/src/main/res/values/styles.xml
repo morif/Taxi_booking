@@ -46,6 +46,7 @@
         <item name="android:textColor">@color/blue</item>
     </style>
 
+
     <!--<style name="customTextAppearance" parent="@android:style/TextAppearance">-->
     <!--<item name="android:textSize">10sp</item>-->
     <!--<item name="android:textColor">@android:color/holo_red_dark</item>-->

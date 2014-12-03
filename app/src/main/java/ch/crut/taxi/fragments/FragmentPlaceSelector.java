@@ -6,8 +6,7 @@ import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.location.LocationRequest;
@@ -24,35 +23,44 @@ import java.util.concurrent.TimeUnit;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
-import ch.crut.taxi.actionbar.ActionBarController;
+import ch.crut.taxi.dialogs.DialogComment;
 import ch.crut.taxi.fragmenthelper.FragmentHelper;
-import ch.crut.taxi.interfaces.ActionBarClickListener;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
+import ch.crut.taxi.interfaces.SmartFragment;
 import ch.crut.taxi.querymaster.QueryMaster;
+import ch.crut.taxi.utils.FavoriteHelper;
+import ch.crut.taxi.utils.NavigationPoint;
+import ch.crut.taxi.utils.actionbar.NBItemSelector;
+import ch.crut.taxi.utils.actionbar.NBItems;
 import ch.crut.taxi.utils.google.map.GoogleMapUtils;
 import ch.crut.taxi.utils.google.map.LocationAddress;
-import ch.crut.taxi.utils.NavigationPoint;
+import ch.crut.taxi.views.NiceProgressDialog;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 
 
+@SmartFragment(items = {NBItems.CANCEL, NBItems.DONE})
 @EFragment(R.layout.fragment_place_selector)
-public class FragmentPlaceSelector extends Fragment implements ActionBarClickListener {
+public class FragmentPlaceSelector extends NBFragment implements NBItemSelector {
 
     private static final int FRAME_CONTAINER = R.id.fragmentFromWhereFrameLayout;
 
     public static final String SELECTED_PLACE_KEY = "SELECTED_PLACE_KEY";
     public static final String AUTO_LOCATION = "AUTO_LOCATION";
 
+
     private OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey;
     private boolean autoLocation;
 
 
-    private ActionBarController barController;
+    //    private NBController barController;
     private GoogleMapUtils mapUtils;
     private NavigationPoint navigationPoint;
+    private NiceProgressDialog niceProgressDialog;
+    private DialogComment dialogComment;
+
 
     public static FragmentPlaceSelector newInstance(OnPlaceSelectedListener.PlaceSelectedKeys placeSelectedKey, boolean autoLocation) {
         FragmentPlaceSelector placeSelector = new FragmentPlaceSelector_();
@@ -73,14 +81,35 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
     @ViewById(R.id.fragmentFromWhereAddress)
     protected EditText addressEditText;
 
+    @ViewById(R.id.fragmentPlaceSelectorEntrance)
+    protected EditText entranceEditText;
+
+    @ViewById(R.id.fragmentPlaceSelectorHome)
+    protected EditText homeEditText;
+
+    @ViewById(R.id.fragmentPlaceSelectorComment)
+    protected Button commentButton;
+
+
     @Click(R.id.fragmentPlaceSelectorLocation)
     protected void clickLocation() {
         findMyLocation(getActivity());
     }
 
+    @Click(R.id.fragmentPlaceSelectorAddFavorite)
+    protected void clickAddFavorite() {
+        FavoriteHelper.add(getActivity(), navigationPoint, placeSelectedKey);
+    }
+
+    @Click(R.id.fragmentPlaceSelectorComment)
+    protected void clickComment() {
+        dialogComment.show();
+    }
+
+
     @Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
+        super.onAttach(activity, FragmentPlaceSelector.class);
 
         Bundle bundle = getArguments();
 
@@ -88,20 +117,15 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
         autoLocation = bundle.getBoolean(AUTO_LOCATION);
         navigationPoint = new NavigationPoint();
 
+        dialogComment = new DialogComment(getActivity());
+        dialogComment.setOnCommentComplete(onCommentComplete);
 
-        final ActivityMain activityMain = (ActivityMain) activity;
-        activityMain.replaceActionBarClickListener(this);
-
-        barController = activityMain.getActionBarController();
+        niceProgressDialog = new NiceProgressDialog(activity);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        barController.title(getString(R.string.elaboration));
-        barController.cancelEnabled(true);
-        barController.doneEnabled(true);
 
         final SupportMapFragment mapFragment = SupportMapFragment.newInstance();
         FragmentHelper.add(getChildFragmentManager(), mapFragment, FRAME_CONTAINER);
@@ -122,41 +146,18 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
         }, 100);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        barController.cancelEnabled(false);
-        barController.doneEnabled(false);
-    }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-
-        ((ActivityMain) getActivity()).setActionBarDefaultListener();
-    }
-
-    @Override
-    public void clickSettings(View view) {
-        ((ActivityMain) getActivity()).clickSettings(view);
-    }
-
-    @Override
-    public void clickBack(View view) {
-        ((ActivityMain) getActivity()).clickBack(view);
-
-    }
-
-    @Override
-    public void clickCancel(View view) {
-        ((ActivityMain) getActivity()).clickCancel(view);
-    }
-
-    @Override
-    public void clickDone(View view) {
-        ((ActivityMain) getActivity()).placeSelected(navigationPoint, placeSelectedKey);
-        ((ActivityMain) getActivity()).initialScreen();
+    public void NBItemSelected(int id) {
+        switch (id) {
+            case NBItems.DONE:
+                ((ActivityMain) getActivity()).placeSelected(navigationPoint, placeSelectedKey);
+                ((ActivityMain) getActivity()).initialScreen();
+                break;
+            case NBItems.CANCEL:
+                FragmentHelper.pop(getFragmentManager());
+                break;
+        }
     }
 
     public final class OnAddressFoundListener implements LocationAddress.OnCompleteListener {
@@ -174,16 +175,25 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
                 final Address userAddress = addresses.get(0);
                 final String addressString = userAddress.getAddressLine(0) + ", " + userAddress.getAddressLine(1);
 
-                navigationPoint.addressString = addressString;
-                navigationPoint.latLng = latLng;
-                navigationPoint.address = userAddress;
+                navigationPoint.setAddressString(addressString);
+                navigationPoint.setLatLng(latLng);
+                navigationPoint.setAddress(userAddress);
+                navigationPoint.setHome();
 
                 addressEditText.setText(addressString);
+                homeEditText.setText(navigationPoint.getHome());
+
+                if (userAddress.hasLatitude() && userAddress.hasLongitude()) {
+                    mapUtils.moveCamera(userAddress.getLatitude(), userAddress.getLongitude());
+                }
             }
+
+            niceProgressDialog.dismiss();
         }
 
         @Override
         public void error() {
+            niceProgressDialog.dismiss();
             QueryMaster.alert(getActivity(), R.string.fail_getting_address);
         }
     }
@@ -191,8 +201,11 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
     private GoogleMap.OnMapClickListener onMapClick = new GoogleMap.OnMapClickListener() {
         @Override
         public void onMapClick(LatLng latLng) {
+
             mapUtils.getMap().clear();
             mapUtils.me(latLng);
+
+            niceProgressDialog.show();
 
             OnAddressFoundListener onAddressFoundListener =
                     new OnAddressFoundListener(latLng);
@@ -204,6 +217,9 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
     };
 
     private void findMyLocation(final Context context) {
+
+        mapUtils.getMap().clear();
+
         long LOCATION_UPDATE_INTERVAL = 10;
         long WAIT_TIME = 10;
         long LOCATION_TIMEOUT_IN_SECONDS = 10;
@@ -214,6 +230,7 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
                 .setInterval(LOCATION_UPDATE_INTERVAL);
 
         ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(context);
+
 
         Observable<Location> goodEnoughQuicklyOrNothingObservable = locationProvider.getUpdatedLocation(req)
                 .filter(new Func1<Location, Boolean>() {
@@ -226,9 +243,11 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
                                 OnAddressFoundListener(latLng);
                         final LocationAddress locationAddress = new LocationAddress(context,
                                 location.getLatitude(), location.getLongitude());
-                        mapUtils.moveCamera(latLng);
+
+
                         locationAddress.setOnCompleteListener(onAddressFoundListener);
                         locationAddress.start();
+
                         return true;
                     }
                 })
@@ -237,5 +256,14 @@ public class FragmentPlaceSelector extends Fragment implements ActionBarClickLis
                 .observeOn(AndroidSchedulers.mainThread());
 
         goodEnoughQuicklyOrNothingObservable.subscribe();
+
+        niceProgressDialog.show();
     }
+
+    private DialogComment.OnCommentComplete onCommentComplete = new DialogComment.OnCommentComplete() {
+        @Override
+        public void commentComplete(String commentBody) {
+            commentButton.setText(commentBody);
+        }
+    };
 }

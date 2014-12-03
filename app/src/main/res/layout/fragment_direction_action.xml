@@ -4,38 +4,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:background="@color/light_grey">
+    android:background="@android:color/white">
 
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:layout_height="30dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/xml_light_grey_background"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/icon_search" />
 
-        <AutoCompleteTextView
-            android:id="@+id/serchAddressAutoCompleteTextView"
+        <ch.crut.taxi.views.AutoCompleteTextViewCustomAdapter
+            android:id="@+id/fragmentDirectionActionAddressAutoCompleteTextView"
             android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textView1"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="#000"
             android:hint="@string/hint_address"
             android:ems="10"
-            android:layout_weight="1"
-            android:text=""/>
+            android:singleLine="true"
+            android:background="@null"
+            android:selectAllOnFocus="true"
+            android:completionThreshold="1" />
+
+        <EditText
+            android:id="@+id/fragmentDirectionAction"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
 
         <ProgressBar
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:visibility="invisible"
-            android:id="@+id/progressBarInAutoComplite"/>
+            android:id="@+id/fragmentDirectionActionProgressAutoComplete" />
 
         <ImageView
             android:id="@+id/fragmentDirectionActionMyLocation"
@@ -45,15 +54,37 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/my_location"
-        android:background="@null" />
-
-    <Button
         android:id="@+id/fragmentDirectionActionSetLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/map_point"
         android:background="@null" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/xml_light_grey_background"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/icon_star" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:text="@string/favorite_addresses" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/fragmentDirectionActionFavoriteListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 </LinearLayout>

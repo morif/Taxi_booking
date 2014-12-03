@@ -55,9 +55,19 @@ public class FragmentHelper {
         return false;
     }
 
+    public static void remove(FragmentManager fragmentManager, Fragment fragment) {
+        fragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss();
+    }
+
     public static void add(FragmentManager fragmentManager, Fragment fragment, int container) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null).replace(container,
+                fragment).commit();
+    }
+
+    public static void addNoReplace(FragmentManager fragmentManager, Fragment fragment, int container) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(container,
                 fragment).commit();
     }
 

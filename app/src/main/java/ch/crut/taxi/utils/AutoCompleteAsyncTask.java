@@ -1,17 +1,13 @@
 package ch.crut.taxi.utils;
 
-import android.content.Context;
-import android.location.Address;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -23,32 +19,30 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import ch.crut.taxi.fragments.FragmentDirectionAction;
-import ch.crut.taxi.utils.google.map.LocationAddress;
 
-public class AutoCompliteAsyncTask extends AsyncTask<String, Void, Object> {
 
-    private static final String TAG = "AutoCompliteAsyncTask";
+public class AutoCompleteAsyncTask extends AsyncTask<String, Void, Object> {
+
+    private static final String TAG = "AutoCompleteAsyncTask";
+
     private String inputStreetName = "";
-    private String language = "fr";
-    private int jsonArraySize;
+
+    private static final String LANGUAGE = "fr";
+
     private String[] listStreetsArray = {""};
     private ProgressBar progressBarInAutoText;
     private FragmentDirectionAction fragmentDirectionAction;
-    private Context context;
-    private AutoCompleteTextView autoCompleteTextView;
 
-    public AutoCompliteAsyncTask(Context context, FragmentDirectionAction fragmentDirectionAction,
-                                 ProgressBar progressBarInAutoText, AutoCompleteTextView autoCompleteTextView) {
-        this.context = context;
+
+    public AutoCompleteAsyncTask(FragmentDirectionAction fragmentDirectionAction,
+                                 ProgressBar progressBarInAutoText, String inputStringName) {
         this.fragmentDirectionAction = fragmentDirectionAction;
         this.progressBarInAutoText = progressBarInAutoText;
-        this.autoCompleteTextView = autoCompleteTextView;
-        inputStreetName = autoCompleteTextView.getText().toString();
-
-
+        this.inputStreetName = inputStringName;
     }
 
 
@@ -58,6 +52,7 @@ public class AutoCompliteAsyncTask extends AsyncTask<String, Void, Object> {
         JSONObject jObj = null;
         StringBuilder sb = null;
 
+
         try {
             HttpEntity httpEntity = httpResponse.getEntity();
             is = httpEntity.getContent();
@@ -65,113 +60,116 @@ public class AutoCompliteAsyncTask extends AsyncTask<String, Void, Object> {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(
                         is, "UTF-8"), 8);
                 sb = new StringBuilder();
-                String line = null;
+
+                String line;
                 while ((line = reader.readLine()) != null) {
-                    sb.append(line + "\n");
+                    sb.append(line);
                 }
-                // is.close();
+
+                json = sb.toString();
+                jObj = new JSONObject(json);
+
+                is.close();
+
+                return jObj;
             }
-            json = sb.toString();
-            Log.d(TAG, json.toString());
-            jObj = new JSONObject(json);
-
-            is.close();
-        } catch (JSONException e) {
-
-            Log.e("log_tag", "Error parsing data " + e.toString());
-
         } catch (Exception e) {
-            Log.e("log_tag", "Exception " + e.toString());
-        }
+            Log.e(TAG, e.toString());
 
-        return jObj;
+        }
+        return null;
     }
+
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
 
+
         if (!inputStreetName.equals("")) {
             progressBarInAutoText.setVisibility(View.VISIBLE);
-            Log.d(TAG, "progresBar");
-
         }
-        Log.d(TAG, "progresBar null");
     }
+
 
     @Override
     protected Object doInBackground(String... entity) {
-        String desc = null;
+
 
         HttpClient httpClient = new DefaultHttpClient();
-        Log.d(TAG, "2: " + inputStreetName);
+//        Log.d(TAG, "2: " + inputStreetName);
         // HttpGet httpGet = new HttpGet("http://maps.googleapis.com/maps/api/geocode/json?address=" + adressStreet + "&sensor=false");
-        HttpGet httpGet = new HttpGet("https://maps.googleapis.com/maps/api/place/autocomplete/" +
-                "json?input=" + inputStreetName + "&types=geocode&language=" + language + "&sensor=true&key=AIzaSyDGBEAwvp7c6oLUxi4dGufZD-f3MToTAqI");
-        Log.e(TAG, "https://maps.googleapis.com/maps/api/place/autocomplete/" +
-                "json?input=" + inputStreetName + "&types=geocode&language=" + language + "&sensor=true&key=AIzaSyDGBEAwvp7c6oLUxi4dGufZD-f3MToTAqI");
+
 
         try {
+
+            Uri uri = new Uri.Builder()
+                    .scheme("https")
+                    .authority("maps.googleapis.com")
+                    .path("maps/api/place/autocomplete/json")
+                    .appendQueryParameter("input", inputStreetName)
+                    .appendQueryParameter("types", "geocode")
+                    .appendQueryParameter("language", LANGUAGE)
+                    .appendQueryParameter("sensor", "true")
+                    .appendQueryParameter("key", "AIzaSyDGBEAwvp7c6oLUxi4dGufZD-f3MToTAqI")
+                    .build();
+
+//            String safeUrl = URLEncoder.encode("https://maps.googleapis.com/maps/api/place/autocomplete/json?input={" +
+//                    inputStreetName + "}&types=geocode&language=" +
+//                    LANGUAGE + "&sensor=true&key=AIzaSyDGBEAwvp7c6oLUxi4dGufZD-f3MToTAqI", "UTF-8");
+
+            Log.e("", "uri.toString -> " + uri.toString());
+
+            HttpGet httpGet = new HttpGet(uri.toString());
+
+//            Log.e(TAG, "https://maps.googleapis.com/maps/api/place/autocomplete/" +
+//                    "json?input=" + inputStreetName + "&types=geocode&language=" + LANGUAGE + "&sensor=true&key=AIzaSyDGBEAwvp7c6oLUxi4dGufZD-f3MToTAqI");
+
             HttpResponse response = httpClient.execute(httpGet);
             JSONObject jObject = createJSONObject(response);
             JSONArray jsonArray = jObject.getJSONArray("predictions");
-            jsonArraySize = jsonArray.length();
+            int jsonArraySize = jsonArray.length();
+//            Log.d(TAG, jsonArray.toString());
+//            Log.d(TAG, "-------------------------------------------------" + jsonArray.length());
             listStreetsArray = new String[jsonArraySize];
+
             for (int i = 0; i < jsonArraySize; i++) {
-
-
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                Log.d(TAG, "1   " + jsonObject.toString());
-                desc = jsonObject.getString("description");
-                listStreetsArray[i] = desc;
+
+                JSONArray terms = jsonObject.getJSONArray("terms");
+
+                JSONObject street = terms.length() >= 1 ? terms.getJSONObject(0) : null;
+                JSONObject city = terms.length() >= 2 ? terms.getJSONObject(1) : null;
+
+                String streetAndCity = "";
+                if (street != null && city != null) {
+                    streetAndCity = street.getString("value") + ", " + city.getString("value");
+                } else if (street != null) {
+                    streetAndCity = street.getString("value");
+                }
+
+                listStreetsArray[i] = streetAndCity;
 
             }
-            autoCompleteTextView.setOnItemClickListener(new AutoCompliteListener());
             if (isCancelled()) return null;
-        } catch (ClientProtocolException e) {
-            Log.e(TAG, e.toString());
-        } catch (IOException e) {
-            Log.e(TAG, e.toString());
-        } catch (JSONException e) {
+
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
             Log.e(TAG, e.toString());
         }
 
-
-        return new Object();
+        return null;
     }
+
+//    https://maps.googleapis.com/maps/api/place/autocomplete/json?input=RTs%20"Blokbaster",%20Kiev&types=geocode&language=fr&sensor=true&key=AIzaSyDGBEAwvp7c6oLUxi4dGufZD-f3MToTAqI
 
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
-        progressBarInAutoText.setVisibility(View.INVISIBLE);
-        fragmentDirectionAction.searchStreet(listStreetsArray);
-        Log.d(TAG, "11111 " + inputStreetName);
 
-    }
-
-    public class AutoCompliteListener implements AdapterView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            String correctStreetName = autoCompleteTextView.getText().toString();
-            double latitude = 0;
-            double longitude = 0;
-            try {
-
-               Address address = LocationAddress.getFromLoсationName(context, correctStreetName).get(0);
-                latitude = address.getLatitude();
-                longitude = address.getLongitude();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            StreetInfo streetInfo = StreetInfo.getStreetInfo();
-            streetInfo.setStreetName(correctStreetName);
-            streetInfo.setLatitude(latitude);
-            streetInfo.setLongitude(longitude);
-            Log.d(TAG, "yesssssssssssssss "+ streetInfo.getLongitude());
+        if (!isCancelled()) {
+            progressBarInAutoText.setVisibility(View.INVISIBLE);
+            fragmentDirectionAction.searchStreet(listStreetsArray);
         }
     }
-
-
 }

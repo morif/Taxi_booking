@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
@@ -13,33 +13,37 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:gravity="center_vertical"
-        android:padding="2dp"
-        android:layout_centerVertical="true">
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:gravity="center_vertical">
 
         <Button
             android:id="@+id/actionBarUILeftButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:textSize="12sp"
-            android:background="@drawable/selector_action_bar_blue" />
+            android:textColor="@color/blue" />
 
         <TextView
             android:id="@+id/actionBarUITitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="14sp"
+            android:textSize="15sp"
+            android:textStyle="bold"
             android:gravity="center"
             android:layout_margin="5dp"
             android:textColor="@android:color/black" />
 
+
         <Button
+            android:textColor="@color/blue"
             android:id="@+id/actionBarUIRightButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:background="@drawable/ic_launcher" />
+            android:layout_height="35dp"
+            android:textSize="12sp" />
+
     </LinearLayout>
 </RelativeLayout>

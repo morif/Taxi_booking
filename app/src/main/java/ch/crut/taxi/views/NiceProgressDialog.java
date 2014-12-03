@@ -22,12 +22,22 @@ public class NiceProgressDialog extends Dialog {
 
     @Override
     public void show() {
-        init();
+        if (!isShowing()) {
+            init();
 
-        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        getWindow().getAttributes().windowAnimations = R.style.niceProgressDialogAnimation;
-        super.show();
+            setCancelable(false);
+
+            getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            getWindow().getAttributes().windowAnimations = R.style.niceProgressDialogAnimation;
+
+            super.show();
+        }
+    }
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
     }
 
     private void init() {

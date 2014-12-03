@@ -14,11 +14,13 @@ import java.util.List;
 public class Entities {
 
     public static class SearchTaxi implements Serializable {
+
+
         private static final long serialVersionUID = 42L;
+
+
         public String taximeter;
         public String bill;
-        public String photo1;
-        public String photo2;
         public String condition;
         public String lng;
         public String lat;
@@ -37,22 +39,25 @@ public class Entities {
         public String numberGos;
         public String status;
         public String rating;
+        public String driverPhoto;
+        public String carPhoto;
+        public String distance;
+        public String count;
 
 
         public SearchTaxi(JSONObject jsonObject) throws JSONException {
+            this.id = jsonObject.getString("id");
             this.taximeter = jsonObject.getString("taximeter");
             this.bill = jsonObject.getString("bill");
-            this.photo1 = jsonObject.getString("photo1");
 
-            this.photo2 = jsonObject.has("photo2") ? jsonObject.getString("photo2") : null;
 
             this.condition = jsonObject.getString("condition");
             this.lat = jsonObject.getString("lat");
             this.lng = jsonObject.getString("lng");
             this.tel1 = jsonObject.getString("tel1");
 
-            this.tel2 = jsonObject.has("tel2") ? jsonObject.getString("tel2") : null;
-            this.tel3 = jsonObject.has("tel3") ? jsonObject.getString("tel3") : null;
+            this.tel2 = jsonObject.has("tel2") ? jsonObject.getString("tel2") : "";
+            this.tel3 = jsonObject.has("tel3") ? jsonObject.getString("tel3") : "";
 
             this.wi_fi = jsonObject.getString("wi_fi");
             this.carClass = jsonObject.getString("carClass");
@@ -65,6 +70,12 @@ public class Entities {
             this.numberGos = jsonObject.getString("numberGos");
             this.status = jsonObject.getString("status");
             this.rating = jsonObject.getString("rating");
+
+            this.driverPhoto = jsonObject.getString("driverPhoto");
+            this.carPhoto = jsonObject.getString("carPhoto");
+            this.distance = jsonObject.getString("distance");
+
+            this.count = jsonObject.getString("count");
         }
 
         public static List<SearchTaxi> get(JSONArray data) throws JSONException {

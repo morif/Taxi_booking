@@ -1,11 +1,10 @@
 package ch.crut.taxi.fragments;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,30 +12,28 @@ import android.widget.Toast;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
+import ch.crut.taxi.TaxiApplication;
+import ch.crut.taxi.fragmenthelper.FragmentHelper;
+import ch.crut.taxi.interfaces.SmartFragment;
+import ch.crut.taxi.interfaces.UserPref_;
 import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.RequestEntities;
+import ch.crut.taxi.utils.TextUtils;
+import ch.crut.taxi.utils.actionbar.NBItemSelector;
+import ch.crut.taxi.utils.actionbar.NBItems;
 import ch.crut.taxi.utils.request.ServerRequest;
-import ch.crut.taxi.utils.request.UserInfo;
 
-/**
- * Created by Alex on 13.11.2014.
- */
+
+@SmartFragment(items = NBItems.CANCEL, title = R.string.registration)
 @EFragment(R.layout.fragment_registration)
-public class FragmentRegistration extends Fragment {
+public class FragmentRegistration extends NBFragment implements NBItemSelector {
 
     private static final String LOG_TAG = "FragmentRegistration";
-    private String emailAddressRegistrationString;
-    private String nameRegistrationString;
-    private String telephoneFirstRegistrationString;
-    private String telephoneSecondRegistrationString;
-    private String loginRegistrationString;
-    private String passwordRegistrationString;
     private ActivityMain activityMain;
 
 
@@ -47,87 +44,87 @@ public class FragmentRegistration extends Fragment {
         return fragmentRegistration;
     }
 
+
+    @ViewById(R.id.passwordRegistrationEdit)
+    protected EditText ETpassword;
+
+    @ViewById(R.id.emailAddressRegistrationEdit)
+    protected EditText ETemail;
+
+    @ViewById(R.id.nameRegistrationEdit)
+    protected EditText ETname;
+
+    @ViewById(R.id.telephoneFirstRegistrationEdit)
+    protected EditText ETphone;
+
+    @ViewById(R.id.telephoneSecondRegistrationEdit)
+    protected EditText ETphoneSecond;
+
+
+    @Click(R.id.confirmRegistrationButton)
+    protected void clickConfirmButton() {
+        confirm();
+    }
+
+
     @Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
+        super.onAttach(activity, FragmentRegistration.class);
         activityMain = (ActivityMain) activity;
+    }
+
+    @Override
+    public void NBItemSelected(int id) {
+        switch (id) {
+            case NBItems.CANCEL:
+                FragmentHelper.pop(getFragmentManager());
+                break;
+        }
     }
 
     private QueryMaster.OnCompleteListener onCompleteListener = new QueryMaster.OnCompleteListener() {
         @Override
         public void QMcomplete(JSONObject jsonObject) throws JSONException {
+//            QueryMaster.alert(getActivity(), jsonObject.toString());
             if (QueryMaster.isSuccess(jsonObject)) {
 
-                Log.d(LOG_TAG, jsonObject.toString());
-                UserInfo userInfo = new UserInfo();
+                UserPref_ userLocationPref = TaxiApplication.getUserPrefs();
 
-                Toast.makeText(activityMain, "Вы успешно зарегистрировались", Toast.LENGTH_LONG).show();
+                userLocationPref.edit()
+                        .email().put(TextUtils.get(ETemail))
+                        .password().put(TextUtils.get(ETpassword))
+                        .apply();
+
+                QueryMaster.toast(getActivity(), R.string.register_success);
+
+                FragmentHelper.replace(getFragmentManager(),
+                        FragmentAuthorization.newInstance(),
+                        ((ViewGroup) getView().getParent()).getId());
             } else {
-                Toast.makeText(activityMain, "некорректные данные", Toast.LENGTH_LONG).show();
+                QueryMaster.toast(getActivity(), R.string.uncorrect_data);
             }
-
-
         }
     };
 
-    @ViewById(R.id.loginRegistrationEdit)
-    protected EditText loginRegistrationEditText;
+    private void confirm() {
+        if (!TextUtils.emptyAnimate(ETpassword, ETemail, ETname, ETphone, ETphoneSecond)) {
 
-    @ViewById(R.id.passwordRegistrationEdit)
-    protected EditText passwordRegistrationEditText;
+            String passwordRegistrationString = ETpassword.getText().toString();
+            String emailAddressRegistrationString = ETemail.getText().toString();
+            String nameRegistrationString = ETname.getText().toString();
+            String telephoneFirstRegistrationString = ETphone.getText().toString();
+            String telephoneSecondRegistrationString = ETphoneSecond.getText().toString();
 
+            RequestEntities.RegisterEntity registrer = new RequestEntities.RegisterEntity();
 
-    @ViewById(R.id.emailAddressRegistrationEdit)
-    protected EditText emailAddressRegistrationEditText;
-
-    @ViewById(R.id.nameRegistrationEdit)
-    protected EditText nameRegistrationEditText;
-
-    @ViewById(R.id.telephoneFirstRegistrationEdit)
-    protected EditText telephoneFirstRegistrationEditText;
-
-    @ViewById(R.id.telephoneSecondRegistrationEdit)
-    protected EditText telephoneSecondRegistrationEditText;
-
-    @ViewById(R.id.confirmRegistrationButton)
-    protected Button confRegistrationButton;
-
-    @Click(R.id.confirmRegistrationButton)
-    protected void clickConfirmButton() {
-
-        passwordRegistrationString = passwordRegistrationEditText.getText().toString();
-        loginRegistrationString = loginRegistrationEditText.getText().toString();
-        emailAddressRegistrationString = emailAddressRegistrationEditText.getText().toString();
-        nameRegistrationString = nameRegistrationEditText.getText().toString();
-        telephoneFirstRegistrationString = telephoneFirstRegistrationEditText.getText().toString();
-        telephoneSecondRegistrationString = telephoneSecondRegistrationEditText.getText().toString();
-
-        if (emailAddressRegistrationString.length() > 0
-                && nameRegistrationString.length() > 0
-                && telephoneFirstRegistrationString.length() > 0
-                && telephoneSecondRegistrationString.length() > 0
-                && loginRegistrationString.length() > 0
-                && passwordRegistrationString.length() > 0) {
-
-            RequestEntities.Registrer registrer = new RequestEntities.Registrer();
-
-            Log.d(LOG_TAG, loginRegistrationString + passwordRegistrationString
-                    + emailAddressRegistrationString + nameRegistrationString
-                    + telephoneFirstRegistrationString + telephoneSecondRegistrationString);
-
-            registrer.setLogin(loginRegistrationString);
             registrer.setPassword(passwordRegistrationString);
             registrer.setEmail(emailAddressRegistrationString);
             registrer.setName(nameRegistrationString);
             registrer.setTelephoneFirst(telephoneFirstRegistrationString);
             registrer.setTelephoneSecond(telephoneSecondRegistrationString);
 
-            ServerRequest.registrationClient(registrer, activityMain, onCompleteListener);
 
+            ServerRequest.registrationClient(registrer, activityMain, onCompleteListener);
         }
     }
-
-
-
-
 }

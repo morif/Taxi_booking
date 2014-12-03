@@ -1,11 +1,13 @@
 package ch.crut.taxi.fragments;
 
+import android.app.Activity;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
@@ -13,20 +15,28 @@ import org.androidannotations.annotations.ViewById;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
-import ch.crut.taxi.actionbar.ActionBarController;
+import ch.crut.taxi.TaxiApplication;
+import ch.crut.taxi.dialogs.TimePickerFragment;
 import ch.crut.taxi.interfaces.OnPlaceSelectedListener;
+import ch.crut.taxi.interfaces.SmartFragment;
+import ch.crut.taxi.querymaster.QueryMaster;
 import ch.crut.taxi.utils.NavigationPoint;
 import ch.crut.taxi.utils.TaxiBookingHelper;
 import ch.crut.taxi.utils.WishObjects;
+import ch.crut.taxi.utils.actionbar.NBItemSelector;
+import ch.crut.taxi.utils.actionbar.NBItems;
 
+@SmartFragment(title = R.string.taxi_booking, items = {NBItems.SETTING})
 @EFragment(R.layout.fragment_taxi_booking)
-public class FragmentTaxiBooking extends Fragment {
+public class FragmentTaxiBooking extends NBFragment implements NBItemSelector {
 
-    private ActionBarController barController;
+//    private NBController barController;
 
     private NavigationPoint originalPoint;
     private NavigationPoint destinationPoint;
@@ -55,10 +65,13 @@ public class FragmentTaxiBooking extends Fragment {
 
     @ViewById(R.id.wifiImage)
     protected ImageView wifiImageView;
+
     @ViewById(R.id.airConditionImage)
     protected ImageView airConditionImageView;
+
     @ViewById(R.id.chieldImage)
     protected ImageView chieldImageView;
+
     @ViewById(R.id.paymentImage)
     protected ImageView paymentImageView;
 
@@ -77,36 +90,75 @@ public class FragmentTaxiBooking extends Fragment {
 
     @Click(R.id.fragmentTaxiBookingSearchAuto)
     protected void clickSearchAuto() {
-        ((ActivityMain) getActivity()).add(FragmentTaxiSearch.newInstance());
+
+
+        if (TaxiApplication.isUserAuthorized()) {
+            if (dataEntered()) {
+                ((ActivityMain) getActivity()).add(FragmentTaxiSearch.newInstance());
+            } else {
+                QueryMaster.toast(getActivity(), R.string.enter_all_data);
+            }
+        } else {
+            ((ActivityMain) getActivity()).add(FragmentAuthorization.newInstance());
+        }
+    }
+
+    @Click(R.id.fragmentTaxiBookingAddWishes)
+    protected void clickWishes() {
+        ((ActivityMain) getActivity()).add(FragmentWish.newInstance());
+    }
+
+    private boolean dataEntered() {
+        return !((ActivityMain) getActivity()).getTaxiBookingHelper().isEmpty();
+    }
+
+    @Click(R.id.fragmentTaxiBookingOrderTime)
+    protected void clickOrderTime() {
+        new TimePickerFragment(getActivity(), onOrderTimePicked).show(getFragmentManager(), "");
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity, FragmentTaxiBooking.class);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        barController = ((ActivityMain) getActivity()).getActionBarController();
-        barController.title(getString(R.string.taxi_booking));
-        barController.settingEnabled(true);
+//        barController = ((ActivityMain) getActivity()).getNBController();
+//        barController.title(getString(R.string.taxi_booking));
+//        barController.settingEnabled(true);
+
+
         TaxiBookingHelper bookingHelper = ((ActivityMain) getActivity()).getTaxiBookingHelper();
+
         originalPoint = bookingHelper.original;
         destinationPoint = bookingHelper.destination;
-        if (originalPoint != null) {
-            originAddress.setText(originalPoint.addressString);
+
+
+        if (!originalPoint.isEmpty()) {
+            originAddress.setText(originalPoint.getAddressString());
         }
-        if (destinationPoint != null) {
-            destinationAddress.setText(destinationPoint.addressString);
+
+        if (!destinationPoint.isEmpty()) {
+            destinationAddress.setText(destinationPoint.getAddressString());
         }
+
         orderTime.setText(getOrderTime());
+
+        creatingWish(((ActivityMain) getActivity()).getUserWishes());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        barController.settingEnabled(false);
+//        barController.settingEnabled(false);
     }
 
     public void setFrom(String fromAddress) {
         this.originAddress.setText(fromAddress);
     }
+
 
     public static String millisecToDate(long milliseconds) {
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -118,10 +170,41 @@ public class FragmentTaxiBooking extends Fragment {
         return millisecToDate(new Date().getTime() + (15 * 60000));
     }
 
+    @Override
+    public void NBItemSelected(int id) {
+        switch (id) {
+            case NBItems.SETTING:
+                ((ActivityMain) getActivity()).add(FragmentSettings.newInstance());
+                break;
+        }
+    }
+
+    private TimePickerDialog.OnTimeSetListener onOrderTimePicked = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+            String time = "";
+            if (hourOfDay < 10)
+                time += "0" + hourOfDay;
+            else
+                time += hourOfDay;
+            time += ":";
+            if (minute < 10)
+                time += "0" + minute;
+            else
+                time += minute;
+
+            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+
+            orderTime.setText(formatDate.format(new Date()) + " " + time);
+        }
+    };
 
     public void creatingWish(ArrayList<WishObjects> wishObjectsArrayList) {
-        int wishObjectSize = wishObjectsArrayList.size();
         if (wishObjectsArrayList != null) {
+
+            int wishObjectSize = wishObjectsArrayList.size();
+
             switch (wishObjectSize) {
                 case 1:
                     animalImageView.setImageResource(wishObjectsArrayList.get(0).getImageViewResurs());
@@ -163,6 +246,7 @@ public class FragmentTaxiBooking extends Fragment {
                     airConditionImageView.setVisibility(View.VISIBLE);
                     chieldImageView.setVisibility(View.VISIBLE);
 
+
                     break;
                 case 6:
                     animalImageView.setImageResource(wishObjectsArrayList.get(0).getImageViewResurs());
@@ -178,12 +262,11 @@ public class FragmentTaxiBooking extends Fragment {
                     chieldImageView.setVisibility(View.VISIBLE);
                     paymentImageView.setVisibility(View.VISIBLE);
 
+
                     break;
             }
         }
-
-
     }
-
-
 }
+
+

@@ -19,7 +19,7 @@
     <string name="back">Назад</string>
     <string name="hint_address">Адресс</string>
     <string name="show_route">Показать маршрут</string>
-    <string name="taxi_order">Заказать такси</string>
+    <string name="taxi_order">Заказать</string>
     <string name="authoritation">Авторизация</string>
     <string name="registration">Регистрация</string>
     <string name="email_address">Электронный адрес</string>
@@ -34,18 +34,30 @@
     <string name="error_network_unavailable">Нет интернет подключения</string>
     <string name="error_invalid_json">invalid json object</string>
     <string name="search_auto">Поиск автомобиля</string>
+    <string name="hint_login">Логин</string>
+    <string name="hint_password">Пароль</string>
+    <string name="add_favorite">Добавить в избранное</string>
+    <string name="no_text" />
     <string name="correct_registration">Вы успешно зарегистрировались</string>
     <string name="leavReview">Оставить отзыв</string>
-    <string name="car_brend">Марка авто:</string>
-    <string name="color_auto">Цвет:</string>
-    <string name="type_car">Tип транспорта:</string>
-    <string name="state_number">Гос номер:</string>
-    <string name="edition_year">Год выпуска:</string>
+    <string name="car_brend">Марка авто</string>
+    <string name="color_auto">Цвет</string>
+    <string name="type_car">тип транспорта</string>
+    <string name="state_number">Гос номер</string>
+    <string name="edition_year">Год выпуска</string>
     <string name="order_auto">Заказать авто</string>
-
-
-
     <string name="add_in_favorites">Добавить в избранное</string>
+    <string name="auto_mark">Марка авто:</string>
+    <string name="go_driver_info">Перейти к экрану водителя</string>
+    <string name="register_success">Регистрация успешна</string>
+    <string name="uncorrect_data">Введены некорректные данные</string>
+    <string name="favorite_addresses">Избранные адреса</string>
+    <string name="already_favorite">Уже в избранном</string>
+    <string name="added_favorite">Добавлено в избранное</string>
+    <string name="hint_enter_comment">Введите комментарий</string>
+    <string name="settings">Настройки</string>
+    <string name="enter_all_data">Введите все данные</string>
+    <string name="driver_info">Информация о водителе</string>
     <string name="wifi_zona">Wifi зона</string>
     <string name="not_smokes">Салон для некурящих</string>
     <string name="animals_transportation">Перевозка животных</string>
@@ -58,4 +70,10 @@
     <string name="tell_friends">Рассказать друзьям</string>
     <string name="radius_search">Радиус поиска, км</string>
     <string name="exit">Выход</string>
+    <string name="distance">Расстояние:</string>
+    <string name="send_order_request">Отправить заказ</string>
+    <string name="send">Отправить</string>
+    <string name="hint_email">Ваш email</string>
+    <string name="authorization_success">Вы успешно авторизовались</string>
+    <string name="auto_list">Список автомобилей</string>
 </resources>

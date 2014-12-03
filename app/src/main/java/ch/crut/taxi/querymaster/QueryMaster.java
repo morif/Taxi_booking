@@ -51,7 +51,6 @@ public class QueryMaster extends Thread {
 
     private static final String TAG = "QueryMaster";
 
-
     public void setProgressDialog() {
         progressHandler.sendEmptyMessage(-1);
     }
@@ -84,6 +83,13 @@ public class QueryMaster extends Thread {
 
     private static final int timeoutConnection = 10000;
 
+
+    /**
+     * @param context
+     * @param url
+     * @param queryType QueryMaster.QUERY_GET or QueryMaster.QUERY_POST
+     * @param entity
+     */
     public QueryMaster(Context context, String url, int queryType, MultipartEntity entity) {
         this(context, url, queryType);
         this.entity = entity;
@@ -137,7 +143,10 @@ public class QueryMaster extends Thread {
             serverResponse = response != null ?
                     EntityUtils.toString(response.getEntity()) : null;
 
+
+            Log.e(TAG, "url -> " + url);
             Log.e(TAG, "serverResponse -> " + serverResponse);
+
 
             if (resultHandler != null) {
                 resultHandler.sendEmptyMessage(QM_COMPLETE);
@@ -151,13 +160,6 @@ public class QueryMaster extends Thread {
             }
         }
     }
-
-//
-//    public interface OnCompleteListener {
-//        public void complete(String serverResponse);
-//
-//        public void error(int errorCode);
-//    }
 
     public static interface OnCompleteListener {
         public void QMcomplete(JSONObject jsonObject) throws JSONException;
@@ -177,19 +179,19 @@ public class QueryMaster extends Thread {
 
                     if (msg.what == QM_COMPLETE) {
 
-                            try {
-                                onCompleteListener.QMcomplete(get(serverResponse));
-                            } catch (JSONException e) {
+                        try {
+                            onCompleteListener.QMcomplete(get(serverResponse));
 
-                                Log.e(TAG, e.toString());
-                                e.printStackTrace();
+                        } catch (JSONException e) {
 
-                                onErrorListener.QMerror(QM_INVALID_JSON);
-                            }
+                            Log.e(TAG, e.toString());
+                            e.printStackTrace();
 
+                            onErrorListener.QMerror(QM_INVALID_JSON);
+                        }
+                    } else {
+                        onErrorListener.QMerror(msg.what);
                     }
-
-                    onErrorListener.QMerror(msg.what);
                 }
 
                 if (niceProgressDialog != null) {
@@ -211,9 +213,7 @@ public class QueryMaster extends Thread {
     }
 
     private static JSONObject get(String serverResponse) throws JSONException {
-
-            return new JSONObject(serverResponse);
-
+        return new JSONObject(serverResponse);
     }
 
     private boolean isNetworkConnected() {
@@ -236,9 +236,10 @@ public class QueryMaster extends Thread {
 
     public static AlertDialog alert(Context context, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-      //  builder.setMessage(message);
-    //    builder.setTitle("Ошибка");
-      //  builder.setPositiveButton("Ok", null);
+        builder.setMessage(message);
+        builder.setTitle("Ошибка");
+
+        builder.setPositiveButton("Ok", null);
         return builder.show();
     }
 
@@ -255,7 +256,6 @@ public class QueryMaster extends Thread {
     }
 
     public static boolean isSuccess(JSONObject jsonObject) throws JSONException {
-        Log.d(TAG, "ecces");
         return jsonObject.getString("status").equalsIgnoreCase("success");
     }
 

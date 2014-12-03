@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import ch.crut.taxi.querymaster.QueryMaster;
+
 public class LocationAddress extends Thread {
 
     private final Context context;
@@ -42,6 +44,11 @@ public class LocationAddress extends Thread {
     @Override
     public void run() {
         super.run();
+
+        if (!QueryMaster.isNetworkConnected(context)) {
+            handler.sendEmptyMessage(Actions.NETWORK_ERROR);
+            return;
+        }
         try {
             List<Address> addresses = getAddress(context, latitude, longitude);
 
@@ -78,6 +85,9 @@ public class LocationAddress extends Thread {
                 case Actions.ERROR:
                     onCompleteListener.error();
                     break;
+                case Actions.NETWORK_ERROR:
+                    onCompleteListener.error();
+                    break;
             }
 
             if (progressDialog != null) {
@@ -95,6 +105,7 @@ public class LocationAddress extends Thread {
     private static interface Actions {
         public static final int DONE = 0;
         public static final int ERROR = 1;
+        public static final int NETWORK_ERROR = 2;
     }
 
     public static List<Address> getAddress(Context context, double latitude, double longitude) throws IOException {
@@ -114,8 +125,6 @@ public class LocationAddress extends Thread {
 
     public static List<Address> getFromLoсationName(Context context, String locationName) throws IOException {
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-
         return geocoder.getFromLocationName(locationName, 1);
-
     }
 }
