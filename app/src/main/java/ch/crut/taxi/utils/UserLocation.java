@@ -10,8 +10,8 @@ import com.google.android.gms.location.LocationRequest;
 import java.util.List;
 
 import ch.crut.taxi.TaxiApplication;
+
 import ch.crut.taxi.interfaces.UserPref_;
-import ch.crut.taxi.querymaster.QueryMaster;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Observable;
 import rx.Subscription;

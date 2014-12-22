@@ -3,12 +3,14 @@ package ch.crut.taxi.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.widget.ListView;
 
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import actionbar.NBFragment;
+import actionbar.NotificationBarItems;
 import ch.crut.taxi.ActivityMain;
 import ch.crut.taxi.R;
 import ch.crut.taxi.adapters.WishCustomAdapter;
@@ -19,10 +21,11 @@ import actionbar.NBItems;
 
 
 @EFragment(R.layout.fragment_wish)
-@SmartFragment(title = R.string.wishes, items = {NBItems.DONE, NBItems.BACK})
+@SmartFragment(title = R.string.wishes, items = {NBItems.TITLE})
 public class FragmentWish extends NBFragment implements NBItemSelector {
 
     private WishCustomAdapter wishCustomAdapter;
+
 
     public static FragmentWish newInstance() {
         FragmentWish fragmentWish = new FragmentWish_();

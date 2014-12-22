@@ -3,7 +3,7 @@ apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.0"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         applicationId "ua.sv.ch.taxi.driver"
@@ -14,7 +14,7 @@ android {
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -22,7 +22,7 @@ android {
 
 apt {
     arguments {
-        androidManifestFile variant.processResources.manifestFile
+        androidManifestFile variant.outputs[0].processResources.manifestFile
         resourcePackageName "ua.sv.ch.taxi.driver"
     }
 }
@@ -30,5 +30,11 @@ apt {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile project(':taxiprojecthelper')
+    compile project(':taxiconnectorlib')
+
+    /**
+     * annotations
+     */
+    apt "org.androidannotations:androidannotations:3.0.1"
+    compile 'org.androidannotations:androidannotations-api:3.0.1'
 }

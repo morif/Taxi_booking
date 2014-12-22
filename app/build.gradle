@@ -14,17 +14,17 @@ android {
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
-//    packagingOptions {
-//        exclude 'META-INF/NOTICE'
-//        exclude 'META-INF/LICENSE'
-//        exclude 'META-INF/*'
-//        exclude 'META-INF/LICENSE.txt'
-//    }
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/*'
+        exclude 'META-INF/LICENSE.txt'
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -34,27 +34,23 @@ android {
 
 apt {
     arguments {
-        androidManifestFile variant.processResources.manifestFile
+        androidManifestFile variant.outputs[0].processResources.manifestFile
         resourcePackageName "ch.crut.taxi"
     }
 }
 
 dependencies {
-
-
     compile fileTree(dir: 'libs', include: ['*.jar'])
-
-
-    compile 'com.google.android.gms:play-services:6.1.71'
-
-
-    compile project(':taxiprojecthelper')
-
+    compile project(':taxiconnectorlib')
+    /**
+     * annotations
+     */
+    apt "org.androidannotations:androidannotations:3.0.1"
+    compile 'org.androidannotations:androidannotations-api:3.0.1'
     //reactive location
     compile 'pl.charmas.android:android-reactive-location:0.2@aar'
     compile 'com.netflix.rxjava:rxjava-android:0.18.4'
     // reactive location end
-
     /**
      * animation
      */

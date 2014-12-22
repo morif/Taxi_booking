@@ -112,4 +112,10 @@
     <string name="download_in_car">Загрузка салона</string>
     <string name="save_change">Сохранить изминения</string>
     <string name="points">Points</string>
+
+    <string name="no_text" />
+    <string name="cancel">Отмена</string>
+    <string name="back">Назад</string>
+    <string name="done">Готово</string>
+    <string name="send">Отправить</string>
 </resources>

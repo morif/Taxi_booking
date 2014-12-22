@@ -7,7 +7,8 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/calligraphy/calligraphy.iml" filepath="$PROJECT_DIR$/calligraphy/calligraphy.iml" />
       <module fileurl="file://$PROJECT_DIR$/sv.ch.taxi.driver/sv.ch.taxi.driver.iml" filepath="$PROJECT_DIR$/sv.ch.taxi.driver/sv.ch.taxi.driver.iml" />
-      <module fileurl="file://$PROJECT_DIR$/taxiprojecthelper/taxiprojecthelper.iml" filepath="$PROJECT_DIR$/taxiprojecthelper/taxiprojecthelper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/taxiconnectorlib/taxiconnectorlib.iml" filepath="$PROJECT_DIR$/taxiconnectorlib/taxiconnectorlib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/taxiconnectorlib/taxiconnectorlib.iml" filepath="$PROJECT_DIR$/taxiconnectorlib/taxiconnectorlib.iml" />
     </modules>
   </component>
 </project>

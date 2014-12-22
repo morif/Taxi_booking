@@ -5,7 +5,7 @@ import android.app.ActionBar;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 
-import com.example.taxiprojecthelper.R;
+import map.vp.ua.taxiconnectorlib.R;
 
 
 public class UINotificationBar {

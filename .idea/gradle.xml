@@ -11,7 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/calligraphy" />
             <option value="$PROJECT_DIR$/sv.ch.taxi.driver" />
-            <option value="$PROJECT_DIR$/taxiprojecthelper" />
+            <option value="$PROJECT_DIR$/taxiconnectorlib" />
           </set>
         </option>
       </GradleProjectSettings>

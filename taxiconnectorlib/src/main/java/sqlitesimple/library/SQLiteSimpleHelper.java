@@ -45,7 +45,7 @@ public class SQLiteSimpleHelper extends SQLiteOpenHelper {
      * @param sharedPreferencesPlace - see {@link sqlitesimple.library.util.SimpleConstants}
      * @param databaseVersion        - see {@link android.database.sqlite.SQLiteOpenHelper}
      * @param assetsDatabaseName     - Load assets or internal (if null) sqlite database if need
-     * @param isFTS                  - see {@link SQLiteSimpleFTS}
+     * @param isFTS                  - see {@link sqlitesimple.library.SQLiteSimpleFTS}
      */
     public SQLiteSimpleHelper(Context context, String sharedPreferencesPlace,
                               int databaseVersion, String assetsDatabaseName, boolean isFTS) {

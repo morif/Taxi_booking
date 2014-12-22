@@ -1,4 +1,4 @@
-package com.example.taxiprojecthelper;
+package map.vp.ua.taxiconnectorlib;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

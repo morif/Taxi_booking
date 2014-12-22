@@ -1,7 +1,7 @@
 package actionbar;
 
 
-import com.example.taxiprojecthelper.R;
+import map.vp.ua.taxiconnectorlib.R;
 
 public final class NBItems {
 
@@ -14,7 +14,6 @@ public final class NBItems {
     public static final int AUTO_LIST = R.id.NBAutoList;
     public static final int SEND_COMMENT = R.id.NBSendComment;
 
-    public static final int EMPTY = -1;
 
     public static int[] obtain() {
         return new int[]{
